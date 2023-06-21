@@ -1,33 +1,20 @@
-const { MongoClient } = require('mongodb');
+//const { MongoClient } = require('mongodb');
+import axios from "axios";
 
-async function saveTodos() {
-  const uri =
-  "mongodb+srv://panagiotisfotiadis:coleslawhammer@reactsite.zhpj3hk.mongodb.net/test?retryWrites=true&w=majority";
-const client = new mongodb.MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
+async function saveTodos({ username, dayData }) {
   try {
-    await client.connect();
-
-    const db = client.db('myDatabase');
-    const collection = db.collection('ToDoList');
-
-    const date = new Date(); // Current date and time
-    const filter = { User: 1 };
-    const update = {
-      $push: {
-        ToDos: {date: "2023-06-015",
-                tasks: ["chillen", "frau schlagen"]}
+    const response = await axios.post(
+      "https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/savetodos",
+      {
+        username,
+        dayData,
       }
-    };
-
-
-    await collection.updateOne(filter, update);
-    console.log("document added")
-  } finally {
-    await client.close();
+    );
+    console.log("response!: ", response);
+    return;
+  } catch (error) {
+    console.error("Login error:", error);
+    throw error;
   }
 }
 
