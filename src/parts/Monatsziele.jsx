@@ -17,6 +17,8 @@ import savePrios from "./../requests/savePrios";
 import GetPrios from "./../requests/GetPrios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AdjustOutlinedIcon from '@mui/icons-material/AdjustOutlined';
+import GetMonatziele from "../requests/GetMonatsziele";
+import saveMonatsziele from "../requests/saveMonatsziele";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -49,7 +51,7 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function AktuellePrios({ username }) {
+function Monatsziele({ username }) {
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
   const [hoverIndex, setHoverIndex] = useState(null);
@@ -73,8 +75,8 @@ function AktuellePrios({ username }) {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await GetPrios({username});
-      console.log("response from aktuelleprios: ", response)
+      const response = await GetMonatziele({username});
+      console.log("response from monatsziele: ", response)
       if(response){
       setTodos(response)
       }
@@ -85,8 +87,8 @@ function AktuellePrios({ username }) {
 
   useEffect(()=>{
     if(todos.length>0){
-      let priosData = todos;
-      savePrios({username, priosData})
+      let mzieleData = todos;
+      saveMonatsziele({username, mzieleData})
     }
   },[todos])
 
@@ -121,7 +123,7 @@ function AktuellePrios({ username }) {
   return (
     <StyledPaper>
       <Typography color={"white"} variant="h6" align="center">
-        Aktuelle Prioritäten
+        Monatsziele
       </Typography>
       <Box display="flex" flexDirection="column" height="90%">
         <Box flexGrow="1" overflow="auto">
@@ -179,11 +181,11 @@ function AktuellePrios({ username }) {
         <Box mt={3} display="flex">
   <WhiteTextField
     InputLabelProps={{
-      style: { color: 'white' },
-    }}
+        style: { color: 'white' },
+      }}
     value={newTodo}
     onChange={(e) => setNewTodo(e.target.value)}
-    label="New Priority"
+    label="New monthly Goal"
     fullWidth
     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
     flexGrow={1} // this will allow the TextField to take up as much space as possible
@@ -203,4 +205,4 @@ function AktuellePrios({ username }) {
   );
 }
 
-export default AktuellePrios;
+export default Monatsziele;

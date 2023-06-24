@@ -27,30 +27,50 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import AdminPage from "./pages/AdminPage"
 import { Login } from "@mui/icons-material";
 import RegisterPage from "./pages/RegisterPage";
 import AktuellePrios from "./parts/AktuellePrios";
 import SimpleList from "./parts/SimpleList";
+
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    secondary: {
+      main: '#251dc2',
+    },
+  },
+});
+
 function App() {
   //use states das weitergegeben wird
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   console.log(currentUser);
-
+  console.log("apppage ",isAdmin)
   return (
-    //Router um zwischen Seiten zu navigieren
+    <ThemeProvider theme={theme}>
     <BrowserRouter basename="/website">
       <Routes>
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/home" element={<HomePage currentUser={currentUser} setCurrentUser={setCurrentUser} isAdmin={isAdmin}/>}  />
         <Route
           path="/login"
           element={
             <LoginPage
               setIsLoggedIn={setIsLoggedIn}
               setCurrentUser={setCurrentUser}
+              currentUser={currentUser}
+              setIsAdmin={setIsAdmin}
             />
           }
+        />
+        <Route
+          path="/forkingsuhaib"
+          element={isAdmin ? <AdminPage currentUser={currentUser} setCurrentUser={setCurrentUser} isAdmin={isAdmin}/> : <h1>unauthorized</h1>
+        }
         />
         <Route
           path="/register"
@@ -58,6 +78,7 @@ function App() {
         />
       </Routes>
     </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

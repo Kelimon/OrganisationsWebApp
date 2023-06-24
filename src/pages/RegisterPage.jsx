@@ -51,7 +51,7 @@ function RegisterPage({ setIsLoggedIn }) {
     RegisterRequest(email, password, setIsLoggedIn)
       .then((result) => {
         // Handle successful login
-        console.log("Logged in:", result.data);
+        console.log("Logged in:", result);
         navigate("/home");
       })
       .catch((error) => {

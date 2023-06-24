@@ -21,7 +21,7 @@ function SimpleList() {
     const { source, destination } = result;
     setItems(arrayMove(items, source.index, destination.index));
   };
-  if (false) {
+  if (true) {
     return (
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="droppable">

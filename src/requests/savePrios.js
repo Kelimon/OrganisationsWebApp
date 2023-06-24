@@ -1,17 +1,16 @@
 //const { MongoClient } = require('mongodb');
 import axios from "axios";
 
-async function saveTodos({ username, todos }) {
-  console.log("savesafe")
+async function savePrios({ username, priosData }) {
+  console.log("savesafeinpriossave")
   try {
-    console.log("Sending data: ", { username, todos });
-    const dayData = todos;
+    console.log("Sending data: ", { username, priosData});
     if(username.length >1){
     const response = await axios.post(
-      "https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/savetodos",
+      "https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/saveprios",
       {
         username,
-        dayData,
+        priosData,
       }
     );
     console.log("response!: ", response);
@@ -23,4 +22,4 @@ async function saveTodos({ username, todos }) {
   }
 }
 
-export default saveTodos;
+export default savePrios;

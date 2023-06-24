@@ -22,7 +22,7 @@ import LoginRequest from "./../requests/LoginRequest";
  * @param {Dispatch<SetStateAction<boolean>>} setIsLoggedIn - function om login status zu setten
  * @returns {JSX.Element} jsx elements von loginpage.
  */
-function LoginPage({ setIsLoggedIn, setCurrentUser }) {
+function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
   //use states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,9 +52,14 @@ function LoginPage({ setIsLoggedIn, setCurrentUser }) {
    * function für login
    */
   const handleLogin = () => {
-    LoginRequest(email, password, setIsLoggedIn, setCurrentUser)
+    LoginRequest(email, password, setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin)
       .then((result) => {
         console.log("Logged in:", result);
+        console.log("loginpage: ",currentUser)
+        if(currentUser == "suhaibking"){
+          console.log("entered setadmin")
+          setIsAdmin(true)
+        }
         navigate("/home");
       })
       .catch((error) => {

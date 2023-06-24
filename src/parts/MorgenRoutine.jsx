@@ -48,7 +48,7 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function ToDoList({ username, todos, setTodos }) {
+function MorgenRoutine({ username, todos, setTodos }) {
   console.log("hi");
   console.log(username)
   
@@ -67,7 +67,7 @@ function ToDoList({ username, todos, setTodos }) {
     };
 
     fetchTodos();
-  }, [username]);
+  }, []);
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
@@ -117,7 +117,7 @@ function ToDoList({ username, todos, setTodos }) {
     <>
       <StyledPaper>
         <Typography color={"white"} variant="h6" align="center">
-          To Do's
+          Morgenroutine
         </Typography>
         <Box display="flex" flexDirection="column" height="90%">
           <Box flexGrow="1" overflow="auto">
@@ -150,11 +150,11 @@ function ToDoList({ username, todos, setTodos }) {
           <Box mt={3} display="flex">
   <WhiteTextField
     InputLabelProps={{
-      style: { color: 'white' },
-    }}
+        style: { color: 'white' },
+      }}
     value={newTodo}
     onChange={(e) => setNewTodo(e.target.value)}
-    label="New To-Do"
+    label="New Routine Task"
     fullWidth
     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
     flexGrow={1} // this will allow the TextField to take up as much space as possible
@@ -175,4 +175,4 @@ function ToDoList({ username, todos, setTodos }) {
   );
 }
 
-export default ToDoList;
+export default MorgenRoutine;
