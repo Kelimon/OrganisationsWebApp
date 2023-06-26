@@ -25,7 +25,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     maxHeight: 500, // Feste Größe für den Block
     height: 550,
     overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-    width: '46.2vw' // 1/4 of the viewport width
   }));
 
 class Chart extends React.Component {
@@ -112,7 +111,7 @@ class Chart extends React.Component {
           },
           
       },
-      colors: ['#9c27b0'], // This is purple.
+      colors: ['white'], // This is purple.
       chart: {
         height: 500,
         type: 'area',
@@ -173,8 +172,7 @@ class Chart extends React.Component {
    getCheckedPercentage = async (days) => {
     let checkedTasks = [];
 
-  // Determine how many days are missing
-  let missingDays = 30 - days.length;
+  // Determine how many days are missi
 
   // Pre-fill the array with zero (or null) for the missing days
   checkedTasks = Array(1).fill(0);  // or use null if you prefer
@@ -249,8 +247,8 @@ class Chart extends React.Component {
     }
     return (this.props.todos.length >0) ? (result *100)/ this.props.todos.length : 0;
   }
-
   render() {
+    if(this.state.todos){
     return (
       <StyledPaper ref={this.myRef}>
         <ReactApexChart
@@ -262,6 +260,9 @@ class Chart extends React.Component {
         />
         </StyledPaper>
     );
+    }else{
+      return(<></>);
+    }
   }
 }
 

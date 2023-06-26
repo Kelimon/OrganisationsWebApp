@@ -32,14 +32,18 @@ import { Login } from "@mui/icons-material";
 import RegisterPage from "./pages/RegisterPage";
 import AktuellePrios from "./parts/AktuellePrios";
 import SimpleList from "./parts/SimpleList";
+import 'typeface-roboto'
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
     secondary: {
-      main: '#251dc2',
+      main: '#9c27b0',
     },
+  },
+  typography: {
+    fontFamily: 'Roboto, Arial, Bodoni',
   },
 });
 

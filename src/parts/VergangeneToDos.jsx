@@ -11,6 +11,11 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import { CSSTransition } from 'react-transition-group';
+import "./../testing/animation.css"
+
 import {
     List,
     ListItem,
@@ -24,19 +29,22 @@ import {
   } from "@mui/material";
 
   const StyledAccordion = styled(Accordion)(({ theme }) => ({
-    backgroundColor: '#9e9d9e',  //replace with your color
-    borderRadius: 5,
+    backgroundColor: '#333e',  //replace with your color
+    borderRadius: 0,
   }));
   
   const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
-    backgroundColor: '#9e9d9e',  //replace with your color
-    borderRadius: 5,
+    backgroundColor: '#4f4f4f',  //replace with your color
+    borderRadius: 7,
+    margin: "2px",
+    color: "white",
   }));
   
   const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-    backgroundColor: '#9e9d9e',  //replace with your color
-    borderRadius: 5,
-    color: "white"
+    backgroundColor: '#4f4f4f',  //replace with your color
+    borderRadius: 12,
+    color: "white",
+    margin: 7
   }));
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -47,7 +55,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     maxHeight: 500, // Feste Größe für den Block
     height: 550,
     overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-    width: '21.25vw' // 1/4 of the viewport width
   }));
 
 function VergangeneToDos({username}) {
@@ -90,10 +97,17 @@ useEffect(() => {
   return (
     <StyledPaper>
     <div>
-      <Button onClick={() => setShowPastTodos(!showPastTodos)} variant="contained" color="secondary" fullWidth>
+      <Button onClick={() => setShowPastTodos(!showPastTodos)} variant="contained" color="secondary" fullWidth sx={{backgroundColor: "linear-gradient(to bottom right, #680e78,  #b608d4)", borderRadius: 4}}>
         {showPastTodos ? "Schließen" : "Zeige vergangene ToDos"}
       </Button>
-      {showPastTodos && todos.map((day, index) => (
+      <CSSTransition
+        in={showPastTodos}
+        timeout={10000}
+        classNames="accordion"
+        unmountOnExit
+        appear
+      ><div>
+      {showPastTodos && [...todos].reverse().map((day, index) => (
         <StyledAccordion key={index}>
           <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="h6">{formatDate(day.date)}</Typography>
@@ -104,14 +118,15 @@ useEffect(() => {
           {day.data.map((todo, index) => (
             <TableRow key={index}>
               <TableCell sx={{color: "white"}}>{todo.text}</TableCell>
-              {todo.checked ? <TableCell sx={{color: "green"}}>{todo.checked ? "Erledigt" : "Nicht erledigt"}</TableCell> : <TableCell sx={{color: "black"}}>{todo.checked ? "Erledigt" : "Nicht erledigt"}</TableCell>}
+              {todo.checked ? <TableCell sx={{color: "#17ff2e"}}><CheckIcon/></TableCell> : <TableCell sx={{color: "#ed2f2f", marginTop: -5,}}><CloseIcon/></TableCell>}
             </TableRow>
           ))}
         </TableBody>
       </Table>
           </StyledAccordionDetails>
         </StyledAccordion>
-      ))}
+        ))}</div>
+        </CSSTransition>
     </div>
     </StyledPaper>
   );

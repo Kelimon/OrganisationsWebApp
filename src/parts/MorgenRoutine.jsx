@@ -16,6 +16,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import saveTodos from "./../requests/saveTodos";
 import GetTodos from "./../requests/GetTodos";
 import RegisterRequest from "../requests/RegisterRequest";
+import saveRoutine from "../requests/saveRoutine";
+import GetRoutine from "../requests/GetRoutine";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -25,7 +27,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxHeight: 500, // Feste Größe für den Block
   height: 550,
   overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-  width: '21.25vw' // 1/4 of the viewport width
 }));
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
@@ -58,11 +59,10 @@ function MorgenRoutine({ username, todos, setTodos }) {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await GetTodos({username});
-      const latestDayData = response.data.days[response.data.days.length - 1];
-      console.log(latestDayData.data)
-      if(latestDayData.data.length>0){
-      setTodos(latestDayData.data);
+      const response = await GetRoutine({username});
+      console.log( "getroutine in morgenrotuine: ", response)
+      if(response.data.days.length>0){
+      setTodos(response.data.days);
       }
     };
 
@@ -83,7 +83,7 @@ function MorgenRoutine({ username, todos, setTodos }) {
   useEffect(()=>{
     console.log(todos)
     if(todos.length>0){
-      saveTodos({username, todos})
+      saveRoutine({username, todos})
     }
   },[todos])
 

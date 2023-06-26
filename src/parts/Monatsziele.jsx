@@ -28,7 +28,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxHeight: 500,
   height: 550,
   overflow: "auto",
-  width: '21.25vw'
 }));
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
@@ -105,16 +104,17 @@ function Monatsziele({ username }) {
   
     setTodos(items);
   }
-  const getItemStyle = (isDragging, draggableStyle) => ({
+  const getItemStyle = (isDragging, draggableStyle,isHovering) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
-    padding: 8 * 2,
-    margin: `0 0 ${8}px 0`,
+    padding: 8 * 1.5,
+    margin: `0 0 8px 0`,
     borderRadius: 10,
   
     // change background colour if dragging
-    background: isDragging ? "black" : "#9c27b0",
-  
+    background: isDragging ? 'linear-gradient(to bottom right, black,  #550763)' : 'linear-gradient(to bottom right,  #870e9c, #ee05fa)',
+    // add margin if hovering
+    marginLeft: isHovering ? '20px' : '0px',
     // styles we need to apply on draggables
     ...draggableStyle
   });
@@ -144,12 +144,15 @@ function Monatsziele({ username }) {
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
+            sx={{ transition: 'margin-left 0.4s',height: '4rem'}}  // update here
             style={getItemStyle(
               snapshot.isDragging,
-              provided.draggableProps.style
+              provided.draggableProps.style,
+              index === hoverIndex
             )}
             onMouseEnter={() => setHoverIndex(index)}
             onMouseLeave={() => setHoverIndex(null)}
+            
           >
             <ListItemIcon>
     <AdjustOutlinedIcon color="inherit" />

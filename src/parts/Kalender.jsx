@@ -12,7 +12,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     maxHeight: 500, // Feste Größe für den Block
     height: 550,
     overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-    width: '45vw' // 1/4 of the viewport width
 }));
 
 const StyledCalendar = styled(Calendar)({

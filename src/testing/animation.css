@@ -1,0 +1,27 @@
+.accordion-enter {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 400ms ease-in-out;
+}
+  
+.accordion-enter-active {
+    max-height: 1000px;  /* This value might need to be tweaked */
+    transition: max-height 400ms ease-in-out;
+}
+  
+.accordion-exit {
+    max-height: 1000px;  /* This value might need to be tweaked */
+    overflow: hidden;
+    transition: max-height 500ms ease-in-out;
+}
+  
+.accordion-exit-active {
+    max-height: 0;
+    transition: max-height 500ms ease-in-out;
+}
+
+.MuiIconButton-root:focus-visible {
+    outline: none;
+  }
+
+  /*css-ykcp7d-MuiButtonBase-root-MuiIconButton-root*/

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Paper, TextField } from "@mui/material";
 import { styled } from "@mui/system";
+import GetNotizen from "../requests/getNotizen";
+import saveNotizen from "../requests/saveNotizen";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   display: 'flex',  // Added this line
@@ -12,7 +14,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxHeight: 500, // Feste Größe für den Block
   height: 1100,
   overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-  width: '21.25vw' // 1/4 of the viewport width
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -30,27 +31,48 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiInputLabel-root": {
     color: "white",
   },
+  "& .MuiInputBase-input": {
+    color: "white", // Setze die Textfarbe des TextFields auf Weiß
+  },
   flex: 1,  // Added this line
 }));
 
-function Notizen() {
+function Notizen({username}) {
   const [note, setNote] = useState("");
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const response = await GetNotizen({username});
+      console.log("notizen data: ", response.data.notizen)
+      if(response.data.notizen.length>0){
+      setNote(response.data.notizen);
+      }
+    };
+
+    fetchTodos();
+  }, [username]);
+
+  const SaveData = async () => {
+    if(note.length>0){
+      saveNotizen
+      ({username, note})
+    }
+  }
 
   return (
     <StyledPaper>
       <StyledTextField
-        color="secondary"
         value={note}
         onChange={(e) => setNote(e.target.value)}
         label="Neue Notizen für den Tag"
         multiline
         rows={18}
         variant="outlined"
-        fullWidth
+        sx={{color: "white", size: 100}}
         />
       <Button
   onClick={() => {
-    /* Add code to handle the note */
+    SaveData();
   }}
   variant="contained"
   color="secondary"

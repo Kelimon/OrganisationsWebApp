@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import saveTodos from "./../requests/saveTodos";
 import GetTodos from "./../requests/GetTodos";
 import RegisterRequest from "../requests/RegisterRequest";
+import AddIcon from '@mui/icons-material/Add';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -25,7 +26,6 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxHeight: 500, // Feste Größe für den Block
   height: 550,
   overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-  width: '21.25vw' // 1/4 of the viewport width
 }));
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
@@ -87,20 +87,6 @@ function ToDoList({ username, todos, setTodos }) {
     }
   },[todos])
 
-  useEffect(() => {
-    const saveBeforeExit = () => {
-      const headers = { 'Content-Type': 'application/json' };
-      const blob = new Blob([JSON.stringify({ username, dayData: todos })], headers);
-      navigator.sendBeacon('https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/savetodos', blob);
-    };
-  
-    window.addEventListener('beforeunload', saveBeforeExit);
-  
-    return () => {
-      window.removeEventListener('beforeunload', saveBeforeExit);
-    };
-  }, [todos, username]);
-
   const toggleCheck = (index) => {
     setTodos(
       todos.map((todo, i) =>
@@ -137,6 +123,7 @@ function ToDoList({ username, todos, setTodos }) {
                     primaryTypographyProps={{ style: { color: "white" } }}
                     primary={todo.text}
                     color={"white"}
+                    
                   />
                   {hoverIndex === index && (
                     <IconButton onClick={() => deleteTodo(index)} color="error">
@@ -159,11 +146,21 @@ function ToDoList({ username, todos, setTodos }) {
     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
     flexGrow={1} // this will allow the TextField to take up as much space as possible
   />
-  <Button
+  {false && 
+  <IconButton
     onClick={addTodo}
     variant="contained"
     color="secondary"
-    style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
+    style={{ }} // add flexShrink: 0 to prevent the button from shrinking
+  >
+    <AddIcon sx={{fontSize:34}}/>
+  </IconButton>
+}
+<Button
+    onClick={addTodo}
+    variant="contained"
+    color="secondary"
+    style={{ borderRadius:7, width: "2vw"}} // add flexShrink: 0 to prevent the button from shrinking
   >
     Add
   </Button>
