@@ -87,20 +87,6 @@ function MorgenRoutine({ username, todos, setTodos }) {
     }
   },[todos])
 
-  useEffect(() => {
-    const saveBeforeExit = () => {
-      const headers = { 'Content-Type': 'application/json' };
-      const blob = new Blob([JSON.stringify({ username, dayData: todos })], headers);
-      navigator.sendBeacon('https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/savetodos', blob);
-    };
-  
-    window.addEventListener('beforeunload', saveBeforeExit);
-  
-    return () => {
-      window.removeEventListener('beforeunload', saveBeforeExit);
-    };
-  }, [todos, username]);
-
   const toggleCheck = (index) => {
     setTodos(
       todos.map((todo, i) =>

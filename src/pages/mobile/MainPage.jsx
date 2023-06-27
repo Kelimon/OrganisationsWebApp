@@ -164,8 +164,10 @@ const useStyles = styled(theme => ({
   },
   // ... and so on
 }));
-function HomePage({ currentUser, setCurrentUser, isAdmin, todos, setTodos, routineList, setRoutineList}) {
+function MainPage({ currentUser, setCurrentUser, isAdmin}) {
   console.log("homepage ",isAdmin)
+  const [todos, setTodos] = useState([]);
+  const [routineList, setRoutineList] = useState([])
   const [inputValue, setInputValue] = useState('');
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('md'));
@@ -215,4 +217,4 @@ function HomePage({ currentUser, setCurrentUser, isAdmin, todos, setTodos, routi
   );
 }
 
-export default HomePage;
+export default MainPage;

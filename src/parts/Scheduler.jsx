@@ -68,6 +68,9 @@ export default function Scheduler({ username }) {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [showCalendar, setShowCalendar] = React.useState(true);
   const [editing, setEditing] = React.useState(false);
+  const [editingIndex, setEditingIndex] = React.useState(null);
+  const [editingMeetingId, setEditingMeetingId] = React.useState(null);
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -79,18 +82,37 @@ export default function Scheduler({ username }) {
 
   const handleSubmit = () => {
     setOpen(false);
-    setMeetings((prevMeetings) => [
-      ...prevMeetings,
-      {
-        date: value,
-        title: title,
-        description: description,
-        start: startHour,
-        end: endHour,
-        color: color, // include color in meeting object
-      },
-    ]);
+    if (editing) {
+      // If we're editing, replace the meeting at the current index
+      setMeetings((prevMeetings) => [
+        ...prevMeetings.slice(0, editingIndex),
+        {
+          date: value,
+          title: title,
+          description: description,
+          start: startHour,
+          end: endHour,
+          color: color,
+        },
+        ...prevMeetings.slice(editingIndex + 1),
+      ]);
+    } else {
+      // Else, add a new meeting as before
+      setMeetings((prevMeetings) => [
+        ...prevMeetings,
+        {
+          date: value,
+          title: title,
+          description: description,
+          start: startHour,
+          end: endHour,
+          color: color,
+        },
+      ]);
+    }
     setColor("#000"); // reset color after adding meeting
+    setEditing(false);
+    setEditingIndex(null); // clear editing index when done editing
   };
 
   React.useEffect(() => {
@@ -123,8 +145,10 @@ export default function Scheduler({ username }) {
     setColor(meetingToEdit.color);
     setValue(meetingToEdit.date);
     setEditing(true);
+    setEditingMeetingId(id); // set the id of the meeting being edited
     setOpen(true);
   };
+  
 
   React.useEffect(() => {
     let scheduleData = meetings;
@@ -144,8 +168,11 @@ export default function Scheduler({ username }) {
     },
   };
 
-  const handleDelete = (id) => {
-    setMeetings((prevMeetings) => prevMeetings.filter((meeting, index) => index !== id));
+  const handleDelete = () => {
+    setMeetings((prevMeetings) => prevMeetings.filter((meeting, index) => index !== editingIndex));
+    setOpen(false);
+    setEditing(false);
+    setEditingIndex(null); // clear editing index when done deleting
   };
 
   if (isSmallScreen) {
@@ -439,9 +466,9 @@ export default function Scheduler({ username }) {
                 open={open}
                 onClose={handleClose}
                 sx={{
-                  borderRadius: 40,
+                  borderRadius: 10,
                   "& .MuiDialog-paper": {
-                    borderRadius: 15,
+                    borderRadius: 10,
                     backgroundColor: "white",
                   },
                 }}
@@ -476,7 +503,7 @@ export default function Scheduler({ username }) {
                 </DialogContent>
                 <DialogActions>
                   {editing && (
-                    <Button color="primary" onClick={() => handleDelete(index)}>
+                    <Button color="primary" onClick={handleDelete}>
                       löschen
                     </Button>
                   )}

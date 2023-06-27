@@ -7,7 +7,7 @@ function Header({ username, isAdmin }) {
 
     const navigate = useNavigate();
     return (
-        <AppBar position="static" sx={{backgroundColor: "black"}} >
+        <AppBar position="static" sx={{backgroundColor: "#13131A" }} >
             <Toolbar >
                 {/* Insert your image here */}
                 <img src={logo} alt="Logo" height={"50"} />
