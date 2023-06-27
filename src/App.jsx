@@ -27,23 +27,23 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
-import AdminPage from "./pages/AdminPage"
+import AdminPage from "./pages/AdminPage";
 import { Login } from "@mui/icons-material";
 import RegisterPage from "./pages/RegisterPage";
 import AktuellePrios from "./parts/AktuellePrios";
 import SimpleList from "./parts/SimpleList";
-import 'typeface-roboto'
+import "typeface-roboto";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
     secondary: {
-      main: '#9c27b0',
+      main: "#9c27b0",
     },
   },
   typography: {
-    fontFamily: 'Roboto, Arial, Bodoni',
+    fontFamily: "Roboto, Arial, Bodoni",
   },
 });
 
@@ -54,34 +54,49 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   console.log(currentUser);
-  console.log("apppage ",isAdmin)
+  console.log("apppage ", isAdmin);
   return (
     <ThemeProvider theme={theme}>
-    <BrowserRouter basename="/website">
-      <Routes>
-        <Route path="/home" element={<HomePage currentUser={currentUser} setCurrentUser={setCurrentUser} isAdmin={isAdmin}/>}  />
-        <Route
-          path="/login"
-          element={
-            <LoginPage
-              setIsLoggedIn={setIsLoggedIn}
-              setCurrentUser={setCurrentUser}
-              currentUser={currentUser}
-              setIsAdmin={setIsAdmin}
-            />
-          }
-        />
-        <Route
-          path="/forkingsuhaib"
-          element={isAdmin ? <AdminPage currentUser={currentUser} setCurrentUser={setCurrentUser} isAdmin={isAdmin}/> : <h1>unauthorized</h1>
-        }
-        />
-        <Route
-          path="/register"
-          element={<RegisterPage setIsLoggedIn={setIsLoggedIn} />}
-        />
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter basename="/website">
+        <Routes>
+          <Route
+            path="/home"
+            element={<HomePage currentUser={currentUser} setCurrentUser={setCurrentUser} isAdmin={isAdmin} />}
+          />
+          <Route
+            path="/login"
+            element={
+              <LoginPage
+                setIsLoggedIn={setIsLoggedIn}
+                setCurrentUser={setCurrentUser}
+                currentUser={currentUser}
+                setIsAdmin={setIsAdmin}
+              />
+            }
+          />
+          <Route
+            path="/forkingsuhaib"
+            element={
+              isAdmin ? (
+                <AdminPage currentUser={currentUser} setCurrentUser={setCurrentUser} isAdmin={isAdmin} />
+              ) : (
+                <h1>unauthorized</h1>
+              )
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <RegisterPage
+                setIsLoggedIn={setIsLoggedIn}
+                setCurrentUser={setCurrentUser}
+                currentUser={currentUser}
+                setIsAdmin={setIsAdmin}
+              />
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

@@ -2,39 +2,38 @@ import React from "react";
 import ReactApexChart from "react-apexcharts";
 import ToDoList from "./ToDoList";
 import { styled } from "@mui/system";
-import GetTodos from "./../requests/GetTodos"
+import GetTodos from "./../requests/GetTodos";
 import {
-    List,
-    ListItem,
-    ListItemText,
-    Checkbox,
-    TextField,
-    Button,
-    Paper,
-    IconButton,
-    Typography,
-    Box,
-  } from "@mui/material";
-
+  List,
+  ListItem,
+  ListItemText,
+  Checkbox,
+  TextField,
+  Button,
+  Paper,
+  IconButton,
+  Typography,
+  Box,
+} from "@mui/material";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-    margin: theme.spacing(2),
-    padding: theme.spacing(2),
-    borderRadius: 15, // Setzt die Rundung der Ecken
-    backgroundColor: "#333e", // Dunklere Farbe für den Block
-    maxHeight: 500, // Feste Größe für den Block
-    height: 550,
-    overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-  }));
+  margin: theme.spacing(2),
+  padding: theme.spacing(2),
+  borderRadius: 15, // Setzt die Rundung der Ecken
+  backgroundColor: "#333e", // Dunklere Farbe für den Block
+  maxHeight: 500, // Feste Größe für den Block
+  height: 550,
+  overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
+}));
 
 class Chart extends React.Component {
   constructor(props) {
-    super(props); 
+    super(props);
     let username = this.props.username;
-    let todos = async () =>  {
-      return await GetTodos({username});
-    }
-    console.log("chart: ",todos())
+    let todos = async () => {
+      return await GetTodos({ username });
+    };
+    console.log("chart: ", todos());
 
     /*const last10Days = Array.from({length: 30}, (v, i) => {
       const d = new Date();
@@ -43,88 +42,84 @@ class Chart extends React.Component {
     }).reverse();*/
 
     this.state = {
-      todospercentage: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,this.calculateLastTodo()],
+      todospercentage: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, this.calculateLastTodo()],
       todos: [],
-      
+
       series: [
         {
           name: "Erledigte ToDos",
-          data: [0,0,0,0,0,0,0,0,0,this.calculateLastTodo()],
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, this.calculateLastTodo()],
         },
       ],
       options: {
         stroke: {
-          curve: 'smooth',  // this makes the line curvy
+          curve: "smooth", // this makes the line curvy
         },
         markers: {
           size: 0,
-      },
-        
-        
+        },
+
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         title: {
-          text: 'Erledigte ToDos der letzten Tage',
-          align: 'left',
+          text: "Erledigte ToDos der letzten Tage",
+          align: "left",
           style: {
-            color: '#FFF',  // Color of the y-axis text
+            color: "#FFF", // Color of the y-axis text
           },
         },
         grid: {
           row: {
-            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-            opacity: 0.1
+            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+            opacity: 0.1,
           },
         },
         xaxis: {
           categories: [],
-          colors:['#F44336', '#E91E63', '#9C27B0'],
+          colors: ["#F44336", "#E91E63", "#9C27B0"],
           labels: {
             style: {
-              colors: '#FFF',  // Color of the y-axis text
+              colors: "#FFF", // Color of the y-axis text
             },
           },
         },
         fill: {
-          type: 'gradient',
+          type: "gradient",
           gradient: {
             shadeIntensity: 1,
             inverseColors: false,
             opacityFrom: 0.7,
             opacityTo: 0.3,
-            stops: [0, 90, 100]
+            stops: [0, 90, 100],
           },
         },
-        
-        
+
         yaxis: {
           min: 0,
           max: 100,
           labels: {
-            formatter: function(value) { 
-              return value + '%'; // add a percentage sign after the number
+            formatter: function (value) {
+              return value + "%"; // add a percentage sign after the number
             },
             style: {
-              colors: '#FFF',  // Color of the y-axis text
+              colors: "#FFF", // Color of the y-axis text
             },
           },
-          
-      },
-      colors: ['white'], // This is purple.
-      chart: {
-        height: 500,
-        type: 'area',
-        zoom: {
-          enabled: false
         },
-        brush: {
-          enabled: false,
-          target: undefined,
-          autoScaleYaxis: false
-        }
-      },
-      
+        colors: ["white"], // This is purple.
+        chart: {
+          height: 500,
+          type: "area",
+          zoom: {
+            enabled: false,
+          },
+          brush: {
+            enabled: false,
+            target: undefined,
+            autoScaleYaxis: false,
+          },
+        },
       },
     };
     this.myRef = React.createRef();
@@ -132,67 +127,65 @@ class Chart extends React.Component {
 
   async fetchTodos() {
     const username = this.props.username;
-    console.log("chartusername: ",username)
-    const todos = (await GetTodos({username})).data.days;
+    console.log("chartusername: ", username);
+    const todos = (await GetTodos({ username })).data.days;
     const days = todos;
-    console.log("charttodos: ", todos)
+    console.log("charttodos: ", todos);
     this.getCheckedPercentage(days);
     this.setState({ todos: todos }); // This will trigger a re-render
-    const last10Days = () =>{
-      let array = []
-      let startDate = new Date(todos[0].date)
-        for( let j =-1; j<todos.length; j++){
-          const tempDate = new Date(startDate); // Create a new Date object
-          tempDate.setDate(tempDate.getDate() + j);
-          array.push(tempDate.toLocaleDateString());
-        }
-      console.log("array is",array)
-      return array;  // or use another format if you prefer
-    }
-    
-  
-    this.setState({ 
+    const last10Days = () => {
+      let array = [];
+      let startDate = new Date(todos[0].date);
+      for (let j = -1; j < todos.length; j++) {
+        const tempDate = new Date(startDate); // Create a new Date object
+        tempDate.setDate(tempDate.getDate() + j);
+        array.push(tempDate.toLocaleDateString());
+      }
+      console.log("array is", array);
+      return array; // or use another format if you prefer
+    };
+
+    this.setState({
       todos: todos,
       options: {
         ...this.state.options,
         xaxis: {
           categories: last10Days(),
-          colors:['#F44336', '#E91E63', '#9C27B0'],
+          colors: ["#F44336", "#E91E63", "#9C27B0"],
           labels: {
             style: {
-              colors: '#FFF',  // Color of the y-axis text
+              colors: "#FFF", // Color of the y-axis text
             },
           },
         },
-      }
+      },
     });
-    console.log("xais", this.state.options.xaxis.categories)
+    console.log("xais", this.state.options.xaxis.categories);
   }
 
-   getCheckedPercentage = async (days) => {
+  getCheckedPercentage = async (days) => {
     let checkedTasks = [];
 
-  // Determine how many days are missi
+    // Determine how many days are missi
 
-  // Pre-fill the array with zero (or null) for the missing days
-  checkedTasks = Array(1).fill(0);  // or use null if you prefer
+    // Pre-fill the array with zero (or null) for the missing days
+    checkedTasks = Array(1).fill(0); // or use null if you prefer
 
-    for (let i=0; i<days.length-1; i++){
-      let checkedTasksDaily =0;
-      let totalTasksDaily =0;
-      for(let j=0; j<days[i].data.length;j++){
-        if(days[i].data[j].checked){
+    for (let i = 0; i < days.length; i++) {
+      let checkedTasksDaily = 0;
+      let totalTasksDaily = 0;
+      for (let j = 0; j < days[i].data.length; j++) {
+        if (days[i].data[j].checked) {
           checkedTasksDaily++;
         }
         totalTasksDaily++;
       }
 
-      if(totalTasksDaily>0){
-        checkedTasks.push((checkedTasksDaily*100)/totalTasksDaily);
-      }else{
+      if (totalTasksDaily > 0) {
+        checkedTasks.push((checkedTasksDaily * 100) / totalTasksDaily);
+      } else {
         checkedTasks.push(0);
       }
-
     }
     await this.setState({
       todospercentage: checkedTasks,
@@ -203,17 +196,16 @@ class Chart extends React.Component {
         },
       ],
     });
-    console.log("chart checjed tasjs: ",checkedTasks)
-    console.log("todospercentage: ",this.state.todospercentage)
+    console.log("chart checjed tasjs: ", checkedTasks);
+    console.log("todospercentage: ", this.state.todospercentage);
     return true;
-  }
+  };
 
   componentDidMount() {
     this.fetchTodos();
   }
 
   componentDidUpdate(prevProps) {
-
     if (this.myRef.current) {
       this.myRef.current.scrollLeft = this.myRef.current.scrollWidth;
     }
@@ -226,17 +218,28 @@ class Chart extends React.Component {
       // recalculate your data here
       const lastToDo = this.calculateLastTodo();
       // update state
+      let updatedArray = [...this.state.todospercentage];
+      console.log("updated Array second", updatedArray);
+      if (updatedArray.length == 0) {
+        updatedArray.push(lastToDo);
+      } else {
+        updatedArray[updatedArray.length - 1] = lastToDo;
+      }
+
+      console.log("updated Array second", updatedArray);
       this.setState({
+        todospercentage: updatedArray,
         series: [
           {
             name: "Erledigte ToDos",
-            data: [...this.state.todospercentage, lastToDo],
+            data: updatedArray,
           },
         ],
       });
+
+      console.log("series", this.state.series);
     }
   }
-  
 
   calculateLastTodo() {
     let result = 0;
@@ -245,23 +248,23 @@ class Chart extends React.Component {
         result++;
       }
     }
-    return (this.props.todos.length >0) ? (result *100)/ this.props.todos.length : 0;
+    return this.props.todos.length > 0 ? (result * 100) / this.props.todos.length : 0;
   }
   render() {
-    if(this.state.todos){
-    return (
-      <StyledPaper ref={this.myRef}>
-        <ReactApexChart
-          options={this.state.options}
-          series={this.state.series}
-          type="area"
-          height={450}
-          width={Math.max(this.state.todos.length * 50, 1000)}
-        />
+    if (this.state.todos) {
+      return (
+        <StyledPaper ref={this.myRef}>
+          <ReactApexChart
+            options={this.state.options}
+            series={this.state.series}
+            type="area"
+            height={450}
+            width={Math.max(this.state.todos.length * 50, 1000)}
+          />
         </StyledPaper>
-    );
-    }else{
-      return(<></>);
+      );
+    } else {
+      return <></>;
     }
   }
 }
