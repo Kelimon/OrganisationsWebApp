@@ -55,10 +55,10 @@ function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
     LoginRequest(email, password, setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin)
       .then((result) => {
         console.log("Logged in:", result);
-        console.log("loginpage: ",currentUser)
-        if(currentUser == "suhaibking"){
-          console.log("entered setadmin")
-          setIsAdmin(true)
+        console.log("loginpage: ", currentUser);
+        if (currentUser == "suhaibking") {
+          console.log("entered setadmin");
+          setIsAdmin(true);
         }
         navigate("/home");
       })
@@ -88,14 +88,7 @@ function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
     <>
       <AppBar position="fixed" style={{ backgroundColor: "black" }}></AppBar>
       <Container minWidth="lg">
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          height="100vh"
-          width={1200}
-        >
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
           <Paper elevation={10} sx={{ padding: "2rem", borderRadius: "1rem" }}>
             <Typography variant="h4" gutterBottom>
               Login
@@ -135,12 +128,7 @@ function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
 
             <Grid container spacing={0} sx={{ marginTop: "1rem" }}>
               <Grid item xs={12} textAlign="right">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleRegister}
-                  size="large"
-                >
+                <Button variant="contained" color="primary" onClick={handleRegister} size="large">
                   Register
                 </Button>
               </Grid>

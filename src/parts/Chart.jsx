@@ -135,11 +135,23 @@ class Chart extends React.Component {
     this.setState({ todos: todos }); // This will trigger a re-render
     const last10Days = () => {
       let array = [];
-      let startDate = new Date(todos[0].date);
-      for (let j = -1; j < todos.length; j++) {
-        const tempDate = new Date(startDate); // Create a new Date object
-        tempDate.setDate(tempDate.getDate() + j);
-        array.push(tempDate.toLocaleDateString());
+
+      // If days array is empty, add yesterday's and today's dates to the array
+      if (todos.length === 0) {
+        const today = new Date();
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        array.push(yesterday.toLocaleDateString());
+        array.push(today.toLocaleDateString());
+      } else {
+        let startDate = new Date(todos[0].date);
+
+        for (let j = -1; j < todos.length; j++) {
+          const tempDate = new Date(startDate); // Create a new Date object
+          tempDate.setDate(tempDate.getDate() + j);
+          array.push(tempDate.toLocaleDateString());
+        }
       }
       console.log("array is", array);
       return array; // or use another format if you prefer
@@ -220,7 +232,7 @@ class Chart extends React.Component {
       // update state
       let updatedArray = [...this.state.todospercentage];
       console.log("updated Array second", updatedArray);
-      if (updatedArray.length == 0) {
+      if (updatedArray.length == 1) {
         updatedArray.push(lastToDo);
       } else {
         updatedArray[updatedArray.length - 1] = lastToDo;

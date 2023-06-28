@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import saveTodos from "./../requests/saveTodos";
 import GetTodos from "./../requests/GetTodos";
 import RegisterRequest from "../requests/RegisterRequest";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -50,19 +50,19 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
 
 function ToDoList({ username, todos, setTodos }) {
   console.log("hi");
-  console.log(username)
-  
+  console.log(username);
+
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await GetTodos({username});
+      const response = await GetTodos({ username });
       const latestDayData = response.data.days[response.data.days.length - 1];
-      console.log(latestDayData.data)
-      if(latestDayData.data.length>0){
-      setTodos(latestDayData.data);
+      console.log(latestDayData.data);
+      if (latestDayData.data.length > 0) {
+        setTodos(latestDayData.data);
       }
     };
 
@@ -75,24 +75,18 @@ function ToDoList({ username, todos, setTodos }) {
       setNewTodo("");
     }
     console.log("username before saving todos: ", username);
-  console.log("todos before saving todos: ", todos);
-
-
+    console.log("todos before saving todos: ", todos);
   };
 
-  useEffect(()=>{
-    console.log(todos)
-    if(todos.length>0){
-      saveTodos({username, todos})
+  useEffect(() => {
+    console.log(todos);
+    if (todos.length > 0) {
+      saveTodos({ username, todos });
     }
-  },[todos])
+  }, [todos]);
 
   const toggleCheck = (index) => {
-    setTodos(
-      todos.map((todo, i) =>
-        i === index ? { ...todo, checked: !todo.checked } : todo
-      )
-    );
+    setTodos(todos.map((todo, i) => (i === index ? { ...todo, checked: !todo.checked } : todo)));
   };
 
   const deleteTodo = (index) => {
@@ -108,64 +102,59 @@ function ToDoList({ username, todos, setTodos }) {
         <Box display="flex" flexDirection="column" height="90%">
           <Box flexGrow="1" overflow="auto">
             <List>
-              {Array.isArray(todos) && todos.map((todo, index) => (
-                <ListItem
-                  key={index}
-                  onMouseEnter={() => setHoverIndex(index)}
-                  onMouseLeave={() => setHoverIndex(null)}
-                >
-                  <Checkbox
-                    checked={todo.checked}
-                    onChange={() => toggleCheck(index)}
-                    style={{ color: "white" }}
-                  />
-                  <ListItemText
-                    primaryTypographyProps={{ style: { color: "white" } }}
-                    primary={todo.text}
-                    color={"white"}
-                    
-                  />
-                  {hoverIndex === index && (
-                    <IconButton onClick={() => deleteTodo(index)} color="error">
-                      <DeleteIcon color="red" />
-                    </IconButton>
-                  )}
-                </ListItem>
-              ))}
+              {Array.isArray(todos) &&
+                todos.map((todo, index) => (
+                  <ListItem
+                    key={index}
+                    onMouseEnter={() => setHoverIndex(index)}
+                    onMouseLeave={() => setHoverIndex(null)}
+                  >
+                    <Checkbox checked={todo.checked} onChange={() => toggleCheck(index)} style={{ color: "white" }} />
+                    <ListItemText
+                      primaryTypographyProps={{ style: { color: "white" } }}
+                      primary={todo.text}
+                      color={"white"}
+                    />
+                    {hoverIndex === index && (
+                      <IconButton onClick={() => deleteTodo(index)} color="error">
+                        <DeleteIcon color="red" />
+                      </IconButton>
+                    )}
+                  </ListItem>
+                ))}
             </List>
           </Box>
           <Box mt={3} display="flex">
-  <WhiteTextField
-    InputLabelProps={{
-      style: { color: 'white' },
-    }}
-    value={newTodo}
-    onChange={(e) => setNewTodo(e.target.value)}
-    label="New To-Do"
-    fullWidth
-    style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-    flexGrow={1} // this will allow the TextField to take up as much space as possible
-  />
-  {false && 
-  <IconButton
-    onClick={addTodo}
-    variant="contained"
-    color="secondary"
-    style={{ }} // add flexShrink: 0 to prevent the button from shrinking
-  >
-    <AddIcon sx={{fontSize:34}}/>
-  </IconButton>
-}
-<Button
-    onClick={addTodo}
-    variant="contained"
-    color="secondary"
-    style={{ borderRadius:7, width: "2vw"}} // add flexShrink: 0 to prevent the button from shrinking
-  >
-    Add
-  </Button>
-</Box>
-
+            <WhiteTextField
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+              value={newTodo}
+              onChange={(e) => setNewTodo(e.target.value)}
+              label="New To-Do"
+              fullWidth
+              style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
+              flexGrow={1} // this will allow the TextField to take up as much space as possible
+            />
+            {false && (
+              <IconButton
+                onClick={addTodo}
+                variant="contained"
+                color="secondary"
+                style={{}} // add flexShrink: 0 to prevent the button from shrinking
+              >
+                <AddIcon sx={{ fontSize: 34 }} />
+              </IconButton>
+            )}
+            <Button
+              onClick={addTodo}
+              variant="contained"
+              color="secondary"
+              style={{ borderRadius: 7, width: "2vw" }} // add flexShrink: 0 to prevent the button from shrinking
+            >
+              Add
+            </Button>
+          </Box>
         </Box>
       </StyledPaper>
     </>

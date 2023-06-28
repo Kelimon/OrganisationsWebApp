@@ -110,7 +110,9 @@ function AktuellePrios({ username }) {
     borderRadius: 10,
 
     // change background colour if dragging
-    background: isDragging ? "black" : "linear-gradient(to right,  #028db0, #fa37c0)",
+    background: isDragging
+      ? "linear-gradient(to bottom right,  green, #fa37c0)"
+      : "linear-gradient(to bottom right,  #028db0, #fa37c0)",
     //background: isDragging ? "linear-gradient(to bottom right, black,  #550763)" : "#b608d4",
     marginLeft: isHovering ? "20px" : "0px",
     // styles we need to apply on draggables

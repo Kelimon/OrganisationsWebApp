@@ -25,9 +25,9 @@ import AddIcon from "@mui/icons-material/Add";
 import "dayjs/locale/de"; // import German locale
 import { useMediaQuery, useTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import "./../testing/animation.css";
-import GetScheduleData from "../requests/GetScheduleData";
-import saveScheduleData from "../requests/saveScheduleData";
+import "./../../testing/animation.css";
+import GetScheduleData from "../../requests/GetScheduleData";
+import saveScheduleData from "../../requests/saveScheduleData";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -35,8 +35,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   borderRadius: 15,
   backgroundColor: "#333e",
-  maxHeight: 532,
-  height: 550,
+  height: "calc(100vh - 220px)",
   overflow: "auto",
   display: "flex",
   flexDirection: "row",
@@ -55,14 +54,14 @@ const TimeSlot = styled("div")(({ theme }) => ({
   },
 }));
 
-export default function Scheduler({ username }) {
+export default function SchedulerMobile({ username, meetings, setMeetings, toLeft }) {
   const [value, setValue] = React.useState(Dayjs());
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [startHour, setStartHour] = React.useState(null);
   const [endHour, setEndHour] = React.useState(null);
-  const [meetings, setMeetings] = React.useState([]);
+
   const [color, setColor] = React.useState("#000"); // default color
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -78,7 +77,7 @@ export default function Scheduler({ username }) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  console.log("schedulermobile", meetings);
   const handleSubmit = () => {
     setOpen(false);
     if (editing) {
@@ -114,27 +113,6 @@ export default function Scheduler({ username }) {
     setEditingIndex(null); // clear editing index when done editing
   };
 
-  React.useEffect(() => {
-    console.log("useeffect entered");
-    const fetchTodos = async () => {
-      console.log("fetchtodosentered");
-      const response = await GetScheduleData({ username });
-      console.log("schedule length and data", response);
-      if (response.length > 0) {
-        const meetingsWithDayjsDates = response.map((meeting) => ({
-          ...meeting,
-          date: Dayjs(meeting.date), // convert date string or number to Dayjs object
-          start: Dayjs(meeting.start), // convert start time string or number to Dayjs object
-          end: Dayjs(meeting.end), // convert end time string or number to Dayjs object
-        }));
-        setMeetings(meetingsWithDayjsDates);
-        setDataFetched(true);
-      }
-    };
-
-    fetchTodos();
-  }, [username]);
-
   const handleEdit = (id) => {
     const meetingToEdit = meetings[id];
     setTitle(meetingToEdit.title);
@@ -162,7 +140,7 @@ export default function Scheduler({ username }) {
     },
     out: {
       opacity: 100,
-      x: "-1000vw",
+      x: "-1.5vw",
     },
   };
 
