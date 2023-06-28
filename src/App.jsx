@@ -184,7 +184,7 @@ function App() {
   if (!isSmallScreen) {
     return (
       <ThemeProvider theme={theme}>
-        <BrowserRouter basename="/OrganisationsWebApp">
+        <BrowserRouter>
           <Routes>
             <Route
               path="/home"
@@ -239,7 +239,7 @@ function App() {
   } else {
     return (
       <ThemeProvider theme={theme}>
-        <BrowserRouter basename="/OrganisationsWebApp">
+        <BrowserRouter>
           <Routes>
             <Route
               path="/register"
