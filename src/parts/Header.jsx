@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box, Paper, Button } from "@mui/material";
-import logo from "./../assets/logo.webp"; // if you're using Create React App
+import logo from "./../assets/Logo.webp"; // if you're using Create React App
 import { useNavigate } from "react-router-dom";
 
 function Header({ username, isAdmin }) {
