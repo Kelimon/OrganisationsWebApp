@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Paper, TextField } from "@mui/material";
 import { styled } from "@mui/system";
-import GetNotizen from "../../requests/getNotizen";
+import GetNotizen from "../../requests/GetNotizen";
 import saveNotizen from "../../requests/saveNotizen";
 import { motion, AnimatePresence } from "framer-motion";
 

@@ -1,26 +1,6 @@
 import * as React from "react";
 import axios from "axios";
 import "./App.css";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-} from "@mui/material";
-import { Button } from "@mui/material";
 import { Paper, Grid, Card, CardContent } from "@mui/material";
 import { CardMedia } from "@mui/material";
 import { useState } from "react";
@@ -44,7 +24,7 @@ import NotizenPage from "./pages/mobile/NotizenPage";
 import AktuellePriosPage from "./pages/mobile/AktuellePriosPage";
 import BottomNavBar from "./components/BottomNavBar";
 import GetMonatziele from "./requests/GetMonatsziele";
-import GetNotizen from "./requests/getNotizen";
+import GetNotizen from "./requests/GetNotizen";
 import GetPrios from "./requests/GetPrios";
 import GetRoutine from "./requests/GetRoutine";
 import GetScheduleData from "./requests/GetScheduleData";
