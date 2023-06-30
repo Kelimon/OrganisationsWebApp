@@ -120,9 +120,7 @@ function App() {
       console.log("getprios:", currentUser);
       const response = await GetRoutine({ username: currentUser });
       console.log("getroutine in morgenrotuine: ", response);
-      if (response.data.days.length > 0) {
         setRoutineList(response.data.days);
-      }
     };
 
     fetchTodos();
@@ -133,9 +131,7 @@ function App() {
       console.log("getprios:", currentUser);
       const response = await GetNotizen({ username: currentUser });
       console.log("notizen data: ", response.data.notizen);
-      if (response.data.notizen.length > 0) {
         setNote(response.data.notizen);
-      }
     };
 
     fetchTodos();
@@ -148,7 +144,6 @@ function App() {
       console.log("fetchtodosentered");
       const response = await GetScheduleData({ username: currentUser });
       console.log("schedule length and data", response);
-      if (response.length > 0) {
         const meetingsWithDayjsDates = response.map((meeting) => ({
           ...meeting,
           date: Dayjs(meeting.date), // convert date string or number to Dayjs object
@@ -156,7 +151,7 @@ function App() {
           end: Dayjs(meeting.end), // convert end time string or number to Dayjs object
         }));
         setMeetings(meetingsWithDayjsDates);
-      }
+      
     };
 
     fetchTodos();
@@ -166,11 +161,14 @@ function App() {
     const fetchTodos = async () => {
       console.log("getprios:", currentUser);
       const response = await GetTodos({ username: currentUser });
+      if(response.data.days.length>0){
       const latestDayData = response.data.days[response.data.days.length - 1];
       console.log(latestDayData.data);
-      if (latestDayData.data.length > 0) {
         setTodos(latestDayData.data);
+      } else {
+        setTodos([])
       }
+      
     };
 
     fetchTodos();

@@ -15,7 +15,7 @@ function RegisterPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }
   const [emailInvalid, setEmailInvalid] = useState(false);
   const navigate = useNavigate();
 
-  const handleEmailChange = (e) => {
+  /*const handleEmailChange = (e) => {
     setEmail(e.target.value);
     // perform simple validation on email format
     const re = /\S+@\S+\.\S+/;
@@ -24,6 +24,10 @@ function RegisterPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }
     } else {
       setEmailInvalid(false);
     }
+  }; */
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
