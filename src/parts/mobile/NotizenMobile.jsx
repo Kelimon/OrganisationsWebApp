@@ -10,10 +10,10 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   flexDirection: "column", // Added this line
   margin: theme.spacing(2),
   padding: theme.spacing(2),
+  marginTop: 34,
   borderRadius: 15, // Setzt die Rundung der Ecken
   backgroundColor: "#333e", // Dunklere Farbe für den Block
-  height: "calc(100vh - 220px)",
-  overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
+  height: "calc(100vh - 275px)",
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -34,7 +34,6 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
     color: "white", // Setze die Textfarbe des TextFields auf Weiß
   },
-  flex: 1, // Added this line
 }));
 
 function NotizenMobile({ username, note, setNote, toLeft }) {
@@ -65,7 +64,7 @@ function NotizenMobile({ username, note, setNote, toLeft }) {
               onChange={(e) => setNote(e.target.value)}
               label="Neue Notizen für den Tag"
               multiline
-              rows={23}
+              rows={21}
               variant="outlined"
               sx={{ color: "white" }}
             />
