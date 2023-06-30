@@ -24,7 +24,7 @@ import { Button } from "@mui/material";
 import { Paper, Grid, Card, CardContent } from "@mui/material";
 import { CardMedia } from "@mui/material";
 import { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
@@ -184,7 +184,7 @@ function App() {
   if (!isSmallScreen) {
     return (
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route
               path="/home"
@@ -233,13 +233,13 @@ function App() {
               }
             />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </ThemeProvider>
     );
   } else {
     return (
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route
               path="/register"
@@ -336,7 +336,7 @@ function App() {
             />
           </Routes>
           {currentUser && <BottomNavBar toLeft={toLeft} setToLeft={setToLeft} />}
-        </BrowserRouter>
+        </HashRouter>
       </ThemeProvider>
     );
   }
