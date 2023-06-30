@@ -43,7 +43,7 @@ function HeaderMobile({ username, isAdmin }) {
         <Toolbar>
           <Grid container>
             <Grid item xs={3}>
-              <img src={logo} alt="Logo" height={"60"} style={{ marginTop: 12 }} />
+              <img src={logo} alt="Logo" height={"45"} style={{ marginTop: 12 }} />
             </Grid>
             <Grid item xs={9}>
               <Grid container justifyContent="flex-end">
@@ -64,11 +64,6 @@ function HeaderMobile({ username, isAdmin }) {
                       {username}
                     </Typography>
                   </Paper>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="h6" component="div" align="right">
-                    King Website by Panaking
-                  </Typography>
                 </Grid>
               </Grid>
             </Grid>

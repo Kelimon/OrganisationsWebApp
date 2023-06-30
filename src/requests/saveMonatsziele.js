@@ -1,8 +1,12 @@
-//const { MongoClient } = require('mongodb');
 import axios from "axios";
 
 async function saveMonatsziele({ username, mzieleData }) {
   console.log("savesafeinmzielesave")
+
+  // Get token from local storage
+  const token = localStorage.getItem('token');
+  console.log("tokensave is", token)
+
   try {
     console.log("Sending data: ", { username, mzieleData});
     if(username.length >1){
@@ -11,6 +15,11 @@ async function saveMonatsziele({ username, mzieleData }) {
       {
         username,
         mzieleData,
+      },
+      {
+        headers: {
+          'Authorization': token
+        }
       }
     );
     console.log("responsesavemonatsziele: ", response);
