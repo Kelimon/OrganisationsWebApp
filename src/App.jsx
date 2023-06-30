@@ -29,6 +29,7 @@ import GetPrios from "./requests/GetPrios";
 import GetRoutine from "./requests/GetRoutine";
 import GetScheduleData from "./requests/GetScheduleData";
 import GetTodos from "./requests/GetTodos";
+import jwtDecode from 'jwt-decode';
 
 const theme = createTheme({
   palette: {
@@ -59,8 +60,23 @@ function App() {
   const [vergangeneTodos, setVergangeneTodos] = useState([]);
   const [toLeft, setToLeft] = React.useState(false);
 
+
+
   console.log(currentUser);
   console.log("apppage ", isAdmin);
+
+  React.useEffect(() => {
+    const username = localStorage.getItem('username');
+    if (username) {
+      try {
+        setCurrentUser(username);
+        setIsLoggedIn(true);
+      } catch (e) {
+        // If there's an error decoding the token, handle it here.
+        console.error(e);
+      }
+    }
+  }, []);
 
   React.useEffect(() => {
     const fetchTodos = async () => {
@@ -76,6 +92,15 @@ function App() {
 
     fetchTodos();
   }, [currentUser]);
+
+  function decodeToken(token) {
+    try {
+        return jwtDecode(token);
+    } catch(e) {
+        console.error('Failed to decode token', e);
+        return null;
+    }
+}
 
   React.useEffect(() => {
     const fetchTodos = async () => {
@@ -161,6 +186,8 @@ function App() {
     fetchTodos();
   }, [currentUser]); // The empty array makes this useEffect act like componentDidMount - it runs once after the component mounts.
   console.log("appjs :", meetings);
+
+
   if (!isSmallScreen) {
     return (
       <ThemeProvider theme={theme}>
@@ -182,7 +209,15 @@ function App() {
             />
             <Route
               path="/login"
-              element={
+              element={ isLoggedIn ? <HomePage
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                isAdmin={isAdmin}
+                todos={todos}
+                setTodos={setTodos}
+                routineList={routineList}
+                setRoutineList={setRoutineList}
+              /> :
                 <LoginPage
                   setIsLoggedIn={setIsLoggedIn}
                   setCurrentUser={setCurrentUser}
@@ -264,7 +299,16 @@ function App() {
             />
             <Route
               path="/login"
-              element={
+              element={ isLoggedIn ? <ToDoListPage
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                isAdmin={isAdmin}
+                todos={todos}
+                setTodos={setTodos}
+                vergangeneTodos={vergangeneTodos}
+                setVergangeneTodos={setVergangeneTodos}
+                toLeft={toLeft}
+              />:
                 <LoginPage
                   setIsLoggedIn={setIsLoggedIn}
                   setCurrentUser={setCurrentUser}
