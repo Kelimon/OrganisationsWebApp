@@ -7,11 +7,11 @@ import AktuellePriosMobile from "../../parts/mobile/AktuellePriosMobile";
 import MonatszieleMobile from "../../parts/mobile/MonatszieleMobile";
 import HeaderMobile from "../../components/HeaderMobile";
 
-function AktuellePriosPage({ currentUser, priosData, setPriosData, mzieleData, setMzieleData, toLeft }) {
+function AktuellePriosPage({ currentUser, priosData, setPriosData, mzieleData, setMzieleData, toLeft, setIsLoggedIn }) {
   const [showVergangeneTodos, setShowVergangeneTodos] = useState(false);
   return (
     <>
-      <HeaderMobile username={currentUser} />
+      <HeaderMobile username={currentUser} setIsLoggedIn={setIsLoggedIn}/>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         {!showVergangeneTodos ? (
           <AktuellePriosMobile

@@ -64,7 +64,9 @@ function App() {
 
   console.log(currentUser);
   console.log("apppage ", isAdmin);
+  console.log("apptodos:",todos)
 
+ 
   React.useEffect(() => {
     const username = localStorage.getItem('username');
     if (username) {
@@ -120,7 +122,12 @@ function App() {
       console.log("getprios:", currentUser);
       const response = await GetRoutine({ username: currentUser });
       console.log("getroutine in morgenrotuine: ", response);
+      if (response.data.days.length > 0) {
         setRoutineList(response.data.days);
+      }else{
+        console.log("thelenght", response.data.days.length)
+        setRoutineList([])
+      }
     };
 
     fetchTodos();
@@ -165,14 +172,32 @@ function App() {
       const latestDayData = response.data.days[response.data.days.length - 1];
       console.log(latestDayData.data);
         setTodos(latestDayData.data);
-      } else {
+        console.log("getsenterdbutfuckedup",latestDayData.data.length)
+      }else{
         setTodos([])
       }
       
     };
 
+    if(!isLoggedIn){
+      setTodos([])
+    }
+
     fetchTodos();
   }, [currentUser]);
+
+  React.useEffect(() => {
+    const username = localStorage.getItem('username');
+    if (username) {
+      try {
+        setCurrentUser(username);
+        setIsLoggedIn(true);
+      } catch (e) {
+        // If there's an error decoding the token, handle it here.
+        console.error(e);
+      }
+    }
+  }, []);
 
   React.useEffect(() => {
     const fetchTodos = async () => {
@@ -184,8 +209,7 @@ function App() {
     fetchTodos();
   }, [currentUser]); // The empty array makes this useEffect act like componentDidMount - it runs once after the component mounts.
   console.log("appjs :", meetings);
-
-
+  console.log("isloggedin", isLoggedIn)
   if (!isSmallScreen) {
     return (
       <ThemeProvider theme={theme}>
@@ -193,15 +217,21 @@ function App() {
           <Routes>
             <Route
               path="/home"
-              element={
-                <HomePage
-                  currentUser={currentUser}
+              element={ isLoggedIn ? <HomePage
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                isAdmin={isAdmin}
+                todos={todos}
+                setTodos={setTodos}
+                routineList={routineList}
+                setRoutineList={setRoutineList}
+                setIsLoggedIn={setIsLoggedIn}
+              /> :
+                <LoginPage
+                  setIsLoggedIn={setIsLoggedIn}
                   setCurrentUser={setCurrentUser}
-                  isAdmin={isAdmin}
-                  todos={todos}
-                  setTodos={setTodos}
-                  routineList={routineList}
-                  setRoutineList={setRoutineList}
+                  currentUser={currentUser}
+                  setIsAdmin={setIsAdmin}
                 />
               }
             />
@@ -215,6 +245,7 @@ function App() {
                 setTodos={setTodos}
                 routineList={routineList}
                 setRoutineList={setRoutineList}
+                setIsLoggedIn={setIsLoggedIn}
               /> :
                 <LoginPage
                   setIsLoggedIn={setIsLoggedIn}
@@ -277,6 +308,7 @@ function App() {
                   vergangeneTodos={vergangeneTodos}
                   setVergangeneTodos={setVergangeneTodos}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />
@@ -292,6 +324,7 @@ function App() {
                   vergangeneTodos={vergangeneTodos}
                   setVergangeneTodos={setVergangeneTodos}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />
@@ -306,7 +339,10 @@ function App() {
                 vergangeneTodos={vergangeneTodos}
                 setVergangeneTodos={setVergangeneTodos}
                 toLeft={toLeft}
+                setIsLoggedIn={setIsLoggedIn}
               />:
+
+                
                 <LoginPage
                   setIsLoggedIn={setIsLoggedIn}
                   setCurrentUser={setCurrentUser}
@@ -325,6 +361,7 @@ function App() {
                   todos={routineList}
                   setTodos={setRoutineList}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />
@@ -336,12 +373,13 @@ function App() {
                   meetings={meetings}
                   setMeetings={setMeetings}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />
             <Route
               path="/notizen"
-              element={<NotizenPage currentUser={currentUser} note={note} setNote={setNote} toLeft={toLeft} />}
+              element={<NotizenPage currentUser={currentUser} note={note} setNote={setNote} toLeft={toLeft} setIsLoggedIn={setIsLoggedIn}/>}
             />
             <Route
               path="/aktuelleprios"
@@ -353,6 +391,7 @@ function App() {
                   mzieleData={mzieleData}
                   setMzieleData={setMzieleData}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />

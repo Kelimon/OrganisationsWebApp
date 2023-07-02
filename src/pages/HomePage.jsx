@@ -164,7 +164,7 @@ const useStyles = styled(theme => ({
   },
   // ... and so on
 }));
-function HomePage({ currentUser, setCurrentUser, isAdmin, todos, setTodos, routineList, setRoutineList}) {
+function HomePage({ currentUser, setCurrentUser, isAdmin, todos, setTodos, routineList, setRoutineList, setIsLoggedIn}) {
   console.log("homepage ",isAdmin)
   const [inputValue, setInputValue] = useState('');
   const theme = useTheme();
@@ -179,7 +179,7 @@ function HomePage({ currentUser, setCurrentUser, isAdmin, todos, setTodos, routi
   };
 
   return (<>
-    <Header username={currentUser} isAdmin={isAdmin}/>
+    <Header username={currentUser} isAdmin={isAdmin} setIsLoggedIn={setIsLoggedIn}/>
     <Grid container spacing={0}>
       <Grid item xs={12} sm={6} md={6} lg={4} xl={3} >
       <ToDoList username={currentUser} todos={todos} setTodos={setTodos} /></Grid>

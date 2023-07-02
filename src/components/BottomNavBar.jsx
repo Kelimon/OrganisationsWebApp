@@ -83,7 +83,7 @@ function BottomNavBar({ toLeft, setToLeft }) {
         }}
       />
       <BottomNavigationAction
-        label="Monatsziele"
+        label="Prioritäten"
         sx={{
           border: "none",
           "&:focus": {

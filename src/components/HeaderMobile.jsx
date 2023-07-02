@@ -1,9 +1,9 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Box, Paper, Button, Grid } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, Paper, Button, Grid, Accordion } from "@mui/material";
 import logo from "./../assets/Logo.webp"; // if you're using Create React App
 import { useNavigate } from "react-router-dom";
 
-function HeaderMobile({ username, isAdmin }) {
+function HeaderMobile({ username, isAdmin, setIsLoggedIn  }) {
   const navigate = useNavigate();
 
   if (false) {
@@ -42,16 +42,13 @@ function HeaderMobile({ username, isAdmin }) {
       <AppBar position="static" sx={{ backgroundColor: "#13131A" }}>
         <Toolbar>
           <Grid container>
-            <Grid item xs={3}>
+            <Grid item xs={2}>
               <img src={logo} alt="Logo" height={"45"} style={{ marginTop: 12 }} />
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={10}>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Paper
-                    elevation={10}
-                    sx={{ padding: 1, backgroundColor: "#333e", borderRadius: 4, marginTop: 1, marginLeft: 3 }}
-                  >
+            
                     <Typography
                       variant="h6"
                       component="div"
@@ -63,7 +60,18 @@ function HeaderMobile({ username, isAdmin }) {
                     >
                       {username}
                     </Typography>
-                  </Paper>
+                    <Button onClick={() => {
+                      localStorage.clear()
+                      setIsLoggedIn(false)
+                      navigate("/login")
+                    
+                    }}
+                    fontSize={10}
+                    sx={{marginTop: "-10px", marginLeft: "200px", paddingBottom: "0px"}}
+                    
+                    >
+                      Logout
+                    </Button>
                 </Grid>
               </Grid>
             </Grid>

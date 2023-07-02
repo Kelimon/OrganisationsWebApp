@@ -60,6 +60,7 @@ function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
           console.log("entered setadmin");
           setIsAdmin(true);
         }
+        setIsLoggedIn(true)
         navigate("/home");
       })
       .catch((error) => {

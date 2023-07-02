@@ -61,6 +61,7 @@ function RegisterPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }
         // Handle successful login
         console.log("registeredd:", result);
         setCurrentUser(email);
+        setIsLoggedIn(true)
         navigate("/home");
       })
       .catch((error) => {
