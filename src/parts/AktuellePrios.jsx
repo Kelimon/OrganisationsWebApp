@@ -175,6 +175,12 @@ function AktuellePrios({ username }) {
             }}
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); // Verhindert das standardmäßige Verhalten von Enter
+                addTodo();
+              }
+            }}
             label="New Priority"
             fullWidth
             style={{ marginRight: 5 }} // add some margin to separate the TextField and Button

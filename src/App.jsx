@@ -1,30 +1,10 @@
 import * as React from "react";
 import axios from "axios";
 import "./App.css";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-} from "@mui/material";
-import { Button } from "@mui/material";
 import { Paper, Grid, Card, CardContent } from "@mui/material";
 import { CardMedia } from "@mui/material";
 import { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
@@ -44,11 +24,12 @@ import NotizenPage from "./pages/mobile/NotizenPage";
 import AktuellePriosPage from "./pages/mobile/AktuellePriosPage";
 import BottomNavBar from "./components/BottomNavBar";
 import GetMonatziele from "./requests/GetMonatsziele";
-import GetNotizen from "./requests/getNotizen";
+import GetNotizen from "./requests/GetNotizen";
 import GetPrios from "./requests/GetPrios";
 import GetRoutine from "./requests/GetRoutine";
 import GetScheduleData from "./requests/GetScheduleData";
 import GetTodos from "./requests/GetTodos";
+import jwtDecode from 'jwt-decode';
 
 const theme = createTheme({
   palette: {
@@ -79,8 +60,25 @@ function App() {
   const [vergangeneTodos, setVergangeneTodos] = useState([]);
   const [toLeft, setToLeft] = React.useState(false);
 
+
+
   console.log(currentUser);
   console.log("apppage ", isAdmin);
+  console.log("apptodos:",todos)
+
+ 
+  React.useEffect(() => {
+    const username = localStorage.getItem('username');
+    if (username) {
+      try {
+        setCurrentUser(username);
+        setIsLoggedIn(true);
+      } catch (e) {
+        // If there's an error decoding the token, handle it here.
+        console.error(e);
+      }
+    }
+  }, []);
 
   React.useEffect(() => {
     const fetchTodos = async () => {
@@ -96,6 +94,15 @@ function App() {
 
     fetchTodos();
   }, [currentUser]);
+
+  function decodeToken(token) {
+    try {
+        return jwtDecode(token);
+    } catch(e) {
+        console.error('Failed to decode token', e);
+        return null;
+    }
+}
 
   React.useEffect(() => {
     const fetchTodos = async () => {
@@ -117,6 +124,9 @@ function App() {
       console.log("getroutine in morgenrotuine: ", response);
       if (response.data.days.length > 0) {
         setRoutineList(response.data.days);
+      }else{
+        console.log("thelenght", response.data.days.length)
+        setRoutineList([])
       }
     };
 
@@ -128,9 +138,7 @@ function App() {
       console.log("getprios:", currentUser);
       const response = await GetNotizen({ username: currentUser });
       console.log("notizen data: ", response.data.notizen);
-      if (response.data.notizen.length > 0) {
         setNote(response.data.notizen);
-      }
     };
 
     fetchTodos();
@@ -143,7 +151,6 @@ function App() {
       console.log("fetchtodosentered");
       const response = await GetScheduleData({ username: currentUser });
       console.log("schedule length and data", response);
-      if (response.length > 0) {
         const meetingsWithDayjsDates = response.map((meeting) => ({
           ...meeting,
           date: Dayjs(meeting.date), // convert date string or number to Dayjs object
@@ -151,7 +158,7 @@ function App() {
           end: Dayjs(meeting.end), // convert end time string or number to Dayjs object
         }));
         setMeetings(meetingsWithDayjsDates);
-      }
+      
     };
 
     fetchTodos();
@@ -161,15 +168,36 @@ function App() {
     const fetchTodos = async () => {
       console.log("getprios:", currentUser);
       const response = await GetTodos({ username: currentUser });
+      if(response.data.days.length>0){
       const latestDayData = response.data.days[response.data.days.length - 1];
       console.log(latestDayData.data);
-      if (latestDayData.data.length > 0) {
         setTodos(latestDayData.data);
+        console.log("getsenterdbutfuckedup",latestDayData.data.length)
+      }else{
+        setTodos([])
       }
+      
     };
+
+    if(!isLoggedIn){
+      setTodos([])
+    }
 
     fetchTodos();
   }, [currentUser]);
+
+  React.useEffect(() => {
+    const username = localStorage.getItem('username');
+    if (username) {
+      try {
+        setCurrentUser(username);
+        setIsLoggedIn(true);
+      } catch (e) {
+        // If there's an error decoding the token, handle it here.
+        console.error(e);
+      }
+    }
+  }, []);
 
   React.useEffect(() => {
     const fetchTodos = async () => {
@@ -181,28 +209,44 @@ function App() {
     fetchTodos();
   }, [currentUser]); // The empty array makes this useEffect act like componentDidMount - it runs once after the component mounts.
   console.log("appjs :", meetings);
+  console.log("isloggedin", isLoggedIn)
   if (!isSmallScreen) {
     return (
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route
               path="/home"
-              element={
-                <HomePage
-                  currentUser={currentUser}
+              element={ isLoggedIn ? <HomePage
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                isAdmin={isAdmin}
+                todos={todos}
+                setTodos={setTodos}
+                routineList={routineList}
+                setRoutineList={setRoutineList}
+                setIsLoggedIn={setIsLoggedIn}
+              /> :
+                <LoginPage
+                  setIsLoggedIn={setIsLoggedIn}
                   setCurrentUser={setCurrentUser}
-                  isAdmin={isAdmin}
-                  todos={todos}
-                  setTodos={setTodos}
-                  routineList={routineList}
-                  setRoutineList={setRoutineList}
+                  currentUser={currentUser}
+                  setIsAdmin={setIsAdmin}
                 />
               }
             />
             <Route
               path="/login"
-              element={
+              element={ isLoggedIn ? <HomePage
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                isAdmin={isAdmin}
+                todos={todos}
+                setTodos={setTodos}
+                routineList={routineList}
+                setRoutineList={setRoutineList}
+                setIsLoggedIn={setIsLoggedIn}
+              /> :
                 <LoginPage
                   setIsLoggedIn={setIsLoggedIn}
                   setCurrentUser={setCurrentUser}
@@ -233,13 +277,13 @@ function App() {
               }
             />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </ThemeProvider>
     );
   } else {
     return (
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route
               path="/register"
@@ -264,6 +308,7 @@ function App() {
                   vergangeneTodos={vergangeneTodos}
                   setVergangeneTodos={setVergangeneTodos}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />
@@ -279,12 +324,25 @@ function App() {
                   vergangeneTodos={vergangeneTodos}
                   setVergangeneTodos={setVergangeneTodos}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />
             <Route
               path="/login"
-              element={
+              element={ isLoggedIn ? <ToDoListPage
+                currentUser={currentUser}
+                setCurrentUser={setCurrentUser}
+                isAdmin={isAdmin}
+                todos={todos}
+                setTodos={setTodos}
+                vergangeneTodos={vergangeneTodos}
+                setVergangeneTodos={setVergangeneTodos}
+                toLeft={toLeft}
+                setIsLoggedIn={setIsLoggedIn}
+              />:
+
+                
                 <LoginPage
                   setIsLoggedIn={setIsLoggedIn}
                   setCurrentUser={setCurrentUser}
@@ -303,6 +361,7 @@ function App() {
                   todos={routineList}
                   setTodos={setRoutineList}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />
@@ -314,12 +373,13 @@ function App() {
                   meetings={meetings}
                   setMeetings={setMeetings}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />
             <Route
               path="/notizen"
-              element={<NotizenPage currentUser={currentUser} note={note} setNote={setNote} toLeft={toLeft} />}
+              element={<NotizenPage currentUser={currentUser} note={note} setNote={setNote} toLeft={toLeft} setIsLoggedIn={setIsLoggedIn}/>}
             />
             <Route
               path="/aktuelleprios"
@@ -331,12 +391,13 @@ function App() {
                   mzieleData={mzieleData}
                   setMzieleData={setMzieleData}
                   toLeft={toLeft}
+                  setIsLoggedIn={setIsLoggedIn}
                 />
               }
             />
           </Routes>
           {currentUser && <BottomNavBar toLeft={toLeft} setToLeft={setToLeft} />}
-        </BrowserRouter>
+        </HashRouter>
       </ThemeProvider>
     );
   }

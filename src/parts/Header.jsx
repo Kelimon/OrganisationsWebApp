@@ -1,9 +1,9 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box, Paper, Button } from "@mui/material";
-import logo from "./../assets/logo.webp"; // if you're using Create React App
+import logo from "./../assets/Logo.webp"; // if you're using Create React App
 import { useNavigate } from "react-router-dom";
 
-function Header({ username, isAdmin }) {
+function Header({ username, isAdmin, setIsLoggedIn }) {
   const navigate = useNavigate();
   return (
     <AppBar position="static" sx={{ backgroundColor: "#13131A" }}>
@@ -20,6 +20,15 @@ function Header({ username, isAdmin }) {
             <Typography variant="h6" component="div" color={"white"} fontSize={16} marginLeft={1} marginRight={1}>
               {username}
             </Typography>
+            <Button onClick={() => {
+              localStorage.clear()
+              setIsLoggedIn(false)
+              navigate("/login")
+            
+            }}
+              >
+                      Logout
+                    </Button>
           </Paper>
           {isAdmin && (
             <Button

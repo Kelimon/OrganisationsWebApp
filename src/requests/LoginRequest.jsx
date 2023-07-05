@@ -10,6 +10,12 @@ async function LoginRequest(username, password, setIsLoggedIn, setCurrentUser, c
       }
     );
     console.log("response!: ", response);
+    // Save token in local storage
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('username', response.data.username);
+    var token = localStorage.getItem('token');
+    localStorage.setItem('username', response.data.username);
+    console.log("token2: ", token)
     setCurrentUser(response.data.username);
     if(response.data.username == "suhaibking"){
       setIsAdmin(true)

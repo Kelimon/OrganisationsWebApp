@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import savePrios from "./../requests/savePrios";
 import GetPrios from "./../requests/GetPrios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import AdjustOutlinedIcon from '@mui/icons-material/AdjustOutlined';
+import AdjustOutlinedIcon from "@mui/icons-material/AdjustOutlined";
 import GetMonatziele from "../requests/GetMonatsziele";
 import saveMonatsziele from "../requests/saveMonatsziele";
 
@@ -74,22 +74,22 @@ function Monatsziele({ username }) {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await GetMonatziele({username});
-      console.log("response from monatsziele: ", response)
-      if(response){
-      setTodos(response)
+      const response = await GetMonatziele({ username });
+      console.log("response from monatsziele: ", response);
+      if (response) {
+        setTodos(response);
       }
     };
 
     fetchTodos();
   }, [username]);
 
-  useEffect(()=>{
-    if(todos.length>0){
+  useEffect(() => {
+    if (todos.length > 0) {
       let mzieleData = todos;
-      saveMonatsziele({username, mzieleData})
+      saveMonatsziele({ username, mzieleData });
     }
-  },[todos])
+  }, [todos]);
 
   const deleteTodo = (index) => {
     setTodos(todos.filter((todo, i) => i !== index));
@@ -97,28 +97,29 @@ function Monatsziele({ username }) {
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) return;
-  
+
     const items = Array.from(todos);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-  
+
     setTodos(items);
-  }
-  const getItemStyle = (isDragging, draggableStyle,isHovering) => ({
+  };
+  const getItemStyle = (isDragging, draggableStyle, isHovering) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
     padding: 8 * 1.5,
     margin: `0 0 8px 0`,
     borderRadius: 10,
-  
+
     // change background colour if dragging
-    background: isDragging ? 'linear-gradient(to bottom right, black,  #550763)' : 'linear-gradient(to bottom right,  #870e9c, #ee05fa)',
+    background: isDragging
+      ? "linear-gradient(to bottom right, black,  #550763)"
+      : "linear-gradient(to bottom right,  #870e9c, #ee05fa)",
     // add margin if hovering
-    marginLeft: isHovering ? '20px' : '0px',
+    marginLeft: isHovering ? "20px" : "0px",
     // styles we need to apply on draggables
-    ...draggableStyle
+    ...draggableStyle,
   });
-  
 
   return (
     <StyledPaper>
@@ -130,50 +131,38 @@ function Monatsziele({ username }) {
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="todos">
               {(provided) => (
-                <List
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {
-  todos.map(({ text }, index) => {
-    return (
-      <Draggable key={index} draggableId={`draggable-${index}-${text}`} index={index}>
-        {(provided, snapshot) => (
-          
-          <ListItem
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            sx={{ transition: 'margin-left 0.4s',height: '4rem'}}  // update here
-            style={getItemStyle(
-              snapshot.isDragging,
-              provided.draggableProps.style,
-              index === hoverIndex
-            )}
-            onMouseEnter={() => setHoverIndex(index)}
-            onMouseLeave={() => setHoverIndex(null)}
-            
-          >
-            <ListItemIcon>
-    <AdjustOutlinedIcon color="inherit" />
-  </ListItemIcon>
-            <ListItemText
-              primaryTypographyProps={{ style: { color: "white" } }}
-              primary={text}
-            />
-            {hoverIndex === index && (
-              <IconButton onClick={() => deleteTodo(index)} color="inherit">
-                <DeleteIcon color="black" />
-              </IconButton>
-            )}
-          </ListItem>
-        )}
-      </Draggable>
-    );
-  })
-}
-
-
+                <List {...provided.droppableProps} ref={provided.innerRef}>
+                  {todos.map(({ text }, index) => {
+                    return (
+                      <Draggable key={index} draggableId={`draggable-${index}-${text}`} index={index}>
+                        {(provided, snapshot) => (
+                          <ListItem
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            sx={{ transition: "margin-left 0.4s", height: "4rem" }} // update here
+                            style={getItemStyle(
+                              snapshot.isDragging,
+                              provided.draggableProps.style,
+                              index === hoverIndex
+                            )}
+                            onMouseEnter={() => setHoverIndex(index)}
+                            onMouseLeave={() => setHoverIndex(null)}
+                          >
+                            <ListItemIcon>
+                              <AdjustOutlinedIcon color="inherit" />
+                            </ListItemIcon>
+                            <ListItemText primaryTypographyProps={{ style: { color: "white" } }} primary={text} />
+                            {hoverIndex === index && (
+                              <IconButton onClick={() => deleteTodo(index)} color="inherit">
+                                <DeleteIcon color="black" />
+                              </IconButton>
+                            )}
+                          </ListItem>
+                        )}
+                      </Draggable>
+                    );
+                  })}
 
                   {provided.placeholder}
                 </List>
@@ -182,27 +171,32 @@ function Monatsziele({ username }) {
           </DragDropContext>
         </Box>
         <Box mt={3} display="flex">
-  <WhiteTextField
-    InputLabelProps={{
-        style: { color: 'white' },
-      }}
-    value={newTodo}
-    onChange={(e) => setNewTodo(e.target.value)}
-    label="New monthly Goal"
-    fullWidth
-    style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-    flexGrow={1} // this will allow the TextField to take up as much space as possible
-  />
-  <Button
-    onClick={addTodo}
-    variant="contained"
-    color="secondary"
-    style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
-  >
-    Add
-  </Button>
-</Box>
-
+          <WhiteTextField
+            InputLabelProps={{
+              style: { color: "white" },
+            }}
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault(); // Verhindert das standardmäßige Verhalten von Enter
+                addTodo();
+              }
+            }}
+            label="New monthly Goal"
+            fullWidth
+            style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
+            flexGrow={1} // this will allow the TextField to take up as much space as possible
+          />
+          <Button
+            onClick={addTodo}
+            variant="contained"
+            color="secondary"
+            style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
+          >
+            Add
+          </Button>
+        </Box>
       </Box>
     </StyledPaper>
   );

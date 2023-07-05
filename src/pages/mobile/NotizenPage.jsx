@@ -5,10 +5,10 @@ import Header from "../../parts/Header";
 import NotizenMobile from "../../parts/mobile/NotizenMobile";
 import HeaderMobile from "../../components/HeaderMobile";
 
-function NotizenPage({ currentUser, note, setNote, toLeft }) {
+function NotizenPage({ currentUser, note, setNote, toLeft, setIsLoggedIn  }) {
   return (
     <>
-      <HeaderMobile username={currentUser} />
+      <HeaderMobile username={currentUser} setIsLoggedIn={setIsLoggedIn}/>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
         <NotizenMobile username={currentUser} note={note} setNote={setNote} toLeft={toLeft} />
       </Box>

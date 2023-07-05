@@ -51,18 +51,18 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
 
 function MorgenRoutine({ username, todos, setTodos }) {
   console.log("hi");
-  console.log(username)
-  
+  console.log(username);
+
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await GetRoutine({username});
-      console.log( "getroutine in morgenrotuine: ", response)
-      if(response.data.days.length>0){
-      setTodos(response.data.days);
+      const response = await GetRoutine({ username });
+      console.log("getroutine in morgenrotuine: ", response);
+      if (response.data.days.length > 0) {
+        setTodos(response.data.days);
       }
     };
 
@@ -75,24 +75,18 @@ function MorgenRoutine({ username, todos, setTodos }) {
       setNewTodo("");
     }
     console.log("username before saving todos: ", username);
-  console.log("todos before saving todos: ", todos);
-
-
+    console.log("todos before saving todos: ", todos);
   };
 
-  useEffect(()=>{
-    console.log(todos)
-    if(todos.length>0){
-      saveRoutine({username, todos})
+  useEffect(() => {
+    console.log(todos);
+    if (todos.length > 0) {
+      saveRoutine({ username, todos });
     }
-  },[todos])
+  }, [todos]);
 
   const toggleCheck = (index) => {
-    setTodos(
-      todos.map((todo, i) =>
-        i === index ? { ...todo, checked: !todo.checked } : todo
-      )
-    );
+    setTodos(todos.map((todo, i) => (i === index ? { ...todo, checked: !todo.checked } : todo)));
   };
 
   const deleteTodo = (index) => {
@@ -108,53 +102,55 @@ function MorgenRoutine({ username, todos, setTodos }) {
         <Box display="flex" flexDirection="column" height="90%">
           <Box flexGrow="1" overflow="auto">
             <List>
-              {Array.isArray(todos) && todos.map((todo, index) => (
-                <ListItem
-                  key={index}
-                  onMouseEnter={() => setHoverIndex(index)}
-                  onMouseLeave={() => setHoverIndex(null)}
-                >
-                  <Checkbox
-                    checked={todo.checked}
-                    onChange={() => toggleCheck(index)}
-                    style={{ color: "white" }}
-                  />
-                  <ListItemText
-                    primaryTypographyProps={{ style: { color: "white" } }}
-                    primary={todo.text}
-                    color={"white"}
-                  />
-                  {hoverIndex === index && (
-                    <IconButton onClick={() => deleteTodo(index)} color="error">
-                      <DeleteIcon color="red" />
-                    </IconButton>
-                  )}
-                </ListItem>
-              ))}
+              {Array.isArray(todos) &&
+                todos.map((todo, index) => (
+                  <ListItem
+                    key={index}
+                    onMouseEnter={() => setHoverIndex(index)}
+                    onMouseLeave={() => setHoverIndex(null)}
+                  >
+                    <Checkbox checked={todo.checked} onChange={() => toggleCheck(index)} style={{ color: "white" }} />
+                    <ListItemText
+                      primaryTypographyProps={{ style: { color: "white" } }}
+                      primary={todo.text}
+                      color={"white"}
+                    />
+                    {hoverIndex === index && (
+                      <IconButton onClick={() => deleteTodo(index)} color="error">
+                        <DeleteIcon color="red" />
+                      </IconButton>
+                    )}
+                  </ListItem>
+                ))}
             </List>
           </Box>
           <Box mt={3} display="flex">
-  <WhiteTextField
-    InputLabelProps={{
-        style: { color: 'white' },
-      }}
-    value={newTodo}
-    onChange={(e) => setNewTodo(e.target.value)}
-    label="New Routine Task"
-    fullWidth
-    style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-    flexGrow={1} // this will allow the TextField to take up as much space as possible
-  />
-  <Button
-    onClick={addTodo}
-    variant="contained"
-    color="secondary"
-    style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
-  >
-    Add
-  </Button>
-</Box>
-
+            <WhiteTextField
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+              value={newTodo}
+              onChange={(e) => setNewTodo(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); // Verhindert das standardmäßige Verhalten von Enter
+                  addTodo();
+                }
+              }}
+              label="New Routine Task"
+              fullWidth
+              style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
+              flexGrow={1} // this will allow the TextField to take up as much space as possible
+            />
+            <Button
+              onClick={addTodo}
+              variant="contained"
+              color="secondary"
+              style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
+            >
+              Add
+            </Button>
+          </Box>
         </Box>
       </StyledPaper>
     </>

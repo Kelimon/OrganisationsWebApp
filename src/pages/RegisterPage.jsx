@@ -15,7 +15,7 @@ function RegisterPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }
   const [emailInvalid, setEmailInvalid] = useState(false);
   const navigate = useNavigate();
 
-  const handleEmailChange = (e) => {
+  /*const handleEmailChange = (e) => {
     setEmail(e.target.value);
     // perform simple validation on email format
     const re = /\S+@\S+\.\S+/;
@@ -24,6 +24,10 @@ function RegisterPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }
     } else {
       setEmailInvalid(false);
     }
+  }; */
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -57,6 +61,7 @@ function RegisterPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }
         // Handle successful login
         console.log("registeredd:", result);
         setCurrentUser(email);
+        setIsLoggedIn(true);
         navigate("/home");
       })
       .catch((error) => {
@@ -105,6 +110,12 @@ function RegisterPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }
               onChange={handleConfirmedPasswordChange}
               fullWidth
               margin="normal"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); // Verhindert das standardmäßige Verhalten von Enter
+                  handleRegister();
+                }
+              }}
             />
             {passwordNotEqual && <Typography color={"red"}>Passwords are not the same.</Typography>}
             {passwordInvalid && <Typography color={"red"}>Password must be atleast 8 characters.</Typography>}

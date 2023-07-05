@@ -60,6 +60,7 @@ function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
           console.log("entered setadmin");
           setIsAdmin(true);
         }
+        setIsLoggedIn(true);
         navigate("/home");
       })
       .catch((error) => {
@@ -106,6 +107,12 @@ function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
               type="password"
               value={password}
               onChange={handlePasswordChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); // Verhindert das standardmäßige Verhalten von Enter
+                  handleLogin();
+                }
+              }}
               fullWidth
               margin="normal"
             />

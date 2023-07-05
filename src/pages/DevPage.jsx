@@ -15,7 +15,6 @@ import Scheduler from "../parts/Scheduler";
 import { Grid } from "@mui/material";
 import { styled } from "@mui/system";
 import { useMediaQuery, useTheme } from "@mui/material";
-import Dev from "../parts/Dev";
 
 const ChartGridItem = styled(Grid)(({ theme }) => ({
   order: 2,
@@ -164,7 +163,7 @@ const useStyles = styled((theme) => ({
   },
   // ... and so on
 }));
-function HomePage({
+function DevPage({
   currentUser,
   setCurrentUser,
   isAdmin,
@@ -220,9 +219,6 @@ function HomePage({
         <MorgenRoutineGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
           <MorgenRoutine username={currentUser} todos={routineList} setTodos={setRoutineList} />
         </MorgenRoutineGridItem>
-        <Grid item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <Dev />
-        </Grid>
       </Grid>
     </>
   );
@@ -230,4 +226,4 @@ function HomePage({
   return <></>;
 }
 
-export default HomePage;
+export default DevPage;

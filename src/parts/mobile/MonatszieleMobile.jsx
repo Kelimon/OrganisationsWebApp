@@ -27,7 +27,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   marginTop: 34,
   borderRadius: 15,
   backgroundColor: "#333e",
-  height: "calc(100vh - 220px)",
+  height: "calc(100vh - 275px)",
   overflow: "auto",
 }));
 

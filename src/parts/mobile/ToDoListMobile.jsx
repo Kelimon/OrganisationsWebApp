@@ -22,7 +22,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { motion, AnimatePresence } from "framer-motion";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2),
+  margin: theme.spacing(1),
   padding: theme.spacing(2),
   borderRadius: 15, // Setzt die Rundung der Ecken
   backgroundColor: "#333e", // Dunklere Farbe für den Block
@@ -38,7 +38,7 @@ const StyledPaperMobile = styled(Paper)(({ theme }) => ({
   borderRadius: 15, // Setzt die Rundung der Ecken
   backgroundColor: "#333e", // Dunklere Farbe für den Block
   maxHeight: 1000, // Feste Größe für den Block
-  height: "calc(100vh - 220px)",
+  height: "calc(100vh - 260px)",
   overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
 }));
 

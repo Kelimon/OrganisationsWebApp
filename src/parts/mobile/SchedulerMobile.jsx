@@ -5,7 +5,7 @@ import Dayjs from "dayjs";
 import { styled } from "@mui/system";
 import dayjs from "dayjs";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   Box,
   Button,
@@ -30,12 +30,14 @@ import GetScheduleData from "../../requests/GetScheduleData";
 import saveScheduleData from "../../requests/saveScheduleData";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Clock from "../../components/Clock";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   borderRadius: 15,
   backgroundColor: "#333e",
-  height: "calc(100vh - 220px)",
+  marginTop: 34,
+  height: "calc(100vh - 245px)",
   overflow: "auto",
   display: "flex",
   flexDirection: "row",
@@ -62,7 +64,7 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
   const [startHour, setStartHour] = React.useState(null);
   const [endHour, setEndHour] = React.useState(null);
 
-  const [color, setColor] = React.useState("#000"); // default color
+  const [color, setColor] = React.useState("#9c27b0"); // default color
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [showCalendar, setShowCalendar] = React.useState(true);
@@ -77,6 +79,7 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
   const handleClose = () => {
     setOpen(false);
   };
+  console.log("color", color)
   console.log("schedulermobile", meetings);
   const handleSubmit = () => {
     setOpen(false);
@@ -108,13 +111,14 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
         },
       ]);
     }
-    setColor("#000"); // reset color after adding meeting
+    setColor("#9c27b0"); // reset color after adding meeting
     setEditing(false);
     setEditingIndex(null); // clear editing index when done editing
   };
 
-  const handleEdit = (id) => {
-    const meetingToEdit = meetings[id];
+  const handleEdit = (index) => {
+    console.log("editing and paramter id: ", editingIndex, index)
+    const meetingToEdit = meetings[index];
     setTitle(meetingToEdit.title);
     setDescription(meetingToEdit.description);
     setStartHour(meetingToEdit.start);
@@ -122,9 +126,11 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
     setColor(meetingToEdit.color);
     setValue(meetingToEdit.date);
     setEditing(true);
-    setEditingMeetingId(id); // set the id of the meeting being edited
+    setEditingIndex(index);
     setOpen(true);
-  };
+};
+
+
 
   React.useEffect(() => {
     let scheduleData = meetings;
@@ -145,13 +151,14 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
   };
 
   const handleDelete = () => {
-    setMeetings((prevMeetings) => prevMeetings.filter((meeting, index) => index !== editingIndex));
+    console.log()
+    let array = [...meetings]
+    array.splice(editingIndex, 1)
+    setMeetings(array);
     setOpen(false);
     setEditing(false);
     setEditingIndex(null); // clear editing index when done deleting
   };
-
-  if (isSmallScreen) {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
         <StyledPaper>
@@ -292,6 +299,11 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
                         <CirclePicker color={color} onChangeComplete={(color) => setColor(color.hex)} />
                       </DialogContent>
                       <DialogActions>
+                      {editing && (
+                    <Button color="primary" onClick={handleDelete}>
+                      löschen
+                    </Button>
+                  )}
                         <Button onClick={handleClose} color="primary">
                           Cancel
                         </Button>
@@ -303,31 +315,51 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
 
                     {/* Display Meetings */}
                     {meetings
-                      .filter((meeting) => meeting.date.isSame(value, "day"))
-                      .sort((a, b) => a.start.unix() - b.start.unix()) // sort meetings by start time
-                      .map((meeting, index) => (
-                        <Paper
-                          sx={{
-                            borderRadius: 2,
-                            backgroundColor: meeting.color,
-                            margin: "10px",
-                            padding: "10px",
-                          }}
-                          key={index}
-                        >
+    .filter((meeting) => meeting.date.isSame(value, "day"))
+    .sort((a, b) => a.start.unix() - b.start.unix()) // sort meetings by start time
+    .map((meeting, index) => (
+    <Paper
+        sx={{
+        borderRadius: 2,
+        backgroundColor: meeting.color,
+        margin: "10px",
+        padding: "10px",
+        }}
+        key={meeting.id} // assuming each meeting has a unique id field
+    >
                           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <Typography color="white" variant="h6" fontWeight="fontWeightBold" fontSize={20}>
                               {meeting.title}
                             </Typography>
-
-                            <Typography color="white" variant="subtitle1">
+                            <Box sx={{ display: "flex"}}>
+                            <Typography color="white" variant="subtitle1" sx={{marginTop:1}}>
                               {meeting.start.format("HH:mm")} - {meeting.end.format("HH:mm")}
                             </Typography>
+                            
+                            <IconButton
+    aria-label="edit"
+    color="white"
+    onClick={() => handleEdit(meetings.indexOf(meeting))} // assuming each meeting has a unique id field
+    sx={{ color: "white" }}
+>
+    <EditIcon />
+</IconButton>
+
+                      </Box>
                           </Box>
                           <Box sx={{ height: "1px", backgroundColor: "black", margin: "5px" }} />
-                          <Typography color="white" variant="body1">
+                          {/*<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>*/}
+                          <Grid container>
+                            <Grid item xs={10}>
+                          <Typography color="white" variant="body1" sx={{marginRight:1}}>
                             {meeting.description}
                           </Typography>
+                          </Grid>
+                          <Grid item xs={2} >
+                          <Clock start={meeting.start} end={meeting.end}/>
+                          
+                          </Grid>
+                          </Grid>
                         </Paper>
                       ))}
                   </Paper>
@@ -338,209 +370,4 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
         </StyledPaper>
       </LocalizationProvider>
     );
-  } else {
-    return (
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-        <StyledPaper>
-          <StaticDatePicker
-            slotProps={{
-              toolbar: { toolbarFormat: "ddd DD MMMM", hidden: false },
-            }}
-            orientation="portrait"
-            value={value}
-            onChange={(newValue) => {
-              setValue(newValue);
-              console.log("scheduler", newValue);
-            }}
-            sx={{
-              height: "100%",
-              backgroundColor: "#333e",
-              borderRight: "3px solid black",
-              fontSize: 100,
-              width: "50%",
-              color: "white",
-              "& .MuiPickersDay-daySelected": {
-                backgroundColor: "grey",
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "grey",
-                  color: "white",
-                },
-              },
-              "& .MuiIconButton-label": {
-                color: "white",
-              },
-              "& .MuiPickersDay-day": {
-                color: "white",
-              },
-              "& .MuiDayCalendar-weekDayLabel": {
-                color: "white",
-              },
-              "& .MuiPickersCalendarHeader-switchViewButton": {
-                color: "white",
-              },
-              "& .MuiPickersArrowSwitcher-button": {
-                color: "white",
-              },
-              "& .MuiPickersDay-root": {
-                color: "white",
-              },
-              "& .MuiPickersDay-root.Mui-selected": {
-                backgroundColor: "grey",
-              },
-              "& .MuiButton-root": {
-                display: "none",
-              },
-            }}
-            renderDay={(date, selectedDates, DayComponentProps) => {
-              console.log("renderDay called");
-              const hasMeeting = meetings.some((meeting) => {
-                console.log("Meeting date:", meeting.date.format("DD/MM/YYYY")); // to log meeting dates
-                console.log("Calendar date:", date.format("DD/MM/YYYY")); // to log current date in the calendar
-                return meeting.date.isSame(date, "day");
-              });
-              console.log("Has meeting:", hasMeeting); // to check if condition is evaluated as true or false
-              return (
-                <Box sx={{ position: "relative" }}>
-                  <DayComponent {...DayComponentProps} />
-                  {hasMeeting && (
-                    <span
-                      style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        width: "4px",
-                        height: "4px",
-                        borderRadius: "50%",
-                        backgroundColor: "red",
-                      }}
-                    />
-                  )}
-                </Box>
-              );
-            }}
-          />
-          {value && (
-            <Paper sx={{ height: "100%", width: "66%", overflow: "auto", backgroundColor: "#333e" }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0" }}>
-                <Typography color={"white"} sx={{ fontSize: 30, marginLeft: 4 }}>
-                  {value.format("ddd, MMM D")}
-                </Typography>
-                <IconButton
-                  aria-label="delete"
-                  color="secondary"
-                  onClick={handleClickOpen}
-                  sx={{ outlineColor: "#333e" }}
-                  disableRipple
-                  disableFocusRipple
-                >
-                  <AddIcon />
-                </IconButton>
-              </Box>
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                sx={{
-                  borderRadius: 10,
-                  "& .MuiDialog-paper": {
-                    borderRadius: 10,
-                    backgroundColor: "white",
-                  },
-                }}
-              >
-                <DialogTitle sx={{ marginLeft: 1 }}>Termin erstellen</DialogTitle>
-                <DialogContent sx={{ borderRadius: 20 }}>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    sx={{ marginTop: 3 }}
-                    id="title"
-                    label="Titel"
-                    type="text"
-                    fullWidth
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <MobileTimePicker label="Beginn" value={startHour} onChange={setStartHour} ampm={false} />
-
-                  <MobileTimePicker label="Ende" value={endHour} onChange={setEndHour} ampm={false} />
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="description"
-                    label="Beschreibung"
-                    type="text"
-                    fullWidth
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                  <CirclePicker color={color} onChangeComplete={(color) => setColor(color.hex)} />
-                </DialogContent>
-                <DialogActions>
-                  {editing && (
-                    <Button color="primary" onClick={handleDelete}>
-                      löschen
-                    </Button>
-                  )}
-                  <Button
-                    onClick={handleClose}
-                    color="secondary"
-                    sx={{ marginBottom: 1 }}
-                    disableRipple
-                    disableFocusRipple
-                  >
-                    Zurück
-                  </Button>
-                  <Button onClick={handleSubmit} color="secondary" sx={{ marginRight: 3, marginBottom: 1 }}>
-                    Hinzufügen
-                  </Button>
-                </DialogActions>
-              </Dialog>
-
-              {/* Display Meetings */}
-              {meetings
-                .filter((meeting) => meeting.date.isSame(value, "day"))
-                .sort((a, b) => a.start.unix() - b.start.unix()) // sort meetings by start time
-                .map((meeting, index) => (
-                  <Paper
-                    sx={{
-                      borderRadius: 2,
-                      backgroundColor: meeting.color,
-                      margin: "10px",
-                      padding: "10px",
-                    }}
-                    key={index}
-                  >
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <Typography color="white" variant="h6" fontWeight="fontWeightBold" fontSize={21}>
-                        {meeting.title}
-                      </Typography>
-
-                      <Typography color="white" variant="subtitle1">
-                        {meeting.start.format("HH:mm")} - {meeting.end.format("HH:mm")}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ height: "1px", backgroundColor: "black", margin: "5px", marginTop: "-3px" }} />
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <Typography color="white" variant="body1">
-                        {meeting.description}
-                      </Typography>
-                      <IconButton
-                        aria-label="edit"
-                        color="white"
-                        onClick={() => handleEdit(index)}
-                        sx={{ color: "white" }}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </Box>
-                  </Paper>
-                ))}
-            </Paper>
-          )}
-        </StyledPaper>
-      </LocalizationProvider>
-    );
   }
-}

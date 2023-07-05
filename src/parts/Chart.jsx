@@ -253,6 +253,14 @@ class Chart extends React.Component {
     }
   }
 
+  chartWidth = () => {
+    if(this.state.todos.length*50 <840){
+      return 840;
+    }else{
+      return this.state.todos.length*60
+    }
+  }
+
   calculateLastTodo() {
     let result = 0;
     for (let i = 0; i < this.props.todos.length; i++) {
@@ -271,7 +279,7 @@ class Chart extends React.Component {
             series={this.state.series}
             type="area"
             height={450}
-            width={Math.max(this.state.todos.length * 50, 1000)}
+            width={this.chartWidth()}
           />
         </StyledPaper>
       );
