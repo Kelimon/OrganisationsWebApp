@@ -111,7 +111,7 @@ function AktuellePrios({ username }) {
 
     // change background colour if dragging
     background: isDragging
-      ? "linear-gradient(to bottom right,  green, #fa37c0)"
+      ? "linear-gradient(to bottom right,  black, purple)"
       : "linear-gradient(to bottom right,  #028db0, #fa37c0)",
     //background: isDragging ? "linear-gradient(to bottom right, black,  #550763)" : "#b608d4",
     marginLeft: isHovering ? "20px" : "0px",

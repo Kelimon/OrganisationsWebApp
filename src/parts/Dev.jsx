@@ -43,6 +43,28 @@ function Dev({ username }) {
       <Grid container>
         <Grid item xs={12}>
           <Typography color={"white"} variant="h6">
+            Erklärung zur Website:
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography color={"lightblue"}>-Todos Tasks löschen sich immer 3 Uhr nachts</Typography>
+        </Grid>
+        <Grid item>
+          <Typography color={"magenta"}>-Todos, Morgneroutine, Prios,monatsziele durch Hovern löschbar</Typography>
+        </Grid>
+        <Grid item>
+          <Typography color={"lightgreen"}>-Prios, Monatsziele mit Drag&Drop verschiebbar</Typography>
+        </Grid>
+        <Grid item>
+          <Typography color={"red"}>-Diagramm zeigt prozentual die erledigten Todos pro Tag an </Typography>
+        </Grid>
+        <Grid item>
+          <Typography color={"pink"}>
+            -MorgenRoutine punkte bleiben, aber Häckchen löscht sich jeden Tag 3 Uhr
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sx={{ marginTop: 5 }}>
+          <Typography color={"white"} variant="h6">
             Update 03.07.23:
           </Typography>
         </Grid>

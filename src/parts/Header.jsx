@@ -12,7 +12,7 @@ function Header({ username, isAdmin, setIsLoggedIn }) {
         <img src={logo} alt="Logo" height={"50"} />
         {/* if you're using Create React App, you'd use <img src={logo} alt="Logo" /> instead */}
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, marginLeft: 2 }}>
-          King Website by Panaking
+          Plana
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", marginTop: 1 }}>
@@ -20,15 +20,15 @@ function Header({ username, isAdmin, setIsLoggedIn }) {
             <Typography variant="h6" component="div" color={"white"} fontSize={16} marginLeft={1} marginRight={1}>
               {username}
             </Typography>
-            <Button onClick={() => {
-              localStorage.clear()
-              setIsLoggedIn(false)
-              navigate("/login")
-            
-            }}
-              >
-                      Logout
-                    </Button>
+            <Button
+              onClick={() => {
+                localStorage.clear();
+                setIsLoggedIn(false);
+                navigate("/login");
+              }}
+            >
+              Logout
+            </Button>
           </Paper>
           {isAdmin && (
             <Button
