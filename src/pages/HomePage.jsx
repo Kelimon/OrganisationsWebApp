@@ -192,7 +192,7 @@ function HomePage({
       <Header username={currentUser} isAdmin={isAdmin} setIsLoggedIn={setIsLoggedIn} />
       <Grid container spacing={0}>
         <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
-          <ToDoList username={currentUser} todos={todos} setTodos={setTodos} />
+          <ToDoList username={currentUser} todos={todos} setTodos={setTodos} isAdmin={isAdmin} />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
           <VergangeneToDos username={currentUser} />
@@ -218,7 +218,7 @@ function HomePage({
           <Scheduler username={currentUser} />
         </KalenderGridItem>
         <MorgenRoutineGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <MorgenRoutine username={currentUser} todos={routineList} setTodos={setRoutineList} />
+          <MorgenRoutine username={currentUser} todos={routineList} setTodos={setRoutineList} isAdmin={isAdmin} />
         </MorgenRoutineGridItem>
         <Grid item xs={12} sm={12} md={6} lg={4} xl={3}>
           <Dev />

@@ -17,7 +17,7 @@ async function LoginRequest(username, password, setIsLoggedIn, setCurrentUser, c
     localStorage.setItem('username', response.data.username);
     console.log("token2: ", token)
     setCurrentUser(response.data.username);
-    if(response.data.username == "suhaibking"){
+    if(response.data.username == "suhaibking" || response.data.username == "suhaibkakamala@gmail.com"){
       setIsAdmin(true)
     }
     console.log("Loginreqeust: ",currentUser)

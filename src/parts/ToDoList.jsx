@@ -48,7 +48,7 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function ToDoList({ username, todos, setTodos }) {
+function ToDoList({ username, todos, setTodos, isAdmin }) {
   console.log("hi");
   console.log(username);
 
@@ -80,7 +80,7 @@ function ToDoList({ username, todos, setTodos }) {
 
   useEffect(() => {
     console.log(todos);
-    if (todos.length > 0) {
+    if (todos.length > 0 && !isAdmin) {
       saveTodos({ username, todos });
     }
   }, [todos]);

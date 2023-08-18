@@ -49,7 +49,7 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function MorgenRoutine({ username, todos, setTodos }) {
+function MorgenRoutine({ username, todos, setTodos, isAdmin }) {
   console.log("hi");
   console.log(username);
 
@@ -80,7 +80,7 @@ function MorgenRoutine({ username, todos, setTodos }) {
 
   useEffect(() => {
     console.log(todos);
-    if (todos.length > 0) {
+    if (todos.length > 0 && !isAdmin) {
       saveRoutine({ username, todos });
     }
   }, [todos]);
