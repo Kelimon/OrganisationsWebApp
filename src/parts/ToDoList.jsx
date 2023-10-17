@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   List,
   ListItem,
@@ -17,6 +17,8 @@ import saveTodos from "./../requests/saveTodos";
 import GetTodos from "./../requests/GetTodos";
 import RegisterRequest from "../requests/RegisterRequest";
 import AddIcon from "@mui/icons-material/Add";
+import { useAuth } from "./../contexts/Auth";
+import { render } from "react-dom";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -48,45 +50,55 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function ToDoList({ username, todos, setTodos, isAdmin }) {
-  console.log("hi");
-  console.log(username);
-
+function ToDoList({ todos, setTodos }) {
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { currentUser, isAdmin } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const isFirstRender = useRef(true);
+  const initialData = useRef(null);
+  const renderCount = useRef(0);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await GetTodos({ username });
+      setIsLoading(true);
+      const response = await GetTodos({ currentUser });
       const latestDayData = response.data.days[response.data.days.length - 1];
-      console.log(latestDayData.data);
       if (latestDayData.data.length > 0) {
         setTodos(latestDayData.data);
+        initialData.current = latestDayData.data;
       }
+      setIsLoading(false);
     };
-
     fetchTodos();
-  }, [username]);
+  }, []);
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
       setTodos([...todos, { text: newTodo, checked: false }]);
       setNewTodo("");
     }
-    console.log("username before saving todos: ", username);
-    console.log("todos before saving todos: ", todos);
   };
-
+  renderCount.current += 1;
   useEffect(() => {
-    console.log(todos);
-    if (todos.length > 0 && !isAdmin) {
-      saveTodos({ username, todos });
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [todos]);
+    if (isLoading) {
+      return;
+    }
+    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
+      saveTodos({ currentUser, todos });
+    }
+  }, [todos, isLoading]);
 
   const toggleCheck = (index) => {
-    setTodos(todos.map((todo, i) => (i === index ? { ...todo, checked: !todo.checked } : todo)));
+    setTodos(
+      todos.map((todo, i) =>
+        i === index ? { ...todo, checked: !todo.checked } : todo
+      )
+    );
   };
 
   const deleteTodo = (index) => {
@@ -109,14 +121,21 @@ function ToDoList({ username, todos, setTodos, isAdmin }) {
                     onMouseEnter={() => setHoverIndex(index)}
                     onMouseLeave={() => setHoverIndex(null)}
                   >
-                    <Checkbox checked={todo.checked} onChange={() => toggleCheck(index)} style={{ color: "white" }} />
+                    <Checkbox
+                      checked={todo.checked}
+                      onChange={() => toggleCheck(index)}
+                      style={{ color: "white" }}
+                    />
                     <ListItemText
                       primaryTypographyProps={{ style: { color: "white" } }}
                       primary={todo.text}
                       color={"white"}
                     />
                     {hoverIndex === index && (
-                      <IconButton onClick={() => deleteTodo(index)} color="error">
+                      <IconButton
+                        onClick={() => deleteTodo(index)}
+                        color="error"
+                      >
                         <DeleteIcon color="red" />
                       </IconButton>
                     )}
@@ -140,7 +159,6 @@ function ToDoList({ username, todos, setTodos, isAdmin }) {
               label="New To-Do"
               fullWidth
               style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-              flexGrow={1} // this will allow the TextField to take up as much space as possible
             />
 
             {false && (

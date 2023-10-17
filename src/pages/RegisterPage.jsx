@@ -4,8 +4,9 @@ import "./../App.css";
 
 import RegisterRequest from "./../requests/RegisterRequest";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./../contexts/Auth";
 
-function RegisterPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
+function RegisterPage({ }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
@@ -13,6 +14,7 @@ function RegisterPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }
   const [passwordInvalid, setPasswordInvalid] = useState(false);
   const [emailExists, setEmailExists] = useState(false);
   const [emailInvalid, setEmailInvalid] = useState(false);
+  const { setCurrentUser,setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
 
   /*const handleEmailChange = (e) => {

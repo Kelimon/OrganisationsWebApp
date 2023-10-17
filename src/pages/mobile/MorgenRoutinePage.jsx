@@ -6,12 +6,12 @@ import Header from "../../parts/Header";
 import MorgenRoutineMobile from "../../parts/mobile/MorgenRoutineMobile";
 import HeaderMobile from "../../components/HeaderMobile";
 
-function MorgenRoutinePage({ currentUser, todos, setTodos, toLeft, setIsLoggedIn  }) {
+function MorgenRoutinePage({ todos, setTodos, toLeft }) {
   return (
     <>
-      <HeaderMobile username={currentUser} setIsLoggedIn={setIsLoggedIn}/>
+      <HeaderMobile/>
       <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-        <MorgenRoutineMobile username={currentUser} todos={todos} setTodos={setTodos} toLeft={toLeft} />
+        <MorgenRoutineMobile todos={todos} setTodos={setTodos} toLeft={toLeft} />
       </Box>
     </>
   );

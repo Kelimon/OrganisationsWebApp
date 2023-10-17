@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   List,
   ListItem,
@@ -18,6 +18,7 @@ import GetTodos from "./../requests/GetTodos";
 import RegisterRequest from "../requests/RegisterRequest";
 import saveRoutine from "../requests/saveRoutine";
 import GetRoutine from "../requests/GetRoutine";
+import { useAuth } from "./../contexts/Auth";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -49,21 +50,26 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function MorgenRoutine({ username, todos, setTodos, isAdmin }) {
-  console.log("hi");
-  console.log(username);
-
+function MorgenRoutine({ todos, setTodos }) {
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { currentUser, isAdmin } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const isFirstRender = useRef(true);
+  const initialData = useRef(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await GetRoutine({ username });
+      setIsLoading(true);
+      const response = await GetRoutine({ currentUser });
       console.log("getroutine in morgenrotuine: ", response);
-      if (response.data.days.length > 0) {
-        setTodos(response.data.days);
-      }
+      setTodos(response.data.days);
+      initialData.current = response.data.days;
+      console.log(
+        "is same: ",
+        JSON.stringify(todos) !== JSON.stringify(initialData.current)
+      );
+      setIsLoading(false);
     };
 
     fetchTodos();
@@ -74,19 +80,30 @@ function MorgenRoutine({ username, todos, setTodos, isAdmin }) {
       setTodos([...todos, { text: newTodo, checked: false }]);
       setNewTodo("");
     }
-    console.log("username before saving todos: ", username);
+    console.log("currentUser before saving routine: ", currentUser);
     console.log("todos before saving todos: ", todos);
   };
 
   useEffect(() => {
-    console.log(todos);
-    if (todos.length > 0 && !isAdmin) {
-      saveRoutine({ username, todos });
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [todos]);
+    if (isLoading) {
+      return; // Skip saving when the component is in a loading state
+    }
+    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
+      saveRoutine({ currentUser, todos });
+    }
+  }, [todos, isLoading]);
 
   const toggleCheck = (index) => {
-    setTodos(todos.map((todo, i) => (i === index ? { ...todo, checked: !todo.checked } : todo)));
+    setTodos(
+      todos.map((todo, i) =>
+        i === index ? { ...todo, checked: !todo.checked } : todo
+      )
+    );
+    console.log("routine check changed", todos);
   };
 
   const deleteTodo = (index) => {
@@ -109,14 +126,21 @@ function MorgenRoutine({ username, todos, setTodos, isAdmin }) {
                     onMouseEnter={() => setHoverIndex(index)}
                     onMouseLeave={() => setHoverIndex(null)}
                   >
-                    <Checkbox checked={todo.checked} onChange={() => toggleCheck(index)} style={{ color: "white" }} />
+                    <Checkbox
+                      checked={todo.checked}
+                      onChange={() => toggleCheck(index)}
+                      style={{ color: "white" }}
+                    />
                     <ListItemText
                       primaryTypographyProps={{ style: { color: "white" } }}
                       primary={todo.text}
                       color={"white"}
                     />
                     {hoverIndex === index && (
-                      <IconButton onClick={() => deleteTodo(index)} color="error">
+                      <IconButton
+                        onClick={() => deleteTodo(index)}
+                        color="error"
+                      >
                         <DeleteIcon color="red" />
                       </IconButton>
                     )}
@@ -140,7 +164,6 @@ function MorgenRoutine({ username, todos, setTodos, isAdmin }) {
               label="New Routine Task"
               fullWidth
               style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-              flexGrow={1} // this will allow the TextField to take up as much space as possible
             />
             <Button
               onClick={addTodo}

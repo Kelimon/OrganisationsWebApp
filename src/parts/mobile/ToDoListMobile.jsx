@@ -68,7 +68,6 @@ function ToDoListMobile({ username, todos, setTodos, setShowVergangeneTodos, sho
 
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const isSmallScreen = useMediaQuery(useTheme().breakpoints.down("sm"));
 
   const pageTransition = {
@@ -171,7 +170,6 @@ function ToDoListMobile({ username, todos, setTodos, setShowVergangeneTodos, sho
                     label="New To-Do"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-                    flexGrow={1} // this will allow the TextField to take up as much space as possible
                   />
                   {false && (
                     <IconButton

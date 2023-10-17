@@ -15,8 +15,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { CSSTransition } from "react-transition-group";
 import "./../testing/animation.css";
+import { useAuth } from "./../contexts/Auth";
 
-import { List, ListItem, ListItemText, Checkbox, TextField, Paper, IconButton, Box } from "@mui/material";
+import { Paper } from "@mui/material";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   backgroundColor: "#333e", //replace with your color
@@ -43,18 +44,20 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   borderRadius: 15, // Setzt die Rundung der Ecken
   backgroundColor: "#333e", // Dunklere Farbe für den Block
   maxHeight: 500, // Feste Größe für den Block
+  height: 550,
   overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
 }));
 
-function VergangeneToDos({ username }) {
+function VergangeneToDos({}) {
   const [todos, setTodos] = useState([]);
   const [showPastTodos, setShowPastTodos] = useState(false);
+  const { currentUser, isAdmin } = useAuth();
   /*
   useEffect(() => {
   let _isMounted = true;  // Initially, component is mounted
 
   const fetchTodos = async () => {
-    const response = await GetTodos({username});
+    const response = await GetTodos({currentUser});
     const latestDayData = response.data.days[response.data.days.length - 1];
     
     if (_isMounted) {  // Only proceed if the component is still mounted
@@ -71,12 +74,12 @@ function VergangeneToDos({ username }) {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = (await GetTodos({ username })).data.days.slice(0, -1);
+      const response = (await GetTodos({ currentUser })).data.days.slice(0, -1);
       setTodos(response);
     };
 
     fetchTodos();
-  }, [username]); // The empty array makes this useEffect act like componentDidMount - it runs once after the component mounts.
+  }, [currentUser]); // The empty array makes this useEffect act like componentDidMount - it runs once after the component mounts.
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -91,42 +94,44 @@ function VergangeneToDos({ username }) {
           variant="contained"
           color="secondary"
           fullWidth
-          sx={{ backgroundColor: "linear-gradient(to bottom right, #680e78,  #b608d4)", borderRadius: 4 }}
+          sx={{
+            backgroundColor:
+              "linear-gradient(to bottom right, #680e78,  #b608d4)",
+            borderRadius: 4,
+          }}
         >
           {showPastTodos ? "Schließen" : "Zeige vergangene ToDos"}
         </Button>
-        <CSSTransition in={showPastTodos} timeout={10000} classNames="accordion" unmountOnExit appear>
-          <div>
-            {showPastTodos &&
-              [...todos].reverse().map((day, index) => (
-                <StyledAccordion key={index}>
-                  <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="h6">{formatDate(day.date)}</Typography>
-                  </StyledAccordionSummary>
-                  <StyledAccordionDetails>
-                    <Table>
-                      <TableBody>
-                        {day.data.map((todo, index) => (
-                          <TableRow key={index}>
-                            <TableCell sx={{ color: "white" }}>{todo.text}</TableCell>
-                            {todo.checked ? (
-                              <TableCell sx={{ color: "#17ff2e" }}>
-                                <CheckIcon />
-                              </TableCell>
-                            ) : (
-                              <TableCell sx={{ color: "#ed2f2f", marginTop: -5 }}>
-                                <CloseIcon />
-                              </TableCell>
-                            )}
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </StyledAccordionDetails>
-                </StyledAccordion>
-              ))}
-          </div>
-        </CSSTransition>
+        {showPastTodos &&
+          [...todos].reverse().map((day, index) => (
+            <StyledAccordion key={index}>
+              <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h6">{formatDate(day.date)}</Typography>
+              </StyledAccordionSummary>
+              <StyledAccordionDetails>
+                <Table>
+                  <TableBody>
+                    {day.data.map((todo, index) => (
+                      <TableRow key={index}>
+                        <TableCell sx={{ color: "white" }}>
+                          {todo.text}
+                        </TableCell>
+                        {todo.checked ? (
+                          <TableCell sx={{ color: "#17ff2e" }}>
+                            <CheckIcon />
+                          </TableCell>
+                        ) : (
+                          <TableCell sx={{ color: "#ed2f2f", marginTop: -5 }}>
+                            <CloseIcon />
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </StyledAccordionDetails>
+            </StyledAccordion>
+          ))}
       </div>
     </StyledPaper>
   );

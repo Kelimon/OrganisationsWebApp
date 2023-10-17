@@ -1,12 +1,10 @@
 //const { MongoClient } = require('mongodb');
 import axios from "axios";
 
-async function GetScheduleData({ username}) {
+async function GetScheduleData({ currentUser }) {
   try {
-    console.log("username scheudlatat: ", { username});
-
     const response = await axios.get(
-      `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getscheduledata?username=${username}`
+      `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getscheduledata?username=${currentUser}`
     );
     console.log("responsschedulatat!: ", response);
     return response.data.scheduleData;

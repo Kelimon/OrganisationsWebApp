@@ -1,12 +1,10 @@
 //const { MongoClient } = require('mongodb');
 import axios from "axios";
 
-async function GetNotizen({ username}) {
+async function GetNotizen({ currentUser }) {
   try {
-    console.log("username notizen: ", { username});
-
     const response = await axios.get(
-      `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getnotizen?username=${username}`
+      `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getnotizen?username=${currentUser}`
     );
     console.log("responsenotizen!: ", response);
     return response;

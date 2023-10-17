@@ -1,0 +1,3 @@
+.apexcharts-bar-series .apexcharts-bar:hover {
+  filter: brightness(0.8); /* Dunkler machen beim Hover */
+}

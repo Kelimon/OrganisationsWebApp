@@ -16,6 +16,7 @@ import { Grid } from "@mui/material";
 import { styled } from "@mui/system";
 import { useMediaQuery, useTheme } from "@mui/material";
 import Dev from "../parts/Dev";
+import { useAuth } from "./../contexts/Auth";
 
 const ChartGridItem = styled(Grid)(({ theme }) => ({
   order: 2,
@@ -165,60 +166,54 @@ const useStyles = styled((theme) => ({
   // ... and so on
 }));
 function HomePage({
-  currentUser,
-  setCurrentUser,
-  isAdmin,
   todos,
   setTodos,
   routineList,
   setRoutineList,
-  setIsLoggedIn,
 }) {
-  console.log("homepage ", isAdmin);
   const [inputValue, setInputValue] = useState("");
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
-
-  console.log("homepage: ", currentUser);
+  const {currentUser} = useAuth();
 
   const wrapperStyle = {
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-between", // optional: add space between the components
   };
-
+  console.log("homepage is currentuser avaible: ", currentUser)
   return (
     <>
-      <Header username={currentUser} isAdmin={isAdmin} setIsLoggedIn={setIsLoggedIn} />
+      <Header />
       <Grid container spacing={0}>
         <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
-          <ToDoList username={currentUser} todos={todos} setTodos={setTodos} isAdmin={isAdmin} />
+          <ToDoList todos={todos} setTodos={setTodos} />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
-          <VergangeneToDos username={currentUser} />
+          <VergangeneToDos />
         </Grid>
         <AktuellePriosGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <AktuellePrios username={currentUser} />
+          <AktuellePrios />
         </AktuellePriosGridItem>
         <MZieleGridItem xs={12} sm={12} md={6} lg={4} xl={3}>
-          <Monatsziele username={currentUser} />
+          <Monatsziele />
         </MZieleGridItem>
 
         <ChartGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
-          {matches && <Chart todos={todos} username={currentUser} />}
+          {matches && <Chart todos={todos} username={currentUser}/>}
         </ChartGridItem>
         <VerlaufGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
           {matches && <Verlauf />}
         </VerlaufGridItem>
         <NotizenGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <Notizen username={currentUser} />
+          <Notizen />
         </NotizenGridItem>
 
         <KalenderGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
-          <Scheduler username={currentUser} />
+          <Scheduler />
         </KalenderGridItem>
         <MorgenRoutineGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <MorgenRoutine username={currentUser} todos={routineList} setTodos={setRoutineList} isAdmin={isAdmin} />
+          <MorgenRoutine todos={routineList} setTodos={setRoutineList} />
         </MorgenRoutineGridItem>
         <Grid item xs={12} sm={12} md={6} lg={4} xl={3}>
           <Dev />

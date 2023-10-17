@@ -51,7 +51,13 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function MonatszieleMobile({ username, showVergangeneTodos, setShowVergangeneTodos, todos, setTodos }) {
+function MonatszieleMobile({
+  username,
+  showVergangeneTodos,
+  setShowVergangeneTodos,
+  todos,
+  setTodos,
+}) {
   const [newTodo, setNewTodo] = useState("");
 
   const [hoverIndex, setHoverIndex] = useState(null);
@@ -125,7 +131,12 @@ function MonatszieleMobile({ username, showVergangeneTodos, setShowVergangeneTod
     <>
       <AnimatePresence exitBeforeEnter>
         <>
-          <motion.div initial="out" animate="in" exit="out" variants={pageTransition}>
+          <motion.div
+            initial="out"
+            animate="in"
+            exit="out"
+            variants={pageTransition}
+          >
             <Button
               variant="outlined"
               onClick={() => setShowVergangeneTodos(!showVergangeneTodos)}
@@ -151,16 +162,26 @@ function MonatszieleMobile({ username, showVergangeneTodos, setShowVergangeneTod
                   <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="todos">
                       {(provided) => (
-                        <List {...provided.droppableProps} ref={provided.innerRef}>
+                        <List
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                        >
                           {todos.map(({ text }, index) => {
                             return (
-                              <Draggable key={index} draggableId={`draggable-${index}-${text}`} index={index}>
+                              <Draggable
+                                key={index}
+                                draggableId={`draggable-${index}-${text}`}
+                                index={index}
+                              >
                                 {(provided, snapshot) => (
                                   <ListItem
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    sx={{ transition: "margin-left 0.4s", height: "4rem" }} // update here
+                                    sx={{
+                                      transition: "margin-left 0.4s",
+                                      height: "4rem",
+                                    }} // update here
                                     style={getItemStyle(
                                       snapshot.isDragging,
                                       provided.draggableProps.style,
@@ -173,11 +194,16 @@ function MonatszieleMobile({ username, showVergangeneTodos, setShowVergangeneTod
                                       <AdjustOutlinedIcon color="inherit" />
                                     </ListItemIcon>
                                     <ListItemText
-                                      primaryTypographyProps={{ style: { color: "white" } }}
+                                      primaryTypographyProps={{
+                                        style: { color: "white" },
+                                      }}
                                       primary={text}
                                     />
                                     {hoverIndex === index && (
-                                      <IconButton onClick={() => deleteTodo(index)} color="inherit">
+                                      <IconButton
+                                        onClick={() => deleteTodo(index)}
+                                        color="inherit"
+                                      >
                                         <DeleteIcon color="black" />
                                       </IconButton>
                                     )}
@@ -203,7 +229,6 @@ function MonatszieleMobile({ username, showVergangeneTodos, setShowVergangeneTod
                     label="New monthly Goal"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-                    flexGrow={1} // this will allow the TextField to take up as much space as possible
                   />
                   <Button
                     onClick={addTodo}

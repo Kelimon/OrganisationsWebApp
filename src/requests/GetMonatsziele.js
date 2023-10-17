@@ -1,13 +1,12 @@
 //const { MongoClient } = require('mongodb');
 import axios from "axios";
 
-async function GetMonatziele({ username }) {
-  console.log("savesafegetmziele")
+async function GetMonatziele({ currentUser }) {
   try {
-    console.log("username priosget: ", { username});
+    console.log("currentUser priosget: ", { currentUser });
 
     const response = await axios.get(
-      `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getmonatsziele?username=${username}`
+      `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getmonatsziele?username=${currentUser}`
     );
     console.log("response!: ", response);
     return response.data.mziele;

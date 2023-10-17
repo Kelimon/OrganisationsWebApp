@@ -56,7 +56,6 @@ function MorgenRoutineMobile({ username, todos, setTodos, toLeft }) {
 
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const pageTransition = {
     in: {
@@ -86,7 +85,11 @@ function MorgenRoutineMobile({ username, todos, setTodos, toLeft }) {
   }, [todos]);
 
   const toggleCheck = (index) => {
-    setTodos(todos.map((todo, i) => (i === index ? { ...todo, checked: !todo.checked } : todo)));
+    setTodos(
+      todos.map((todo, i) =>
+        i === index ? { ...todo, checked: !todo.checked } : todo
+      )
+    );
   };
 
   const deleteTodo = (index) => {
@@ -97,7 +100,12 @@ function MorgenRoutineMobile({ username, todos, setTodos, toLeft }) {
     <>
       <AnimatePresence exitBeforeEnter>
         <>
-          <motion.div initial="out" animate="in" exit="out" variants={pageTransition}>
+          <motion.div
+            initial="out"
+            animate="in"
+            exit="out"
+            variants={pageTransition}
+          >
             <StyledPaper>
               <Typography color={"white"} variant="h6" align="center">
                 Morgenroutine
@@ -118,12 +126,17 @@ function MorgenRoutineMobile({ username, todos, setTodos, toLeft }) {
                             style={{ color: "white" }}
                           />
                           <ListItemText
-                            primaryTypographyProps={{ style: { color: "white" } }}
+                            primaryTypographyProps={{
+                              style: { color: "white" },
+                            }}
                             primary={todo.text}
                             color={"white"}
                           />
                           {hoverIndex === index && (
-                            <IconButton onClick={() => deleteTodo(index)} color="error">
+                            <IconButton
+                              onClick={() => deleteTodo(index)}
+                              color="error"
+                            >
                               <DeleteIcon color="red" />
                             </IconButton>
                           )}
@@ -141,7 +154,6 @@ function MorgenRoutineMobile({ username, todos, setTodos, toLeft }) {
                     label="New Routine Task"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-                    flexGrow={1} // this will allow the TextField to take up as much space as possible
                   />
                   <Button
                     onClick={addTodo}

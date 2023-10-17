@@ -37,7 +37,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   flex: 1, // Added this line
 }));
 
-function Dev({ username }) {
+function Dev({}) {
   return (
     <StyledPaper>
       <Grid container>
@@ -47,20 +47,29 @@ function Dev({ username }) {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography color={"lightblue"}>-Todos Tasks löschen sich immer 3 Uhr nachts</Typography>
+          <Typography color={"lightblue"}>
+            -Todos Tasks löschen sich immer 3 Uhr nachts
+          </Typography>
         </Grid>
         <Grid item>
-          <Typography color={"magenta"}>-Todos, Morgneroutine, Prios,monatsziele durch Hovern löschbar</Typography>
+          <Typography color={"magenta"}>
+            -Todos, Morgneroutine, Prios,monatsziele durch Hovern löschbar
+          </Typography>
         </Grid>
         <Grid item>
-          <Typography color={"lightgreen"}>-Prios, Monatsziele mit Drag&Drop verschiebbar</Typography>
+          <Typography color={"lightgreen"}>
+            -Prios, Monatsziele mit Drag&Drop verschiebbar
+          </Typography>
         </Grid>
         <Grid item>
-          <Typography color={"red"}>-Diagramm zeigt prozentual die erledigten Todos pro Tag an </Typography>
+          <Typography color={"red"}>
+            -Diagramm zeigt prozentual die erledigten Todos pro Tag an{" "}
+          </Typography>
         </Grid>
         <Grid item>
           <Typography color={"pink"}>
-            -MorgenRoutine punkte bleiben, aber Häckchen löscht sich jeden Tag 3 Uhr
+            -MorgenRoutine punkte bleiben, aber Häckchen löscht sich jeden Tag 3
+            Uhr
           </Typography>
         </Grid>
         <Grid item xs={12} sx={{ marginTop: 5 }}>
@@ -69,10 +78,14 @@ function Dev({ username }) {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography color={"white"}>-automatisches Einloggen eingebaut</Typography>
+          <Typography color={"white"}>
+            -automatisches Einloggen eingebaut
+          </Typography>
         </Grid>
         <Grid item>
-          <Typography color={"white"}>-Termine deleten, editieren added</Typography>
+          <Typography color={"white"}>
+            -Termine deleten, editieren added
+          </Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography color={"white"} variant="h6">
@@ -80,10 +93,14 @@ function Dev({ username }) {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography color={"white"}>-Visualisierung Terminzeit added</Typography>
+          <Typography color={"white"}>
+            -Visualisierung Terminzeit added
+          </Typography>
         </Grid>
         <Grid item>
-          <Typography color={"yellow"}>-Bei Textfeld Enter drücken löst jetzt die Buttons aus</Typography>
+          <Typography color={"yellow"}>
+            -Bei Textfeld Enter drücken löst jetzt die Buttons aus
+          </Typography>
         </Grid>
       </Grid>
     </StyledPaper>

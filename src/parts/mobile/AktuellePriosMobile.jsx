@@ -18,8 +18,8 @@ import GetPrios from "./../../requests/GetPrios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AdjustOutlinedIcon from "@mui/icons-material/AdjustOutlined";
 import { motion, AnimatePresence } from "framer-motion";
-
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { useAuth } from "./../../contexts/Auth";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -51,9 +51,15 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function AktuellePriosMobile({ username, showVergangeneTodos, setShowVergangeneTodos, todos, setTodos, toLeft }) {
+function AktuellePriosMobile({
+  showVergangeneTodos,
+  setShowVergangeneTodos,
+  todos,
+  setTodos,
+  toLeft,
+}) {
   const [newTodo, setNewTodo] = useState("");
-
+  const { currentUser } = useAuth();
   const [hoverIndex, setHoverIndex] = useState(null);
 
   /*useEffect(() => {
@@ -113,7 +119,7 @@ function AktuellePriosMobile({ username, showVergangeneTodos, setShowVergangeneT
   useEffect(() => {
     if (todos.length > 0) {
       let priosData = todos;
-      savePrios({ username, priosData });
+      savePrios({ currentUser, priosData });
     }
   }, [todos]);
 
@@ -138,7 +144,9 @@ function AktuellePriosMobile({ username, showVergangeneTodos, setShowVergangeneT
     borderRadius: 10,
 
     // change background colour if dragging
-    background: isDragging ? "black" : "linear-gradient(to right,  #028db0, #fa37c0)",
+    background: isDragging
+      ? "black"
+      : "linear-gradient(to right,  #028db0, #fa37c0)",
     //background: isDragging ? "linear-gradient(to bottom right, black,  #550763)" : "#b608d4",
     marginLeft: isHovering ? "20px" : "0px",
     // styles we need to apply on draggables
@@ -149,7 +157,12 @@ function AktuellePriosMobile({ username, showVergangeneTodos, setShowVergangeneT
     <>
       <AnimatePresence exitBeforeEnter>
         <>
-          <motion.div initial="out" animate="in" exit="out" variants={pageTransition}>
+          <motion.div
+            initial="out"
+            animate="in"
+            exit="out"
+            variants={pageTransition}
+          >
             <Button
               variant="outlined"
               onClick={() => setShowVergangeneTodos(!showVergangeneTodos)}
@@ -175,16 +188,26 @@ function AktuellePriosMobile({ username, showVergangeneTodos, setShowVergangeneT
                   <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="todos">
                       {(provided) => (
-                        <List {...provided.droppableProps} ref={provided.innerRef}>
+                        <List
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                        >
                           {todos.map(({ text }, index) => {
                             return (
-                              <Draggable key={index} draggableId={`draggable-${index}-${text}`} index={index}>
+                              <Draggable
+                                key={index}
+                                draggableId={`draggable-${index}-${text}`}
+                                index={index}
+                              >
                                 {(provided, snapshot) => (
                                   <ListItem
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    sx={{ transition: "margin-left 0.4s", height: "4rem" }} // update here
+                                    sx={{
+                                      transition: "margin-left 0.4s",
+                                      height: "4rem",
+                                    }} // update here
                                     style={getItemStyle(
                                       snapshot.isDragging,
                                       provided.draggableProps.style,
@@ -197,11 +220,16 @@ function AktuellePriosMobile({ username, showVergangeneTodos, setShowVergangeneT
                                       <AdjustOutlinedIcon color="inherit" />
                                     </ListItemIcon>
                                     <ListItemText
-                                      primaryTypographyProps={{ style: { color: "white" } }}
+                                      primaryTypographyProps={{
+                                        style: { color: "white" },
+                                      }}
                                       primary={text}
                                     />
                                     {hoverIndex === index && (
-                                      <IconButton onClick={() => deleteTodo(index)} color="inherit">
+                                      <IconButton
+                                        onClick={() => deleteTodo(index)}
+                                        color="inherit"
+                                      >
                                         <DeleteIcon color="black" />
                                       </IconButton>
                                     )}
@@ -227,7 +255,6 @@ function AktuellePriosMobile({ username, showVergangeneTodos, setShowVergangeneT
                     label="New Priority"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-                    flexGrow={1} // this will allow the TextField to take up as much space as possible
                   />
                   <Button
                     onClick={addTodo}

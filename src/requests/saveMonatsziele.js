@@ -1,28 +1,25 @@
 import axios from "axios";
 
-async function saveMonatsziele({ username, mzieleData }) {
-  console.log("savesafeinmzielesave")
-
+async function saveMonatsziele({ currentUser, mzieleData }) {
   // Get token from local storage
-  const token = localStorage.getItem('token');
-  console.log("tokensave is", token)
+  const token = localStorage.getItem("token");
+  const username = currentUser;
 
   try {
-    console.log("Sending data: ", { username, mzieleData});
-    if(username.length >1){
-    const response = await axios.post(
-      "https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/savemonatsziele",
-      {
-        username,
-        mzieleData,
-      },
-      {
-        headers: {
-          'Authorization': token
+    if (currentUser.length > 1) {
+      const response = await axios.post(
+        "https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/savemonatsziele",
+        {
+          username,
+          mzieleData,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
         }
-      }
-    );
-    console.log("responsesavemonatsziele: ", response);
+      );
+      console.log("responsesavemonatsziele: ", response);
     }
     return;
   } catch (error) {

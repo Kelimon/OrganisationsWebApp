@@ -1,13 +1,10 @@
 //const { MongoClient } = require('mongodb');
 import axios from "axios";
 
-async function GetRoutine({ username}) {
-  console.log("savesafegetroutine")
+async function GetRoutine({ currentUser }) {
   try {
-    console.log("username get: ", { username});
-
     const response = await axios.get(
-      `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getroutine?username=${username}`
+      `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getroutine?username=${currentUser}`
     );
     console.log("responsegetroutine!: ", response);
     return response;

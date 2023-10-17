@@ -7,16 +7,15 @@ import ToDoListMobile from "../../parts/mobile/ToDoListMobile";
 import VergangeneTodosMobile from "../../parts/mobile/VergangeneTodosMobile";
 import HeaderMobile from "../../components/HeaderMobile";
 
-function ToDoListPage({ currentUser, todos, setTodos, vergangeneTodos, setVergangeneTodos, toLeft, setIsLoggedIn  }) {
+function ToDoListPage({ todos, setTodos, vergangeneTodos, setVergangeneTodos, toLeft  }) {
   const [showVergangeneTodos, setShowVergangeneTodos] = useState(false);
   return (
     <>
-      <HeaderMobile username={currentUser} setIsLoggedIn={setIsLoggedIn}/>
+      <HeaderMobile/>
 
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         {showVergangeneTodos ? (
           <VergangeneTodosMobile
-            username={currentUser}
             setShowVergangeneTodos={setShowVergangeneTodos}
             showVergangeneTodos={showVergangeneTodos}
             todos={vergangeneTodos}
@@ -24,7 +23,6 @@ function ToDoListPage({ currentUser, todos, setTodos, vergangeneTodos, setVergan
           />
         ) : (
           <ToDoListMobile
-            username={currentUser}
             todos={todos}
             setTodos={setTodos}
             setShowVergangeneTodos={setShowVergangeneTodos}

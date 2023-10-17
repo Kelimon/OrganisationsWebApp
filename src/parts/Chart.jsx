@@ -33,7 +33,6 @@ class Chart extends React.Component {
     let todos = async () => {
       return await GetTodos({ username });
     };
-    console.log("chart: ", todos());
 
     /*const last10Days = Array.from({length: 30}, (v, i) => {
       const d = new Date();
@@ -42,7 +41,25 @@ class Chart extends React.Component {
     }).reverse();*/
 
     this.state = {
-      todospercentage: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, this.calculateLastTodo()],
+      todospercentage: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        this.calculateLastTodo(),
+      ],
       todos: [],
 
       series: [
@@ -114,6 +131,9 @@ class Chart extends React.Component {
           zoom: {
             enabled: false,
           },
+          toolbar: {
+            show: false,
+          },
           brush: {
             enabled: false,
             target: undefined,
@@ -127,10 +147,8 @@ class Chart extends React.Component {
 
   async fetchTodos() {
     const username = this.props.username;
-    console.log("chartusername: ", username);
-    const todos = (await GetTodos({ username })).data.days;
+    const todos = (await GetTodos({ currentUser: username })).data.days;
     const days = todos;
-    console.log("charttodos: ", todos);
     this.getCheckedPercentage(days);
     this.setState({ todos: todos }); // This will trigger a re-render
     const last10Days = () => {
@@ -153,7 +171,6 @@ class Chart extends React.Component {
           array.push(tempDate.toLocaleDateString());
         }
       }
-      console.log("array is", array);
       return array; // or use another format if you prefer
     };
 
@@ -172,7 +189,6 @@ class Chart extends React.Component {
         },
       },
     });
-    console.log("xais", this.state.options.xaxis.categories);
   }
 
   getCheckedPercentage = async (days) => {
@@ -208,8 +224,6 @@ class Chart extends React.Component {
         },
       ],
     });
-    console.log("chart checjed tasjs: ", checkedTasks);
-    console.log("todospercentage: ", this.state.todospercentage);
     return true;
   };
 
@@ -231,14 +245,12 @@ class Chart extends React.Component {
       const lastToDo = this.calculateLastTodo();
       // update state
       let updatedArray = [...this.state.todospercentage];
-      console.log("updated Array second", updatedArray);
       if (updatedArray.length == 1) {
         updatedArray.push(lastToDo);
       } else {
         updatedArray[updatedArray.length - 1] = lastToDo;
       }
 
-      console.log("updated Array second", updatedArray);
       this.setState({
         todospercentage: updatedArray,
         series: [
@@ -248,18 +260,16 @@ class Chart extends React.Component {
           },
         ],
       });
-
-      console.log("series", this.state.series);
     }
   }
 
   chartWidth = () => {
-    if(this.state.todos.length*50 <840){
+    if (this.state.todos.length * 50 < 840) {
       return 840;
-    }else{
-      return this.state.todos.length*60
+    } else {
+      return this.state.todos.length * 60;
     }
-  }
+  };
 
   calculateLastTodo() {
     let result = 0;
@@ -268,7 +278,9 @@ class Chart extends React.Component {
         result++;
       }
     }
-    return this.props.todos.length > 0 ? (result * 100) / this.props.todos.length : 0;
+    return this.props.todos.length > 0
+      ? (result * 100) / this.props.todos.length
+      : 0;
   }
   render() {
     if (this.state.todos) {

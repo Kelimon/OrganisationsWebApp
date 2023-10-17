@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   List,
   ListItem,
@@ -17,6 +17,14 @@ import savePrios from "./../requests/savePrios";
 import GetPrios from "./../requests/GetPrios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AdjustOutlinedIcon from "@mui/icons-material/AdjustOutlined";
+import { useAuth } from "./../contexts/Auth";
+import Checkbox from "@mui/material/Checkbox";
+
+const RoundedCheckbox = styled(Checkbox)({
+  "&.MuiCheckbox-colorPrimary.Mui-checked .MuiSvgIcon-root": {
+    color: "black", // Ersetzen Sie YOUR_CUSTOM_COLOR durch Ihre gewünschte Farbe
+  },
+});
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -48,20 +56,14 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function AktuellePrios({ username }) {
+function AktuellePrios({}) {
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodos] = useState([]);
   const [hoverIndex, setHoverIndex] = useState(null);
-
-  /*useEffect(() => {
-    const fetchTodos = async () => {
-      const response = await GetTodos({username});
-      const latestDayData = response.data.days[response.data.days.length - 1];
-      setTodos(latestDayData.data);
-    };
-
-    fetchTodos();
-  }, []);*/
+  const { currentUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const isFirstRender = useRef(true);
+  const initialData = useRef(null);
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
@@ -72,22 +74,32 @@ function AktuellePrios({ username }) {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await GetPrios({ username });
+      setIsLoading(true);
+      const response = await GetPrios({ currentUser });
       console.log("response from aktuelleprios: ", response);
       if (response) {
         setTodos(response);
+        initialData.current = response;
       }
+      setIsLoading(false);
     };
 
     fetchTodos();
-  }, [username]);
+  }, []);
 
   useEffect(() => {
-    if (todos.length > 0) {
-      let priosData = todos;
-      savePrios({ username, priosData });
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [todos]);
+    if (isLoading) {
+      return; // Skip saving when the component is in a loading state
+    }
+    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
+      let priosData = todos;
+      savePrios({ currentUser, priosData });
+    }
+  }, [todos, isLoading]);
 
   const deleteTodo = (index) => {
     setTodos(todos.filter((todo, i) => i !== index));
@@ -114,8 +126,6 @@ function AktuellePrios({ username }) {
       ? "linear-gradient(to bottom right,  black, purple)"
       : "linear-gradient(to bottom right,  #028db0, #fa37c0)",
     //background: isDragging ? "linear-gradient(to bottom right, black,  #550763)" : "#b608d4",
-    marginLeft: isHovering ? "20px" : "0px",
-    // styles we need to apply on draggables
     ...draggableStyle,
   });
 
@@ -130,15 +140,22 @@ function AktuellePrios({ username }) {
             <Droppable droppableId="todos">
               {(provided) => (
                 <List {...provided.droppableProps} ref={provided.innerRef}>
-                  {todos.map(({ text }, index) => {
+                  {todos.map(({ text, checked }, index) => {
                     return (
-                      <Draggable key={index} draggableId={`draggable-${index}-${text}`} index={index}>
+                      <Draggable
+                        key={index}
+                        draggableId={`draggable-${index}-${text}`}
+                        index={index}
+                      >
                         {(provided, snapshot) => (
                           <ListItem
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            sx={{ transition: "margin-left 0.4s", height: "4rem" }} // update here
+                            sx={{
+                              transition: "margin-left 0.4s",
+                              height: "4rem",
+                            }}
                             style={getItemStyle(
                               snapshot.isDragging,
                               provided.draggableProps.style,
@@ -147,12 +164,29 @@ function AktuellePrios({ username }) {
                             onMouseEnter={() => setHoverIndex(index)}
                             onMouseLeave={() => setHoverIndex(null)}
                           >
-                            <ListItemIcon>
-                              <AdjustOutlinedIcon color="inherit" />
+                            <ListItemIcon sx={{ borderRadius: 15 }}>
+                              <RoundedCheckbox
+                                checked={checked}
+                                onChange={() => {
+                                  const newTodos = [...todos];
+                                  newTodos[index].checked =
+                                    !newTodos[index].checked;
+                                  setTodos(newTodos);
+                                }}
+                                color="primary"
+                              />
                             </ListItemIcon>
-                            <ListItemText primaryTypographyProps={{ style: { color: "white" } }} primary={text} />
+                            <ListItemText
+                              primaryTypographyProps={{
+                                style: { color: "white" },
+                              }}
+                              primary={text}
+                            />
                             {hoverIndex === index && (
-                              <IconButton onClick={() => deleteTodo(index)} color="inherit">
+                              <IconButton
+                                onClick={() => deleteTodo(index)}
+                                color="inherit"
+                              >
                                 <DeleteIcon color="black" />
                               </IconButton>
                             )}
@@ -184,7 +218,6 @@ function AktuellePrios({ username }) {
             label="New Priority"
             fullWidth
             style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-            flexGrow={1} // this will allow the TextField to take up as much space as possible
           />
           <Button
             onClick={addTodo}

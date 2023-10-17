@@ -1,4 +1,4 @@
-import React from "react";
+/*import React from "react";
 import AktuellePrios from "./../parts/AktuellePrios";
 import Notizen from "./../parts/Notizen";
 import ToDoList from "./../parts/ToDoList";
@@ -164,8 +164,6 @@ const useStyles = styled((theme) => ({
   // ... and so on
 }));
 function DevPage({
-  currentUser,
-  setCurrentUser,
   isAdmin,
   todos,
   setTodos,
@@ -178,8 +176,6 @@ function DevPage({
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
 
-  console.log("homepage: ", currentUser);
-
   const wrapperStyle = {
     display: "flex",
     flexWrap: "wrap",
@@ -188,36 +184,36 @@ function DevPage({
 
   return (
     <>
-      <Header username={currentUser} isAdmin={isAdmin} setIsLoggedIn={setIsLoggedIn} />
+      <Header isAdmin={isAdmin} setIsLoggedIn={setIsLoggedIn} />
       <Grid container spacing={0}>
         <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
-          <ToDoList username={currentUser} todos={todos} setTodos={setTodos} />
+          <ToDoListPage todos={todos} setTodos={setTodos} />
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
-          <VergangeneToDos username={currentUser} />
+          <VergangeneToDos />
         </Grid>
         <AktuellePriosGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <AktuellePrios username={currentUser} />
+          <AktuellePrios />
         </AktuellePriosGridItem>
         <MZieleGridItem xs={12} sm={12} md={6} lg={4} xl={3}>
-          <Monatsziele username={currentUser} />
+          <Monatsziele />
         </MZieleGridItem>
 
         <ChartGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
-          {matches && <Chart todos={todos} username={currentUser} />}
+          {matches && <Chart todos={todos} />}
         </ChartGridItem>
         <VerlaufGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
           {matches && <Verlauf />}
         </VerlaufGridItem>
         <NotizenGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <Notizen username={currentUser} />
+          <Notizen />
         </NotizenGridItem>
 
         <KalenderGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
-          <Scheduler username={currentUser} />
+          <Scheduler />
         </KalenderGridItem>
         <MorgenRoutineGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <MorgenRoutine username={currentUser} todos={routineList} setTodos={setRoutineList} />
+          <MorgenRoutine todos={routineList} setTodos={setRoutineList} />
         </MorgenRoutineGridItem>
       </Grid>
     </>
@@ -227,3 +223,4 @@ function DevPage({
 }
 
 export default DevPage;
+*/

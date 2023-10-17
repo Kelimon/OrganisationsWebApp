@@ -15,20 +15,17 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LoginRequest from "./../requests/LoginRequest";
+import { useAuth } from './../contexts/Auth'; 
 
-/**
- * Login page component.
- *
- * @param {Dispatch<SetStateAction<boolean>>} setIsLoggedIn - function om login status zu setten
- * @returns {JSX.Element} jsx elements von loginpage.
- */
-function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
+
+function LoginPage({  }) {
   //use states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [credentialsInvalid, setCredentialsInvalid] = useState(false);
   const navigate = useNavigate();
   const [profile, setProfile] = useState("");
+  const { setCurrentUser, currentUser, setIsLoggedIn, setIsAdmin, isAdmin } = useAuth();
 
   /**
    * email input ändern
@@ -51,22 +48,18 @@ function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
   /**
    * function für login
    */
-  const handleLogin = () => {
-    LoginRequest(email, password, setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin)
-      .then((result) => {
-        console.log("Logged in:", result);
-        console.log("loginpage: ", currentUser);
-        if (currentUser == "suhaibking") {
-          console.log("entered setadmin");
-          setIsAdmin(true);
-        }
-        setIsLoggedIn(true);
-        navigate("/home");
-      })
-      .catch((error) => {
-        console.error("Login error:", error);
-        setCredentialsInvalid(true);
-      });
+  const handleLogin = async () => {
+    try {
+      const result = await LoginRequest(email, password);
+      setCurrentUser(result.username);
+      setIsLoggedIn(true);
+      setIsAdmin(result.isAdmin);
+      console.log("auth user", currentUser)
+      navigate("/home");
+    } catch (error) {
+      console.error("Login error:", error);
+      setCredentialsInvalid(true);
+    }
   };
 
   /**
@@ -88,7 +81,7 @@ function LoginPage({ setIsLoggedIn, setCurrentUser, currentUser, setIsAdmin }) {
   return (
     <>
       <AppBar position="fixed" style={{ backgroundColor: "black" }}></AppBar>
-      <Container minWidth="lg">
+      <Container>
         <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
           <Paper elevation={10} sx={{ padding: "2rem", borderRadius: "1rem" }}>
             <Typography variant="h4" gutterBottom>

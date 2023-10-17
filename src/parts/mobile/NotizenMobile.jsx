@@ -57,7 +57,12 @@ function NotizenMobile({ username, note, setNote, toLeft }) {
   return (
     <AnimatePresence exitBeforeEnter>
       <>
-        <motion.div initial="out" animate="in" exit="out" variants={pageTransition}>
+        <motion.div
+          initial="out"
+          animate="in"
+          exit="out"
+          variants={pageTransition}
+        >
           <StyledPaper>
             <StyledTextField
               value={note}
