@@ -17,6 +17,7 @@ import { styled } from "@mui/system";
 import { useMediaQuery, useTheme } from "@mui/material";
 import Dev from "../parts/Dev";
 import { useAuth } from "./../contexts/Auth";
+import "./../assets/Hintergrund.jpg";
 
 const ChartGridItem = styled(Grid)(({ theme }) => ({
   order: 2,
@@ -165,23 +166,18 @@ const useStyles = styled((theme) => ({
   },
   // ... and so on
 }));
-function HomePage({
-  todos,
-  setTodos,
-  routineList,
-  setRoutineList,
-}) {
+function HomePage({ todos, setTodos, routineList, setRoutineList }) {
   const [inputValue, setInputValue] = useState("");
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
-  const {currentUser} = useAuth();
+  const { currentUser } = useAuth();
 
   const wrapperStyle = {
     display: "flex",
     flexWrap: "wrap",
     justifyContent: "space-between", // optional: add space between the components
   };
-  console.log("homepage is currentuser avaible: ", currentUser)
+  console.log("homepage is currentuser avaible: ", currentUser);
   return (
     <>
       <Header />
@@ -200,7 +196,7 @@ function HomePage({
         </MZieleGridItem>
 
         <ChartGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
-          {matches && <Chart todos={todos} username={currentUser}/>}
+          {matches && <Chart todos={todos} username={currentUser} />}
         </ChartGridItem>
         <VerlaufGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
           {matches && <Verlauf />}

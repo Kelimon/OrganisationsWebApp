@@ -19,22 +19,13 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AdjustOutlinedIcon from "@mui/icons-material/AdjustOutlined";
 import { useAuth } from "./../contexts/Auth";
 import Checkbox from "@mui/material/Checkbox";
+import { StyledPaper } from "./../components/StyledPaper";
 
 const RoundedCheckbox = styled(Checkbox)({
   "&.MuiCheckbox-colorPrimary.Mui-checked .MuiSvgIcon-root": {
     color: "black", // Ersetzen Sie YOUR_CUSTOM_COLOR durch Ihre gewünschte Farbe
   },
 });
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  borderRadius: 15,
-  backgroundColor: "#333e",
-  maxHeight: 500,
-  height: 550,
-  overflow: "auto",
-}));
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {

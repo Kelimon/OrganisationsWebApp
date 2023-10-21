@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box, Paper, Button } from "@mui/material";
-import logo from "./../assets/Logo.webp"; // if you're using Create React App
+import logo from "./../assets/Logo_2_verarbeitet.webp"; // if you're using Create React App
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./../contexts/Auth";
 
@@ -11,7 +11,10 @@ function Header({}) {
     <AppBar position="static" sx={{ backgroundColor: "#13131A" }}>
       <Toolbar>
         {/* Insert your image here */}
-        <img src={logo} alt="Logo" height={"50"} />
+        <div>
+          <img src={logo} alt="Logo" height={"70"} />
+        </div>
+
         {/* if you're using Create React App, you'd use <img src={logo} alt="Logo" /> instead */}
         <Typography
           variant="h6"

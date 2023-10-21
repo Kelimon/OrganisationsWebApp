@@ -21,16 +21,7 @@ import GetMonatziele from "../requests/GetMonatsziele";
 import saveMonatsziele from "../requests/saveMonatsziele";
 import { useAuth } from "./../contexts/Auth";
 import Checkbox from "@mui/material/Checkbox";
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  borderRadius: 15,
-  backgroundColor: "#333e",
-  maxHeight: 500,
-  height: 550,
-  overflow: "auto",
-}));
+import { StyledPaper } from "./../components/StyledPaper";
 const RoundedCheckbox = styled(Checkbox)({
   "&.MuiCheckbox-colorPrimary.Mui-checked .MuiSvgIcon-root": {
     color: "black", // Ersetzen Sie YOUR_CUSTOM_COLOR durch Ihre gewünschte Farbe

@@ -19,17 +19,7 @@ import RegisterRequest from "../requests/RegisterRequest";
 import AddIcon from "@mui/icons-material/Add";
 import { useAuth } from "./../contexts/Auth";
 import { render } from "react-dom";
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  borderRadius: 15, // Setzt die Rundung der Ecken
-  backgroundColor: "#333e", // Dunklere Farbe für den Block
-  maxHeight: 500, // Feste Größe für den Block
-  height: 550,
-  overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-}));
-
+import { StyledPaper } from "./../components/StyledPaper";
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {

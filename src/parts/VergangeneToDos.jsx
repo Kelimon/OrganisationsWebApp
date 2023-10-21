@@ -16,8 +16,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { CSSTransition } from "react-transition-group";
 import "./../testing/animation.css";
 import { useAuth } from "./../contexts/Auth";
-
 import { Paper } from "@mui/material";
+import { StyledPaper } from "./../components/StyledPaper";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   backgroundColor: "#333e", //replace with your color
@@ -36,16 +36,6 @@ const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   borderRadius: 12,
   color: "white",
   margin: 7,
-}));
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  borderRadius: 15, // Setzt die Rundung der Ecken
-  backgroundColor: "#333e", // Dunklere Farbe für den Block
-  maxHeight: 500, // Feste Größe für den Block
-  height: 550,
-  overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
 }));
 
 function VergangeneToDos({}) {
