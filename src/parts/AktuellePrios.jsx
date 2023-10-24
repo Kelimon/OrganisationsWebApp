@@ -23,27 +23,27 @@ import { StyledPaper } from "./../components/StyledPaper";
 
 const RoundedCheckbox = styled(Checkbox)({
   "&.MuiCheckbox-colorPrimary.Mui-checked .MuiSvgIcon-root": {
-    color: "black", // Ersetzen Sie YOUR_CUSTOM_COLOR durch Ihre gewünschte Farbe
+    color: "white", // Ersetzen Sie YOUR_CUSTOM_COLOR durch Ihre gewünschte Farbe
   },
 });
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white", // Setze die Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Outline-Farbe auf Weiß
     },
     "&:hover fieldset": {
-      borderColor: "white", // Setze die Hover-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Hover-Outline-Farbe auf Weiß
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white", // Setze die Fokussierte-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Fokussierte-Outline-Farbe auf Weiß
     },
   },
   "& .MuiInputLabel-root": {
-    color: "white", // Setze die Label-Farbe auf Weiß
+    color: "black", // Setze die Label-Farbe auf Weiß
   },
   "& .MuiInputBase-input": {
-    color: "white", // Setze die Textfarbe des TextFields auf Weiß
+    color: "black", // Setze die Textfarbe des TextFields auf Weiß
   },
 }));
 
@@ -122,7 +122,7 @@ function AktuellePrios({}) {
 
   return (
     <StyledPaper>
-      <Typography color={"white"} variant="h6" align="center">
+      <Typography color={"black"} variant="h6" align="center">
         Aktuelle Prioritäten
       </Typography>
       <Box display="flex" flexDirection="column" height="90%">
@@ -164,7 +164,6 @@ function AktuellePrios({}) {
                                     !newTodos[index].checked;
                                   setTodos(newTodos);
                                 }}
-                                color="primary"
                               />
                             </ListItemIcon>
                             <ListItemText
@@ -178,7 +177,7 @@ function AktuellePrios({}) {
                                 onClick={() => deleteTodo(index)}
                                 color="inherit"
                               >
-                                <DeleteIcon color="black" />
+                                <DeleteIcon color="white" />
                               </IconButton>
                             )}
                           </ListItem>
@@ -196,7 +195,7 @@ function AktuellePrios({}) {
         <Box mt={3} display="flex">
           <WhiteTextField
             InputLabelProps={{
-              style: { color: "white" },
+              style: { color: "black" },
             }}
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}

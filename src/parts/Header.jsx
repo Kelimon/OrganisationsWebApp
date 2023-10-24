@@ -8,7 +8,18 @@ function Header({}) {
   const navigate = useNavigate();
   const { setIsLoggedIn, isAdmin, currentUser } = useAuth();
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#13131A" }}>
+    /* colors 
+    #F5F5FA
+    #F0F0F5
+    #F2F2F8
+    #F9F4F4
+    #F5F0F0
+    #FAF4F4
+    */
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: "#FAF4F4", border: "2px solid black" }}
+    >
       <Toolbar>
         {/* Insert your image here */}
         <div>
@@ -19,7 +30,7 @@ function Header({}) {
         <Typography
           variant="h6"
           component="div"
-          sx={{ flexGrow: 1, marginLeft: 2 }}
+          sx={{ flexGrow: 1, marginLeft: 2, color: "black" }}
         >
           Plana
         </Typography>

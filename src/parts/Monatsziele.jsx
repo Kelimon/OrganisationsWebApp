@@ -31,20 +31,20 @@ const RoundedCheckbox = styled(Checkbox)({
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white", // Setze die Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Outline-Farbe auf Weiß
     },
     "&:hover fieldset": {
-      borderColor: "white", // Setze die Hover-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Hover-Outline-Farbe auf Weiß
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white", // Setze die Fokussierte-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Fokussierte-Outline-Farbe auf Weiß
     },
   },
   "& .MuiInputLabel-root": {
-    color: "white", // Setze die Label-Farbe auf Weiß
+    color: "black", // Setze die Label-Farbe auf Weiß
   },
   "& .MuiInputBase-input": {
-    color: "white", // Setze die Textfarbe des TextFields auf Weiß
+    color: "black", // Setze die Textfarbe des TextFields auf Weiß
   },
 }));
 
@@ -124,7 +124,7 @@ function Monatsziele({}) {
 
   return (
     <StyledPaper>
-      <Typography color={"white"} variant="h6" align="center">
+      <Typography color={"black"} variant="h6" align="center">
         Monatsziele
       </Typography>
       <Box display="flex" flexDirection="column" height="90%">
@@ -196,7 +196,7 @@ function Monatsziele({}) {
         <Box mt={3} display="flex">
           <WhiteTextField
             InputLabelProps={{
-              style: { color: "white" },
+              style: { color: "black" },
             }}
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
