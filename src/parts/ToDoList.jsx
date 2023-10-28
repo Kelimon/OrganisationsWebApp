@@ -47,6 +47,7 @@ function ToDoList({ todos, setTodos }) {
   const [isLoading, setIsLoading] = useState(true);
   const isFirstRender = useRef(true);
   const initialData = useRef(null);
+  const [ownTodos, setOwnTodos] = useState(todos);
   const renderCount = useRef(0);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
 
@@ -55,9 +56,16 @@ function ToDoList({ todos, setTodos }) {
       setIsLoading(true);
       const response = await GetTodos({ currentUser });
       const latestDayData = response.data.days[response.data.days.length - 1];
+      const end = response.data.days.length;
+      const start = Math.max(end - 3, 0);
+      const lastThreeDayData = response.data.days
+        .slice(start, end)
+        .map((day) => day.data);
+
       if (latestDayData.data.length > 0) {
         setTodos(latestDayData.data);
-        initialData.current = latestDayData.data;
+        setOwnTodos(lastThreeDayData);
+        initialData.current = lastThreeDayData;
       }
       setIsLoading(false);
     };
@@ -66,10 +74,15 @@ function ToDoList({ todos, setTodos }) {
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
-      setTodos([...todos, { text: newTodo, checked: false, day: selectedDay }]);
+      const newTask = { text: newTodo, checked: false, day: selectedDay };
+      setOwnTodos([...ownTodos, newTask]);
+      if (selectedDay === 0) {
+        setTodos([...todos, newTask]);
+      }
       setNewTodo("");
     }
   };
+  console.log("keo: ", ownTodos);
   renderCount.current += 1;
   useEffect(() => {
     if (isFirstRender.current) {
@@ -79,23 +92,36 @@ function ToDoList({ todos, setTodos }) {
     if (isLoading) {
       return;
     }
-    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
-      saveTodos({ currentUser, todos, selectedDay });
+    if (JSON.stringify(ownTodos) !== JSON.stringify(initialData.current)) {
+      saveTodos({ currentUser, ownTodos, selectedDay });
     }
-  }, [todos, isLoading]);
+  }, [ownTodos, isLoading]);
 
   const toggleCheck = (index) => {
-    setTodos(
-      todos.map((todo, i) =>
-        i === index ? { ...todo, checked: !todo.checked } : todo
-      )
+    const updatedOwnTodos = ownTodos.map((todo, i) =>
+      i === index ? { ...todo, checked: !todo.checked } : todo
     );
+    setOwnTodos(updatedOwnTodos);
+
+    if (selectedDay === 0) {
+      const updatedTodos = todos.map((todo, i) =>
+        i === index ? { ...todo, checked: !todo.checked } : todo
+      );
+      setTodos(updatedTodos);
+    }
   };
 
   const deleteTodo = (index) => {
-    setTodos(todos.filter((todo, i) => i !== index));
+    const updatedOwnTodos = ownTodos.filter((todo, i) => i !== index);
+    setOwnTodos(updatedOwnTodos);
+
+    if (selectedDay === 0) {
+      const updatedTodos = todos.filter((todo, i) => i !== index);
+      setTodos(updatedTodos);
+    }
   };
 
+  console.log("timer: ", todos);
   return (
     <>
       <StyledPaper>
@@ -145,35 +171,34 @@ function ToDoList({ todos, setTodos }) {
         <Box display="flex" flexDirection="column" height="90%">
           <Box flexGrow="1" overflow="auto">
             <List>
-              {Array.isArray(todos) &&
-                todos
-                  .filter((todo) => todo.day === selectedDay)
-                  .map((todo, index) => (
-                    <ListItem
-                      key={index}
-                      onMouseEnter={() => setHoverIndex(index)}
-                      onMouseLeave={() => setHoverIndex(null)}
-                    >
-                      <Checkbox
-                        checked={todo.checked}
-                        onChange={() => toggleCheck(index)}
-                        style={{ color: "black" }}
-                      />
-                      <ListItemText
-                        primaryTypographyProps={{ style: { color: "black" } }}
-                        primary={todo.text}
-                        color={"black"}
-                      />
-                      {hoverIndex === index && (
-                        <IconButton
-                          onClick={() => deleteTodo(index)}
-                          color="error"
-                        >
-                          <DeleteIcon color="red" />
-                        </IconButton>
-                      )}
-                    </ListItem>
-                  ))}
+              {ownTodos
+                .filter((todo) => todo.day === selectedDay)
+                .map((todo, index) => (
+                  <ListItem
+                    key={index}
+                    onMouseEnter={() => setHoverIndex(index)}
+                    onMouseLeave={() => setHoverIndex(null)}
+                  >
+                    <Checkbox
+                      checked={todo.checked}
+                      onChange={() => toggleCheck(index)}
+                      style={{ color: "black" }}
+                    />
+                    <ListItemText
+                      primaryTypographyProps={{ style: { color: "black" } }}
+                      primary={todo.text}
+                      color={"black"}
+                    />
+                    {hoverIndex === index && (
+                      <IconButton
+                        onClick={() => deleteTodo(index)}
+                        color="error"
+                      >
+                        <DeleteIcon color="red" />
+                      </IconButton>
+                    )}
+                  </ListItem>
+                ))}
             </List>
           </Box>
           <Box mt={3} display="flex">

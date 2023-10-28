@@ -75,6 +75,7 @@ function VergangeneToDos({}) {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
+  console.log("wtf is todos: ", todos);
 
   return (
     <StyledPaper>
@@ -101,22 +102,23 @@ function VergangeneToDos({}) {
               <StyledAccordionDetails>
                 <Table>
                   <TableBody>
-                    {day.data.map((todo, index) => (
-                      <TableRow key={index}>
-                        <TableCell sx={{ color: "white" }}>
-                          {todo.text}
-                        </TableCell>
-                        {todo.checked ? (
-                          <TableCell sx={{ color: "#17ff2e" }}>
-                            <CheckIcon />
+                    {Array.isArray(day.data) &&
+                      day.data.map((todo, index) => (
+                        <TableRow key={index}>
+                          <TableCell sx={{ color: "white" }}>
+                            {todo.text}
                           </TableCell>
-                        ) : (
-                          <TableCell sx={{ color: "#ed2f2f", marginTop: -5 }}>
-                            <CloseIcon />
-                          </TableCell>
-                        )}
-                      </TableRow>
-                    ))}
+                          {todo.checked ? (
+                            <TableCell sx={{ color: "#17ff2e" }}>
+                              <CheckIcon />
+                            </TableCell>
+                          ) : (
+                            <TableCell sx={{ color: "#ed2f2f", marginTop: -5 }}>
+                              <CloseIcon />
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </StyledAccordionDetails>
