@@ -74,12 +74,13 @@ class Chart extends React.Component {
           text: "Erledigte ToDos der letzten Tage",
           align: "left",
           style: {
-            color: "#FFF", // Color of the y-axis text
+            color: "#000", // Schwarz
           },
         },
+
         grid: {
           row: {
-            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+            colors: ["white", "transparent"], // takes an array which will be repeated on columns
             opacity: 0.1,
           },
         },
@@ -88,7 +89,7 @@ class Chart extends React.Component {
           colors: ["#F44336", "#E91E63", "#9C27B0"],
           labels: {
             style: {
-              colors: "#FFF", // Color of the y-axis text
+              colors: "#000", // Schwarz
             },
           },
         },
@@ -98,7 +99,7 @@ class Chart extends React.Component {
             shadeIntensity: 1,
             inverseColors: false,
             opacityFrom: 0.7,
-            opacityTo: 0.3,
+            opacityTo: 0,
             stops: [0, 90, 100],
           },
         },
@@ -111,11 +112,11 @@ class Chart extends React.Component {
               return value + "%"; // add a percentage sign after the number
             },
             style: {
-              colors: "#FFF", // Color of the y-axis text
+              colors: "#000", // Schwarz
             },
           },
         },
-        colors: ["white"], // This is purple.
+        colors: ["purple"], // This is purple.
         chart: {
           height: 500,
           type: "area",
@@ -134,6 +135,10 @@ class Chart extends React.Component {
       },
     };
     this.myRef = React.createRef();
+  }
+
+  getToday() {
+    return new Date().toLocaleDateString();
   }
 
   async fetchTodos() {
@@ -171,10 +176,10 @@ class Chart extends React.Component {
         ...this.state.options,
         xaxis: {
           categories: last10Days(),
-          colors: ["#F44336", "#E91E63", "#9C27B0"],
+          colors: ["white", "white", "white"],
           labels: {
             style: {
-              colors: "#FFF", // Color of the y-axis text
+              colors: "black", // Color of the y-axis text
             },
           },
         },
@@ -190,7 +195,7 @@ class Chart extends React.Component {
     // Pre-fill the array with zero (or null) for the missing days
     checkedTasks = Array(1).fill(0); // or use null if you prefer
 
-    for (let i = 0; i < days.length; i++) {
+    for (let i = 0; i < days.length - 2; i++) {
       let checkedTasksDaily = 0;
       let totalTasksDaily = 0;
       for (let j = 0; j < days[i].data.length; j++) {

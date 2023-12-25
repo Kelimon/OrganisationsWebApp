@@ -177,44 +177,50 @@ function HomePage({ todos, setTodos, routineList, setRoutineList }) {
     flexWrap: "wrap",
     justifyContent: "space-between", // optional: add space between the components
   };
-  console.log("homepage is currentuser avaible: ", currentUser);
+
+  const backgroundImageStyle = {
+    backgroundImage: `url(./../assets/hintergrund.jpg)`,
+    backgroundSize: "cover", // cover the entire space
+    backgroundPosition: "center", // center the image
+    backgroundRepeat: "no-repeat", // prevent repeating the image
+    height: "100vh", // set the height (optional)
+  };
+
   return (
     <>
-      <Header />
-      <Grid container spacing={0}>
-        <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
-          <ToDoList todos={todos} setTodos={setTodos} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
-          <VergangeneToDos />
-        </Grid>
-        <AktuellePriosGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <AktuellePrios />
-        </AktuellePriosGridItem>
-        <MZieleGridItem xs={12} sm={12} md={6} lg={4} xl={3}>
-          <Monatsziele />
-        </MZieleGridItem>
+      <div style={backgroundImageStyle}>
+        <Header />
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={6} md={6} lg={4} xl={4}>
+            <ToDoList todos={todos} setTodos={setTodos} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={6} lg={4} xl={4}>
+            <VergangeneToDos />
+          </Grid>
+          <AktuellePriosGridItem item xs={12} sm={12} md={6} lg={4} xl={4}>
+            <AktuellePrios />
+          </AktuellePriosGridItem>
+          <ChartGridItem item xs={12} sm={12} md={12} lg={8} xl={8}>
+            {matches && <Chart todos={todos} username={currentUser} />}
+          </ChartGridItem>
+          <MZieleGridItem xs={12} sm={12} md={6} lg={4} xl={4}>
+            <Monatsziele />
+          </MZieleGridItem>
 
-        <ChartGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
-          {matches && <Chart todos={todos} username={currentUser} />}
-        </ChartGridItem>
-        <VerlaufGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          {matches && <Verlauf />}
-        </VerlaufGridItem>
-        <NotizenGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <Notizen />
-        </NotizenGridItem>
-
-        <KalenderGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
-          <Scheduler />
-        </KalenderGridItem>
-        <MorgenRoutineGridItem item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <MorgenRoutine todos={routineList} setTodos={setRoutineList} />
-        </MorgenRoutineGridItem>
-        <Grid item xs={12} sm={12} md={6} lg={4} xl={3}>
-          <Dev />
+          <VerlaufGridItem item xs={12} sm={12} md={6} lg={4} xl={4}>
+            {matches && <Verlauf />}
+          </VerlaufGridItem>
+          <NotizenGridItem item xs={12} sm={12} md={6} lg={4} xl={4}>
+            <Notizen />
+          </NotizenGridItem>
+          <MorgenRoutineGridItem item xs={12} sm={12} md={6} lg={4} xl={4}>
+            <MorgenRoutine todos={routineList} setTodos={setRoutineList} />
+          </MorgenRoutineGridItem>
+          <KalenderGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
+            <Scheduler />
+          </KalenderGridItem>
         </Grid>
-      </Grid>
+      </div>
     </>
   );
 

@@ -18,7 +18,11 @@ function Header({}) {
     */
     <AppBar
       position="static"
-      sx={{ backgroundColor: "#FAF4F4", border: "2px solid black" }}
+      sx={{
+        backgroundColor: "#FAF4F4",
+        borderRadius: "10px",
+        paddingBottom: "5px",
+      }}
     >
       <Toolbar>
         {/* Insert your image here */}
@@ -47,7 +51,7 @@ function Header({}) {
             elevation={10}
             sx={{
               padding: 1,
-              backgroundColor: "#333e",
+              backgroundColor: "white",
               borderRadius: 4,
               marginBottom: 1,
             }}
@@ -55,7 +59,7 @@ function Header({}) {
             <Typography
               variant="h6"
               component="div"
-              color={"white"}
+              color={"black"}
               fontSize={16}
               marginLeft={1}
               marginRight={1}
@@ -75,7 +79,6 @@ function Header({}) {
           {isAdmin && (
             <Button
               onClick={() => navigate("/forkingsuhaib")}
-              variant="contained"
               color="warning"
               style={{ height: 35, borderRadius: 15 }}
             >

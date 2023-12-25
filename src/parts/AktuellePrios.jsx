@@ -31,6 +31,7 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
       borderColor: "black", // Setze die Outline-Farbe auf Weiß
+      borderRadius: "20px", // Fügt den borderRadius hinzu
     },
     "&:hover fieldset": {
       borderColor: "black", // Setze die Hover-Outline-Farbe auf Weiß
@@ -115,7 +116,7 @@ function AktuellePrios({}) {
     // change background colour if dragging
     background: isDragging
       ? "linear-gradient(to bottom right,  black, purple)"
-      : "linear-gradient(to bottom right,  #028db0, #fa37c0)",
+      : "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
     //background: isDragging ? "linear-gradient(to bottom right, black,  #550763)" : "#b608d4",
     ...draggableStyle,
   });
@@ -213,7 +214,11 @@ function AktuellePrios({}) {
             onClick={addTodo}
             variant="contained"
             color="secondary"
-            style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
+            style={{
+              borderRadius: 20,
+              width: "2vw",
+              backgroundColor: "#44CDDD",
+            }} // add flexShrink: 0 to prevent the button from shrinking
           >
             Add
           </Button>

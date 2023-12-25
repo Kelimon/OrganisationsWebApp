@@ -47,6 +47,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
+  border: "2px solid black",
 }));
 
 // Define a styled component for the highlighted day
@@ -248,36 +249,36 @@ export default function Scheduler({}) {
           }}
           sx={{
             height: "100%",
-            backgroundColor: "#333e",
+            backgroundColor: "#F0F0F5",
             borderRight: "3px solid black",
             fontSize: 100,
             width: "50%",
-            color: "white",
+            color: "black",
             "& .MuiPickersDay-daySelected": {
               backgroundColor: "grey",
-              color: "white",
+              color: "black",
               "&:hover": {
                 backgroundColor: "grey",
-                color: "white",
+                color: "black",
               },
             },
             "& .MuiIconButton-label": {
-              color: "white",
+              color: "black",
             },
             "& .MuiPickersDay-day": {
-              color: "white",
+              color: "black",
             },
             "& .MuiDayCalendar-weekDayLabel": {
-              color: "white",
+              color: "black",
             },
             "& .MuiPickersCalendarHeader-switchViewButton": {
-              color: "white",
+              color: "black",
             },
             "& .MuiPickersArrowSwitcher-button": {
-              color: "white",
+              color: "black",
             },
             "& .MuiPickersDay-root": {
-              color: "white",
+              color: "black",
             },
             "& .MuiPickersDay-root.Mui-selected": {
               backgroundColor: "grey",
@@ -301,7 +302,7 @@ export default function Scheduler({}) {
               <Box
                 sx={{
                   position: "relative",
-                  "& .MuiPickersDay-root": { backgroundColor, color: "white" },
+                  "& .MuiPickersDay-root": { backgroundColor, color: "black" },
                 }}
               >
                 <DayComponent {...DayComponentProps} />
@@ -329,7 +330,7 @@ export default function Scheduler({}) {
               height: "100%",
               width: "66%",
               overflow: "auto",
-              backgroundColor: "#333e",
+              backgroundColor: "#F0F0F5",
             }}
           >
             <Box
@@ -340,7 +341,7 @@ export default function Scheduler({}) {
                 padding: "10px 0",
               }}
             >
-              <Typography color={"white"} sx={{ fontSize: 30, marginLeft: 4 }}>
+              <Typography color={"black"} sx={{ fontSize: 30, marginLeft: 4 }}>
                 {value.format("ddd, MMM D")}
               </Typography>
               <IconButton
@@ -361,7 +362,7 @@ export default function Scheduler({}) {
                 borderRadius: 10,
                 "& .MuiDialog-paper": {
                   borderRadius: 10,
-                  backgroundColor: "white",
+                  backgroundColor: "black",
                 },
               }}
             >
@@ -408,7 +409,13 @@ export default function Scheduler({}) {
               </DialogContent>
               <DialogActions>
                 {editing && (
-                  <Button color="primary" onClick={handleDelete}>
+                  <Button
+                    color="secondary"
+                    sx={{ marginBottom: 1 }}
+                    disableRipple
+                    disableFocusRipple
+                    onClick={handleDelete}
+                  >
                     löschen
                   </Button>
                 )}
@@ -426,7 +433,7 @@ export default function Scheduler({}) {
                   color="secondary"
                   sx={{ marginRight: 3, marginBottom: 1 }}
                 >
-                  Hinzufügen
+                  Bestätigen
                 </Button>
               </DialogActions>
             </Dialog>

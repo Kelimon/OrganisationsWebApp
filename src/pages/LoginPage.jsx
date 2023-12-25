@@ -15,17 +15,17 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LoginRequest from "./../requests/LoginRequest";
-import { useAuth } from './../contexts/Auth'; 
+import { useAuth } from "./../contexts/Auth";
 
-
-function LoginPage({  }) {
+function LoginPage({}) {
   //use states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [credentialsInvalid, setCredentialsInvalid] = useState(false);
   const navigate = useNavigate();
   const [profile, setProfile] = useState("");
-  const { setCurrentUser, currentUser, setIsLoggedIn, setIsAdmin, isAdmin } = useAuth();
+  const { setCurrentUser, currentUser, setIsLoggedIn, setIsAdmin, isAdmin } =
+    useAuth();
 
   /**
    * email input ändern
@@ -54,10 +54,9 @@ function LoginPage({  }) {
       setCurrentUser(result.username);
       setIsLoggedIn(true);
       setIsAdmin(result.isAdmin);
-      console.log("auth user", currentUser)
+
       navigate("/home");
     } catch (error) {
-      console.error("Login error:", error);
       setCredentialsInvalid(true);
     }
   };
@@ -82,7 +81,13 @@ function LoginPage({  }) {
     <>
       <AppBar position="fixed" style={{ backgroundColor: "black" }}></AppBar>
       <Container>
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          height="100vh"
+        >
           <Paper elevation={10} sx={{ padding: "2rem", borderRadius: "1rem" }}>
             <Typography variant="h4" gutterBottom>
               Login
@@ -128,7 +133,12 @@ function LoginPage({  }) {
 
             <Grid container spacing={0} sx={{ marginTop: "1rem" }}>
               <Grid item xs={12} textAlign="right">
-                <Button variant="contained" color="primary" onClick={handleRegister} size="large">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleRegister}
+                  size="large"
+                >
                   Register
                 </Button>
               </Grid>

@@ -11,29 +11,30 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   padding: theme.spacing(2),
   borderRadius: 15, // Setzt die Rundung der Ecken
-  backgroundColor: "#333", // Dunklere Farbe für den Block
+  backgroundColor: "#F0F0F5",
   maxHeight: 500, // Feste Größe für den Block
   height: 1100,
   overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
+  border: "2px solid black",
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white",
+      borderColor: "black",
     },
     "&:hover fieldset": {
-      borderColor: "white",
+      borderColor: "black",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white",
+      borderColor: "black",
     },
   },
   "& .MuiInputLabel-root": {
-    color: "white",
+    color: "black",
   },
   "& .MuiInputBase-input": {
-    color: "white", // Setze die Textfarbe des TextFields auf Weiß
+    color: "black", // Setze die Textfarbe des TextFields auf Weiß
   },
   flex: 1, // Added this line
 }));

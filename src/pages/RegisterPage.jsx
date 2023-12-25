@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Container, TextField, Typography, Paper, AppBar, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Paper,
+  AppBar,
+  Grid,
+} from "@mui/material";
 import "./../App.css";
 
 import RegisterRequest from "./../requests/RegisterRequest";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./../contexts/Auth";
 
-function RegisterPage({ }) {
+function RegisterPage({}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
@@ -14,7 +23,7 @@ function RegisterPage({ }) {
   const [passwordInvalid, setPasswordInvalid] = useState(false);
   const [emailExists, setEmailExists] = useState(false);
   const [emailInvalid, setEmailInvalid] = useState(false);
-  const { setCurrentUser,setIsLoggedIn } = useAuth();
+  const { setCurrentUser, setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
 
   /*const handleEmailChange = (e) => {
@@ -61,7 +70,7 @@ function RegisterPage({ }) {
     RegisterRequest(email, password, setIsLoggedIn)
       .then((result) => {
         // Handle successful login
-        console.log("registeredd:", result);
+
         setCurrentUser(email);
         setIsLoggedIn(true);
         navigate("/home");
@@ -83,7 +92,13 @@ function RegisterPage({ }) {
     <>
       <AppBar position="fixed" style={{ backgroundColor: "black" }}></AppBar>
       <Container maxWidth="sm">
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          height="100vh"
+        >
           <Paper elevation={10} sx={{ padding: "2rem", borderRadius: "1rem" }}>
             <Typography variant="h4" gutterBottom>
               Register
@@ -119,10 +134,22 @@ function RegisterPage({ }) {
                 }
               }}
             />
-            {passwordNotEqual && <Typography color={"red"}>Passwords are not the same.</Typography>}
-            {passwordInvalid && <Typography color={"red"}>Password must be atleast 8 characters.</Typography>}
-            {emailExists && <Typography color={"red"}>There is already a User with the given email.</Typography>}
-            {emailInvalid && <Typography color={"red"}>Please enter a valid email.</Typography>}
+            {passwordNotEqual && (
+              <Typography color={"red"}>Passwords are not the same.</Typography>
+            )}
+            {passwordInvalid && (
+              <Typography color={"red"}>
+                Password must be atleast 8 characters.
+              </Typography>
+            )}
+            {emailExists && (
+              <Typography color={"red"}>
+                There is already a User with the given email.
+              </Typography>
+            )}
+            {emailInvalid && (
+              <Typography color={"red"}>Please enter a valid email.</Typography>
+            )}
             <Button
               variant="contained"
               color="primary"
@@ -136,7 +163,12 @@ function RegisterPage({ }) {
 
             <Grid container spacing={0} sx={{ marginTop: "1rem" }}>
               <Grid item xs={12} textAlign="right">
-                <Button variant="contained" color="primary" onClick={handleLogin} size="large">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleLogin}
+                  size="large"
+                >
                   Login
                 </Button>
               </Grid>

@@ -24,20 +24,21 @@ import { StyledPaper } from "./../components/StyledPaper";
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white", // Setze die Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Outline-Farbe auf Weiß
+      borderRadius: "20px", // Fügt den borderRadius hinzu
     },
     "&:hover fieldset": {
-      borderColor: "white", // Setze die Hover-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Hover-Outline-Farbe auf Weiß
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white", // Setze die Fokussierte-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Fokussierte-Outline-Farbe auf Weiß
     },
   },
   "& .MuiInputLabel-root": {
-    color: "white", // Setze die Label-Farbe auf Weiß
+    color: "black", // Setze die Label-Farbe auf Weiß
   },
   "& .MuiInputBase-input": {
-    color: "white", // Setze die Textfarbe des TextFields auf Weiß
+    color: "black", // Setze die Textfarbe des TextFields auf Weiß
   },
 }));
 
@@ -104,7 +105,7 @@ function MorgenRoutine({ todos, setTodos }) {
   return (
     <>
       <StyledPaper>
-        <Typography color={"white"} variant="h6" align="center">
+        <Typography color={"black"} variant="h6" align="center">
           Morgenroutine
         </Typography>
         <Box display="flex" flexDirection="column" height="90%">
@@ -120,19 +121,19 @@ function MorgenRoutine({ todos, setTodos }) {
                     <Checkbox
                       checked={todo.checked}
                       onChange={() => toggleCheck(index)}
-                      style={{ color: "white" }}
+                      style={{ color: "black" }}
                     />
                     <ListItemText
-                      primaryTypographyProps={{ style: { color: "white" } }}
+                      primaryTypographyProps={{ style: { color: "black" } }}
                       primary={todo.text}
-                      color={"white"}
+                      color={"black"}
                     />
                     {hoverIndex === index && (
                       <IconButton
                         onClick={() => deleteTodo(index)}
-                        color="error"
+                        color="#4f4f4f"
                       >
-                        <DeleteIcon color="red" />
+                        <DeleteIcon color="black" />
                       </IconButton>
                     )}
                   </ListItem>
@@ -142,7 +143,7 @@ function MorgenRoutine({ todos, setTodos }) {
           <Box mt={3} display="flex">
             <WhiteTextField
               InputLabelProps={{
-                style: { color: "white" },
+                style: { color: "black" },
               }}
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
@@ -160,7 +161,7 @@ function MorgenRoutine({ todos, setTodos }) {
               onClick={addTodo}
               variant="contained"
               color="secondary"
-              style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
+              style={{ borderRadius: 20, width: "2vw" }} // add flexShrink: 0 to prevent the button from shrinking
             >
               Add
             </Button>

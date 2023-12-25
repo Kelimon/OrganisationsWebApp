@@ -64,7 +64,7 @@ function VergangeneToDos({}) {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = (await GetTodos({ currentUser })).data.days.slice(0, -1);
+      const response = (await GetTodos({ currentUser })).data.days.slice(0, -3);
       setTodos(response);
     };
 
@@ -86,8 +86,7 @@ function VergangeneToDos({}) {
           color="secondary"
           fullWidth
           sx={{
-            backgroundColor:
-              "linear-gradient(to bottom right, #680e78,  #b608d4)",
+            backgroundColor: "#45CDDD",
             borderRadius: 4,
           }}
         >

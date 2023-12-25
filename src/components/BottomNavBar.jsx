@@ -8,14 +8,12 @@ function BottomNavBar({ toLeft, setToLeft }) {
   const [prevValue, setPrevValue] = React.useState(0);
 
   React.useEffect(() => {
-    console.log("valuessssssss", prevValue, value);
     if (prevValue > value) {
       setToLeft(true);
     } else {
       setToLeft(false);
     }
     setPrevValue(value);
-    console.log("toleft in navar:", toLeft);
   }, [value]);
 
   return (
