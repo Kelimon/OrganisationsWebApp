@@ -114,6 +114,16 @@ function ToDoList({ todos, setTodos }) {
     }
   };
 
+  const getFormattedDate = (selectedDay) => {
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + selectedDay);
+    return currentDate.toLocaleDateString("de-DE", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
   const deleteTodo = (index) => {
     const updatedOwnTodos = ownTodos.filter((todo, i) => i !== index);
     setOwnTodos(updatedOwnTodos);
@@ -167,7 +177,10 @@ function ToDoList({ todos, setTodos }) {
           >
             To Do's
           </Typography>
-
+          <Typography color={"black"}>
+            {getFormattedDate(selectedDay)}{" "}
+            {/* Hier wird das Datum eingefügt */}
+          </Typography>
           <Button
             onClick={() => {
               setSelectedDay(selectedDay + 1);
@@ -210,9 +223,9 @@ function ToDoList({ todos, setTodos }) {
                     {hoverIndex === index && (
                       <IconButton
                         onClick={() => deleteTodo(ownTodos.indexOf(todo))}
-                        color="error"
+                        color="inherit"
                       >
-                        <DeleteIcon color="red" />
+                        <DeleteIcon color="black" />
                       </IconButton>
                     )}
                   </ListItem>

@@ -116,7 +116,7 @@ class Chart extends React.Component {
             },
           },
         },
-        colors: ["purple"], // This is purple.
+        colors: ["#44CDDD"], // This is purple.
         chart: {
           height: 500,
           type: "area",

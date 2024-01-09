@@ -191,10 +191,10 @@ function HomePage({ todos, setTodos, routineList, setRoutineList }) {
       <div style={backgroundImageStyle}>
         <Header />
         <Grid container spacing={0}>
-          <Grid item xs={12} sm={6} md={6} lg={4} xl={4}>
+          <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
             <ToDoList todos={todos} setTodos={setTodos} />
           </Grid>
-          <Grid item xs={12} sm={6} md={6} lg={4} xl={4}>
+          <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
             <VergangeneToDos />
           </Grid>
           <AktuellePriosGridItem item xs={12} sm={12} md={6} lg={4} xl={4}>

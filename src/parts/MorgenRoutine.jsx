@@ -66,6 +66,18 @@ function MorgenRoutine({ todos, setTodos }) {
 
     fetchTodos();
   }, []);
+  const getItemStyle = () => ({
+    // some basic styles to make the items look a bit nicer
+    userSelect: "none",
+    padding: 8 * 1.5,
+    margin: `0 0 8px 0`,
+    borderRadius: 10,
+
+    // change background colour if dragging
+    background: "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
+    // add margin if hovering
+    // styles we need to apply on draggables
+  });
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
@@ -117,6 +129,11 @@ function MorgenRoutine({ todos, setTodos }) {
                     key={index}
                     onMouseEnter={() => setHoverIndex(index)}
                     onMouseLeave={() => setHoverIndex(null)}
+                    style={getItemStyle(
+                      false, // as this list isn't draggable, set isDragging to false
+                      {}, // no draggableProps here
+                      hoverIndex === index
+                    )}
                   >
                     <Checkbox
                       checked={todo.checked}
@@ -124,7 +141,7 @@ function MorgenRoutine({ todos, setTodos }) {
                       style={{ color: "black" }}
                     />
                     <ListItemText
-                      primaryTypographyProps={{ style: { color: "black" } }}
+                      primaryTypographyProps={{ style: { color: "white" } }}
                       primary={todo.text}
                       color={"black"}
                     />
@@ -143,7 +160,7 @@ function MorgenRoutine({ todos, setTodos }) {
           <Box mt={3} display="flex">
             <WhiteTextField
               InputLabelProps={{
-                style: { color: "black" },
+                style: { color: "" },
               }}
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
@@ -161,7 +178,11 @@ function MorgenRoutine({ todos, setTodos }) {
               onClick={addTodo}
               variant="contained"
               color="secondary"
-              style={{ borderRadius: 20, width: "2vw" }} // add flexShrink: 0 to prevent the button from shrinking
+              style={{
+                borderRadius: 20,
+                width: "2vw",
+                backgroundColor: "#44CDDD",
+              }} // add flexShrink: 0 to prevent the button from shrinking
             >
               Add
             </Button>

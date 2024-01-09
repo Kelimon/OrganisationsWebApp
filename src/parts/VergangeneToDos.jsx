@@ -20,19 +20,19 @@ import { Paper } from "@mui/material";
 import { StyledPaper } from "./../components/StyledPaper";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
-  backgroundColor: "#333e", //replace with your color
-  borderRadius: 0,
+  backgroundColor: "white", //replace with your color
+  borderRadius: 10,
 }));
 
 const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
-  backgroundColor: "#4f4f4f", //replace with your color
+  backgroundColor: "#F5F5F5", //replace with your color
   borderRadius: 7,
   margin: "2px",
   color: "white",
 }));
 
 const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-  backgroundColor: "#4f4f4f", //replace with your color
+  backgroundColor: "#f0f0f5", //replace with your color
   borderRadius: 12,
   color: "white",
   margin: 7,
@@ -83,7 +83,6 @@ function VergangeneToDos({}) {
         <Button
           onClick={() => setShowPastTodos(!showPastTodos)}
           variant="contained"
-          color="secondary"
           fullWidth
           sx={{
             backgroundColor: "#45CDDD",
@@ -96,7 +95,9 @@ function VergangeneToDos({}) {
           [...todos].reverse().map((day, index) => (
             <StyledAccordion key={index}>
               <StyledAccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6">{formatDate(day.date)}</Typography>
+                <Typography variant="h6" color={"black"}>
+                  {formatDate(day.date)}
+                </Typography>
               </StyledAccordionSummary>
               <StyledAccordionDetails>
                 <Table>
@@ -105,7 +106,7 @@ function VergangeneToDos({}) {
                       day.data.map((todo, index) => (
                         <TableRow key={index}>
                           <TableCell sx={{ color: "white" }}>
-                            {todo.text}
+                            <Typography color={"black"}>{todo.text}</Typography>
                           </TableCell>
                           {todo.checked ? (
                             <TableCell sx={{ color: "#17ff2e" }}>

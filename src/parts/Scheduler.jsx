@@ -40,7 +40,7 @@ import { useAuth } from "./../contexts/Auth";
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   borderRadius: 15,
-  backgroundColor: "#333e",
+  backgroundColor: "white",
   maxHeight: 532,
   height: 550,
   overflow: "auto",
@@ -249,7 +249,7 @@ export default function Scheduler({}) {
           }}
           sx={{
             height: "100%",
-            backgroundColor: "#F0F0F5",
+            backgroundColor: "white",
             borderRight: "3px solid black",
             fontSize: 100,
             width: "50%",
@@ -330,7 +330,7 @@ export default function Scheduler({}) {
               height: "100%",
               width: "66%",
               overflow: "auto",
-              backgroundColor: "#F0F0F5",
+              backgroundColor: "white",
             }}
           >
             <Box
@@ -362,7 +362,7 @@ export default function Scheduler({}) {
                 borderRadius: 10,
                 "& .MuiDialog-paper": {
                   borderRadius: 10,
-                  backgroundColor: "black",
+                  backgroundColor: "white",
                 },
               }}
             >

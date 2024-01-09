@@ -101,6 +101,9 @@ class Verlauf extends React.Component {
           categories: ["Jahr", "Monat", "Woche"],
           labels: {
             show: false, // Entfernt die Achsenbeschriftungen
+            style: {
+              colors: "black", // Macht die Beschriftungen weiß
+            },
           },
           axisBorder: {
             show: false, // Entfernt die Achsenlinien
@@ -112,7 +115,7 @@ class Verlauf extends React.Component {
         yaxis: {
           labels: {
             style: {
-              colors: "#fff", // Macht die Beschriftungen weiß
+              colors: "black", // Macht die Beschriftungen weiß
             },
           },
           axisBorder: {
@@ -126,7 +129,7 @@ class Verlauf extends React.Component {
           show: false, // Entfernt die Gitterlinien
         },
         fill: {
-          colors: ["#9c27b0", "#242424"], // set the color for the added series, // Set color for each series. First color for the first series, second color for the second series
+          colors: ["#44CDDD", "#242424"], // set the color for the added series, // Set color for each series. First color for the first series, second color for the second series
           type: "gradient",
           hover: {
             type: "darken", // Dunkler machen beim Hover

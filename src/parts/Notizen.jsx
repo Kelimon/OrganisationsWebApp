@@ -6,16 +6,17 @@ import saveNotizen from "../requests/saveNotizen";
 import { useAuth } from "./../contexts/Auth";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  display: "flex", // Added this line
-  flexDirection: "column", // Added this line
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  borderRadius: 15, // Setzt die Rundung der Ecken
-  backgroundColor: "#F0F0F5",
-  maxHeight: 500, // Feste Größe für den Block
-  height: 1100,
-  overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-  border: "2px solid black",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "stretch", // dies stellt sicher, dass die Kinder (children) den Container voll ausfüllen
+  margin: theme.spacing(3),
+  padding: theme.spacing(7),
+  borderRadius: 51,
+  backgroundColor: "white",
+  maxHeight: 500,
+  height: 550,
+  overflow: "auto",
+  boxShadow: theme.shadows[20], // Example shadow deptht dafür, dass Padding und Border in der Höhe berücksichtigt werden
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -78,7 +79,12 @@ function Notizen({}) {
         }}
         variant="contained"
         color="secondary"
-        style={{ marginTop: 5, display: "flex", flexDirection: "column" }}
+        style={{
+          marginTop: 5,
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#44CDDD",
+        }}
       >
         Save
       </Button>

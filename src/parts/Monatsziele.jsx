@@ -116,8 +116,8 @@ function Monatsziele({}) {
 
     // change background colour if dragging
     background: isDragging
-      ? "linear-gradient(to bottom right, black,  #550763)"
-      : "linear-gradient(to bottom right,  #ce16db, purple)",
+      ? "linear-gradient(to bottom right, #44CDDD, lightblue)"
+      : "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
     // add margin if hovering
     // styles we need to apply on draggables
     ...draggableStyle,
@@ -215,7 +215,11 @@ function Monatsziele({}) {
             onClick={addTodo}
             variant="contained"
             color="secondary"
-            style={{ borderRadius: 20, width: "2vw" }} // add flexShrink: 0 to prevent the button from shrinking
+            style={{
+              borderRadius: 20,
+              width: "2vw",
+              backgroundColor: "#44CDDD",
+            }} // add flexShrink: 0 to prevent the button from shrinking
           >
             Add
           </Button>
