@@ -17,7 +17,6 @@ import { styled } from "@mui/system";
 import { useMediaQuery, useTheme } from "@mui/material";
 import Dev from "../parts/Dev";
 import { useAuth } from "./../contexts/Auth";
-import "./../assets/Hintergrund.jpg";
 
 const ChartGridItem = styled(Grid)(({ theme }) => ({
   order: 2,
