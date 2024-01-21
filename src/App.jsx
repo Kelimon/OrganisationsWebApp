@@ -65,19 +65,30 @@ function App() {
   const [meetings, setMeetings] = React.useState([]);
   const [vergangeneTodos, setVergangeneTodos] = useState([]);
   const [toLeft, setToLeft] = React.useState(false);
+  axios.defaults.withCredentials = true;
 
   React.useEffect(() => {
-    const username = localStorage.getItem("username");
-    if (username) {
+    async function checkAuthStatus() {
       try {
-        setCurrentUser(username);
-        setIsLoggedIn(true);
-        setIsAdmin(localStorage.getItem("isAdmin"));
-      } catch (e) {
-        // If there's an error decoding the token, handle it here.
-        console.error(e);
+        // Senden einer Anfrage an den Server, um den Authentifizierungsstatus zu überprüfen
+        const response = await axios.get(
+          "https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/checkAuthStatus"
+        );
+        console.log("laula", response.data);
+        // Wenn das Authentifizierungstoken gültig ist
+        if (response.data.isAuthenticated) {
+          setCurrentUser(response.data.username);
+          setIsLoggedIn(true);
+          setIsAdmin(response.data.isAdmin);
+          //
+        }
+      } catch (error) {
+        console.error("Authentifizierungsprüfung fehlgeschlagen:", error);
+        setIsLoggedIn(false);
       }
     }
+
+    checkAuthStatus();
   }, []);
   function decodeToken(token) {
     try {

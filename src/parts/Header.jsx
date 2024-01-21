@@ -7,6 +7,8 @@ import { useAuth } from "./../contexts/Auth";
 function Header({}) {
   const navigate = useNavigate();
   const { setIsLoggedIn, isAdmin, currentUser } = useAuth();
+  console.log("is pana admin?: ", isAdmin);
+
   return (
     /* colors 
     #F5F5FA
