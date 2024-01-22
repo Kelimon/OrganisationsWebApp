@@ -31,6 +31,7 @@ import GetScheduleData from "./requests/GetScheduleData";
 import GetTodos from "./requests/GetTodos";
 import jwtDecode from "jwt-decode";
 import { useAuth } from "./contexts/Auth";
+import PasswordResetPage from "./pages/PasswordResetPage";
 
 const theme = createTheme({
   palette: {
@@ -138,6 +139,8 @@ function App() {
               element={isAdmin ? <AdminPage /> : <h1>unauthorized</h1>}
             />
             <Route path="/register" element={<RegisterPage />} />
+
+            <Route path="/password-reset" element={<PasswordResetPage />} />
           </Routes>
         </HashRouter>
       </ThemeProvider>

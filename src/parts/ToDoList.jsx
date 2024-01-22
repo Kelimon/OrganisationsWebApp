@@ -48,7 +48,7 @@ function ToDoList({ todos, setTodos }) {
   const [isLoading, setIsLoading] = useState(true);
   const isFirstRender = useRef(true);
   const initialData = useRef(null);
-  const [ownTodos, setOwnTodos] = useState(todos);
+  const [ownTodos, setOwnTodos] = useState([]);
   const renderCount = useRef(0);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
   const todosForSelectedDay = ownTodos[selectedDay] || [];
@@ -73,12 +73,19 @@ function ToDoList({ todos, setTodos }) {
       const latestDayData = response.data.days[response.data.days.length - 3];
       const end = response.data.days.length;
       const start = Math.max(end - 3, 0);
+      console.log("response", response.data.days);
       const lastThreeDayData = response.data.days
         .slice(start, end)
-        .map((day) => day.data)
+        .map((day) =>
+          day.data.map((item) => ({
+            ...item,
+            date: day.date,
+          }))
+        )
         .flat();
-      console.log("datefrommongo", response.data.days[204].date);
 
+      console.log("datefrommongo", response.data.days[204].date);
+      console.log("latesthree", lastThreeDayData);
       if (latestDayData.data.length > 0) {
         setTodos(latestDayData.data);
         setOwnTodos(lastThreeDayData);
@@ -92,7 +99,12 @@ function ToDoList({ todos, setTodos }) {
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
-      const newTask = { text: newTodo, checked: false, day: selectedDay };
+      const newTask = {
+        text: newTodo,
+        checked: false,
+        day: selectedDay,
+        date: localDateTime,
+      };
       setOwnTodos([...ownTodos, newTask]);
       if (selectedDay === 0) {
         setTodos([...todos, newTask]);

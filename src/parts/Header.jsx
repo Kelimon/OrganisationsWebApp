@@ -1,13 +1,22 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Box, Paper, Button } from "@mui/material";
 import logo from "./../assets/Logo_2_verarbeitet.webp"; // if you're using Create React App
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./../contexts/Auth";
 
 function Header({}) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setIsLoggedIn, isAdmin, currentUser } = useAuth();
   console.log("is pana admin?: ", isAdmin);
+
+  const handleToggle = () => {
+    if (location.pathname === "/forkingsuhaib") {
+      navigate("/home");
+    } else {
+      navigate("/forkingsuhaib");
+    }
+  };
 
   return (
     /* colors 
@@ -80,11 +89,13 @@ function Header({}) {
           </Paper>
           {isAdmin && (
             <Button
-              onClick={() => navigate("/forkingsuhaib")}
+              onClick={handleToggle}
               color="warning"
               style={{ height: 35, borderRadius: 15 }}
             >
-              View Users
+              {location.pathname === "/forkingsuhaib"
+                ? "Back to Homepage"
+                : "View Users"}
             </Button>
           )}
         </Box>
