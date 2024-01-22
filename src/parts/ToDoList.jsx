@@ -48,10 +48,23 @@ function ToDoList({ todos, setTodos }) {
   const [isLoading, setIsLoading] = useState(true);
   const isFirstRender = useRef(true);
   const initialData = useRef(null);
-  const [ownTodos, setOwnTodos] = useState(todos);
+  const [ownTodos, setOwnTodos] = useState([]);
   const renderCount = useRef(0);
   const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
   const todosForSelectedDay = ownTodos[selectedDay] || [];
+
+  const heute = new Date();
+  heute.setHours(0, 0, 0, 0);
+  heute.setDate(heute.getDate() + selectedDay); // Addiert selectedDay zum aktuellen Datum
+  const jahr = heute.getFullYear();
+  const monat = (heute.getMonth() + 1).toString().padStart(2, "0"); // Monate sind 0-indiziert
+  const tag = heute.getDate().toString().padStart(2, "0");
+  const stunden = heute.getHours().toString().padStart(2, "0");
+  const minuten = heute.getMinutes().toString().padStart(2, "0");
+  const sekunden = heute.getSeconds().toString().padStart(2, "0");
+  const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
+
+  console.log("localDateTime: ", localDateTime);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -60,14 +73,23 @@ function ToDoList({ todos, setTodos }) {
       const latestDayData = response.data.days[response.data.days.length - 3];
       const end = response.data.days.length;
       const start = Math.max(end - 3, 0);
+      console.log("response", response.data.days);
       const lastThreeDayData = response.data.days
         .slice(start, end)
-        .map((day) => day.data)
+        .map((day) =>
+          day.data.map((item) => ({
+            ...item,
+            date: day.date,
+          }))
+        )
         .flat();
 
+      console.log("datefrommongo", response.data.days[204].date);
+      console.log("latesthree", lastThreeDayData);
       if (latestDayData.data.length > 0) {
         setTodos(latestDayData.data);
         setOwnTodos(lastThreeDayData);
+
         initialData.current = lastThreeDayData;
       }
       setIsLoading(false);
@@ -77,7 +99,12 @@ function ToDoList({ todos, setTodos }) {
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
-      const newTask = { text: newTodo, checked: false, day: selectedDay };
+      const newTask = {
+        text: newTodo,
+        checked: false,
+        day: selectedDay,
+        date: localDateTime,
+      };
       setOwnTodos([...ownTodos, newTask]);
       if (selectedDay === 0) {
         setTodos([...todos, newTask]);
@@ -145,6 +172,15 @@ function ToDoList({ todos, setTodos }) {
     // add margin if hovering
     // styles we need to apply on draggables
   });
+
+  // Morgen
+  const morgen = new Date();
+  morgen.setDate(morgen.getDate() + 1);
+
+  // Übermorgen
+  const uebermorgen = new Date();
+  uebermorgen.setDate(uebermorgen.getDate() + 2);
+  console.log("owntodosis,", ownTodos);
   return (
     <>
       <StyledPaper>
@@ -198,7 +234,7 @@ function ToDoList({ todos, setTodos }) {
           <Box flexGrow="1" overflow="auto">
             <List>
               {ownTodos
-                .filter((todo) => todo.day == selectedDay)
+                .filter((todo) => todo.date == localDateTime)
                 .map((todo, index) => (
                   <ListItem
                     key={index}

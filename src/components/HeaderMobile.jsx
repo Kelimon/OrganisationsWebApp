@@ -15,7 +15,7 @@ import { useAuth } from "./../contexts/Auth";
 
 function HeaderMobile({}) {
   const navigate = useNavigate();
-  const { setIsLoggedIn, setIsAdmin, currentUser, isAdmin } = useAuth();
+  const { setIsLoggedIn, currentUser, isAdmin } = useAuth();
 
   if (false) {
     return (

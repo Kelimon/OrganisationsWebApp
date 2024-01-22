@@ -24,8 +24,7 @@ function LoginPage({}) {
   const [credentialsInvalid, setCredentialsInvalid] = useState(false);
   const navigate = useNavigate();
   const [profile, setProfile] = useState("");
-  const { setCurrentUser, currentUser, setIsLoggedIn, setIsAdmin, isAdmin } =
-    useAuth();
+  const { setCurrentUser, setIsLoggedIn, setIsAdmin } = useAuth();
 
   /**
    * email input ändern
