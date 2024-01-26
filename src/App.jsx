@@ -103,12 +103,7 @@ function App() {
               path="/home"
               element={
                 isLoggedIn ? (
-                  <HomePage
-                    todos={todos}
-                    setTodos={setTodos}
-                    routineList={routineList}
-                    setRoutineList={setRoutineList}
-                  />
+                  <HomePage todos={todos} setTodos={setTodos} />
                 ) : (
                   <LoginPage />
                 )
