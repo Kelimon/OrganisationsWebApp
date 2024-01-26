@@ -5,7 +5,7 @@ import Dayjs from "dayjs";
 import { styled } from "@mui/system";
 import dayjs from "dayjs";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import {
   Box,
   Button,
@@ -56,7 +56,12 @@ const TimeSlot = styled("div")(({ theme }) => ({
   },
 }));
 
-export default function SchedulerMobile({ username, meetings, setMeetings, toLeft }) {
+export default function SchedulerMobile({
+  username,
+  meetings,
+  setMeetings,
+  toLeft,
+}) {
   const [value, setValue] = React.useState(Dayjs());
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
@@ -79,8 +84,6 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
   const handleClose = () => {
     setOpen(false);
   };
-  console.log("color", color)
-  console.log("schedulermobile", meetings);
   const handleSubmit = () => {
     setOpen(false);
     if (editing) {
@@ -117,7 +120,6 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
   };
 
   const handleEdit = (index) => {
-    console.log("editing and paramter id: ", editingIndex, index)
     const meetingToEdit = meetings[index];
     setTitle(meetingToEdit.title);
     setDescription(meetingToEdit.description);
@@ -128,9 +130,7 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
     setEditing(true);
     setEditingIndex(index);
     setOpen(true);
-};
-
-
+  };
 
   React.useEffect(() => {
     let scheduleData = meetings;
@@ -151,223 +151,301 @@ export default function SchedulerMobile({ username, meetings, setMeetings, toLef
   };
 
   const handleDelete = () => {
-    console.log()
-    let array = [...meetings]
-    array.splice(editingIndex, 1)
+    let array = [...meetings];
+    array.splice(editingIndex, 1);
     setMeetings(array);
     setOpen(false);
     setEditing(false);
     setEditingIndex(null); // clear editing index when done deleting
   };
-    return (
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-        <StyledPaper>
-          <AnimatePresence exitBeforeEnter>
-            {showCalendar ? (
-              <>
-                <motion.div initial="out" animate="in" exit="out" variants={pageTransition}>
-                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button
-                      onClick={() => {
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
+      <StyledPaper>
+        <AnimatePresence exitBeforeEnter>
+          {showCalendar ? (
+            <>
+              <motion.div
+                initial="out"
+                animate="in"
+                exit="out"
+                variants={pageTransition}
+              >
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button
+                    onClick={() => {
+                      setShowCalendar(false);
+                    }}
+                  >
+                    Termine
+                  </Button>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <StaticDatePicker
+                    slotProps={{
+                      toolbar: { toolbarFormat: "ddd DD MMMM", hidden: false },
+                    }}
+                    orientation="portrait"
+                    value={value}
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                      if (isSmallScreen) {
                         setShowCalendar(false);
-                      }}
-                    >
-                      Termine
-                    </Button>
-                  </Box>
-                  <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    <StaticDatePicker
-                      slotProps={{
-                        toolbar: { toolbarFormat: "ddd DD MMMM", hidden: false },
-                      }}
-                      orientation="portrait"
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                        if (isSmallScreen) {
-                          setShowCalendar(false);
-                        }
-                      }}
-                      sx={{
-                        height: "90%",
-                        backgroundColor: "#333e",
-                        fontSize: 100,
+                      }
+                    }}
+                    sx={{
+                      height: "90%",
+                      backgroundColor: "#333e",
+                      fontSize: 100,
+                      color: "white",
+                      "& .MuiPickersDay-daySelected": {
+                        backgroundColor: "grey",
                         color: "white",
-                        "& .MuiPickersDay-daySelected": {
+                        "&:hover": {
                           backgroundColor: "grey",
                           color: "white",
-                          "&:hover": {
-                            backgroundColor: "grey",
-                            color: "white",
-                          },
                         },
-                        "& .MuiIconButton-label": {
-                          color: "white",
-                        },
-                        "& .MuiPickersDay-day": {
-                          color: "white",
-                        },
-                        "& .MuiDayCalendar-weekDayLabel": {
-                          color: "white",
-                        },
-                        "& .MuiPickersCalendarHeader-switchViewButton": {
-                          color: "white",
-                        },
-                        "& .MuiPickersArrowSwitcher-button": {
-                          color: "white",
-                        },
-                        "& .MuiPickersDay-root": {
-                          color: "white",
-                        },
-                        "& .MuiPickersDay-root.Mui-selected": {
-                          backgroundColor: "grey",
-                        },
-                        "& .MuiButton-root": {
-                          display: "none",
-                        },
-                      }}
-                      renderDay={(date, selectedDates, DayComponentProps) => {
-                        const hasMeeting = meetings.some((meeting) => meeting.date.isSame(date, "day"));
-                        return (
-                          <Box sx={{ position: "relative" }}>
-                            <DayComponent {...DayComponentProps} onClick={() => handleClickDate(date)} />
-                            {hasMeeting && (
-                              <span
-                                style={{
-                                  position: "absolute",
-                                  bottom: 0,
-                                  left: "50%",
-                                  transform: "translateX(-50%)",
-                                  width: "4px",
-                                  height: "4px",
-                                  borderRadius: "50%",
-                                  backgroundColor: "red",
-                                }}
-                              />
-                            )}
-                          </Box>
-                        );
-                      }}
-                    />{" "}
-                  </Box>{" "}
-                </motion.div>
-              </>
-            ) : (
-              <>
-                {" "}
-                <motion.div initial="out" animate="in" exit="out" variants={pageTransition}>
-                  <Paper sx={{ height: "100%", width: "86vw", overflow: "auto", backgroundColor: "#333e" }}>
-                    <Box
-                      sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0" }}
+                      },
+                      "& .MuiIconButton-label": {
+                        color: "white",
+                      },
+                      "& .MuiPickersDay-day": {
+                        color: "white",
+                        // Setzen Sie die gewünschte Höhe
+                      },
+                      "& .MuiDayCalendar-weekDayLabel": {
+                        color: "white",
+                      },
+                      "& .MuiPickersCalendarHeader-switchViewButton": {
+                        color: "white",
+                      },
+                      "& .MuiPickersArrowSwitcher-button": {
+                        color: "white",
+                      },
+                      "& .MuiPickersDay-root": {
+                        color: "white",
+                      },
+                      "& .MuiPickersDay-root.Mui-selected": {
+                        backgroundColor: "grey",
+                      },
+                      "& .MuiButton-root": {
+                        display: "none",
+                      },
+                    }}
+                    renderDay={(date, selectedDates, DayComponentProps) => {
+                      const hasMeeting = meetings.some((meeting) =>
+                        meeting.date.isSame(date, "day")
+                      );
+                      return (
+                        <Box sx={{ position: "relative" }}>
+                          <DayComponent
+                            {...DayComponentProps}
+                            onClick={() => handleClickDate(date)}
+                          />
+                          {hasMeeting && (
+                            <span
+                              style={{
+                                position: "absolute",
+                                bottom: 0,
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                width: "4px",
+                                height: "4px",
+                                borderRadius: "50%",
+                                backgroundColor: "red",
+                              }}
+                            />
+                          )}
+                        </Box>
+                      );
+                    }}
+                  />{" "}
+                </Box>{" "}
+              </motion.div>
+            </>
+          ) : (
+            <>
+              {" "}
+              <motion.div
+                initial="out"
+                animate="in"
+                exit="out"
+                variants={pageTransition}
+              >
+                <Paper
+                  sx={{
+                    height: "100%",
+                    width: "86vw",
+                    overflow: "auto",
+                    backgroundColor: "#333e",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "10px 0",
+                    }}
+                  >
+                    <Button
+                      onClick={() => setShowCalendar(true)}
+                      color="secondary"
                     >
-                      <Button onClick={() => setShowCalendar(true)} color="secondary">
-                        Zurück
-                      </Button>
-                      <Typography variant="h6" color={"white"} fontSize={25} sx={{ marginRight: 2 }}>
-                        {value.format("ddd, MMM D")}
-                      </Typography>
-                      <IconButton aria-label="delete" color="secondary" onClick={handleClickOpen}>
-                        <AddIcon />
-                      </IconButton>
-                    </Box>
-                    <Dialog open={open} onClose={handleClose}>
-                      <DialogTitle>Add Event</DialogTitle>
-                      <DialogContent>
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="title"
-                          label="Title"
-                          type="text"
-                          fullWidth
-                          value={title}
-                          onChange={(e) => setTitle(e.target.value)}
-                        />
-                        <MobileTimePicker label="Start Hour" value={startHour} onChange={setStartHour} ampm={false} />
-
-                        <MobileTimePicker label="End Hour" value={endHour} onChange={setEndHour} ampm={false} />
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="description"
-                          label="Description"
-                          type="text"
-                          fullWidth
-                          value={description}
-                          onChange={(e) => setDescription(e.target.value)}
-                        />
-                        <CirclePicker color={color} onChangeComplete={(color) => setColor(color.hex)} />
-                      </DialogContent>
-                      <DialogActions>
-                      {editing && (
-                    <Button color="primary" onClick={handleDelete}>
-                      löschen
+                      Zurück
                     </Button>
-                  )}
-                        <Button onClick={handleClose} color="primary">
-                          Cancel
-                        </Button>
-                        <Button onClick={handleSubmit} color="primary">
-                          Submit
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
+                    <Typography
+                      variant="h6"
+                      color={"white"}
+                      fontSize={25}
+                      sx={{ marginRight: 2 }}
+                    >
+                      {value.format("ddd, MMM D")}
+                    </Typography>
+                    <IconButton
+                      aria-label="delete"
+                      color="secondary"
+                      onClick={handleClickOpen}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </Box>
+                  <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle>Add Event</DialogTitle>
+                    <DialogContent>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="title"
+                        label="Title"
+                        type="text"
+                        fullWidth
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                      <MobileTimePicker
+                        label="Start Hour"
+                        value={startHour}
+                        onChange={setStartHour}
+                        ampm={false}
+                      />
 
-                    {/* Display Meetings */}
-                    {meetings
-    .filter((meeting) => meeting.date.isSame(value, "day"))
-    .sort((a, b) => a.start.unix() - b.start.unix()) // sort meetings by start time
-    .map((meeting, index) => (
-    <Paper
-        sx={{
-        borderRadius: 2,
-        backgroundColor: meeting.color,
-        margin: "10px",
-        padding: "10px",
-        }}
-        key={meeting.id} // assuming each meeting has a unique id field
-    >
-                          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <Typography color="white" variant="h6" fontWeight="fontWeightBold" fontSize={20}>
-                              {meeting.title}
-                            </Typography>
-                            <Box sx={{ display: "flex"}}>
-                            <Typography color="white" variant="subtitle1" sx={{marginTop:1}}>
-                              {meeting.start.format("HH:mm")} - {meeting.end.format("HH:mm")}
-                            </Typography>
-                            
-                            <IconButton
-    aria-label="edit"
-    color="white"
-    onClick={() => handleEdit(meetings.indexOf(meeting))} // assuming each meeting has a unique id field
-    sx={{ color: "white" }}
->
-    <EditIcon />
-</IconButton>
+                      <MobileTimePicker
+                        label="End Hour"
+                        value={endHour}
+                        onChange={setEndHour}
+                        ampm={false}
+                      />
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="description"
+                        label="Description"
+                        type="text"
+                        fullWidth
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
+                      <CirclePicker
+                        color={color}
+                        onChangeComplete={(color) => setColor(color.hex)}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      {editing && (
+                        <Button color="primary" onClick={handleDelete}>
+                          löschen
+                        </Button>
+                      )}
+                      <Button onClick={handleClose} color="primary">
+                        Cancel
+                      </Button>
+                      <Button onClick={handleSubmit} color="primary">
+                        Submit
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
 
-                      </Box>
-                          </Box>
-                          <Box sx={{ height: "1px", backgroundColor: "black", margin: "5px" }} />
-                          {/*<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>*/}
-                          <Grid container>
-                            <Grid item xs={10}>
-                          <Typography color="white" variant="body1" sx={{marginRight:1}}>
-                            {meeting.description}
+                  {/* Display Meetings */}
+                  {meetings
+                    .filter((meeting) => meeting.date.isSame(value, "day"))
+                    .sort((a, b) => a.start.unix() - b.start.unix()) // sort meetings by start time
+                    .map((meeting, index) => (
+                      <Paper
+                        sx={{
+                          borderRadius: 2,
+                          backgroundColor: meeting.color,
+                          margin: "10px",
+                          padding: "10px",
+                        }}
+                        key={meeting.id} // assuming each meeting has a unique id field
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            color="white"
+                            variant="h6"
+                            fontWeight="fontWeightBold"
+                            fontSize={20}
+                          >
+                            {meeting.title}
                           </Typography>
+                          <Box sx={{ display: "flex" }}>
+                            <Typography
+                              color="white"
+                              variant="subtitle1"
+                              sx={{ marginTop: 1 }}
+                            >
+                              {meeting.start.format("HH:mm")} -{" "}
+                              {meeting.end.format("HH:mm")}
+                            </Typography>
+
+                            <IconButton
+                              aria-label="edit"
+                              color="white"
+                              onClick={() =>
+                                handleEdit(meetings.indexOf(meeting))
+                              } // assuming each meeting has a unique id field
+                              sx={{ color: "white" }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Box>
+                        </Box>
+                        <Box
+                          sx={{
+                            height: "1px",
+                            backgroundColor: "black",
+                            margin: "5px",
+                          }}
+                        />
+                        {/*<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>*/}
+                        <Grid container>
+                          <Grid item xs={10}>
+                            <Typography
+                              color="white"
+                              variant="body1"
+                              sx={{ marginRight: 1 }}
+                            >
+                              {meeting.description}
+                            </Typography>
                           </Grid>
-                          <Grid item xs={2} >
-                          <Clock start={meeting.start} end={meeting.end}/>
-                          
+                          <Grid item xs={2}>
+                            <Clock start={meeting.start} end={meeting.end} />
                           </Grid>
-                          </Grid>
-                        </Paper>
-                      ))}
-                  </Paper>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
-        </StyledPaper>
-      </LocalizationProvider>
-    );
-  }
+                        </Grid>
+                      </Paper>
+                    ))}
+                </Paper>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </StyledPaper>
+    </LocalizationProvider>
+  );
+}

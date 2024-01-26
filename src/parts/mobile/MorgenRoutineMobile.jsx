@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   List,
   ListItem,
@@ -19,6 +19,7 @@ import RegisterRequest from "../../requests/RegisterRequest";
 import saveRoutine from "../../requests/saveRoutine";
 import GetRoutine from "../../requests/GetRoutine";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "./../../contexts/Auth";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -50,13 +51,30 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function MorgenRoutineMobile({ username, todos, setTodos, toLeft }) {
-  console.log("hi");
-  console.log(username);
-
+function MorgenRoutineMobile({ toLeft }) {
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
+  const { currentUser, isAdmin } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const isFirstRender = useRef(true);
+  const initialData = useRef(null);
+  const [todos, setTodos] = useState([]);
 
+  useEffect(() => {
+    const fetchTodos = async () => {
+      setIsLoading(true);
+      const response = await GetRoutine({ currentUser });
+      console.log("userrrr", currentUser);
+      console.log("response", response);
+      console.log("response.data", response.data);
+      console.log("response.data.days");
+      setTodos(response.data.days);
+      initialData.current = response.data.days;
+      setIsLoading(false);
+    };
+
+    fetchTodos();
+  }, [currentUser]);
   const pageTransition = {
     in: {
       opacity: 10,
@@ -73,16 +91,20 @@ function MorgenRoutineMobile({ username, todos, setTodos, toLeft }) {
       setTodos([...todos, { text: newTodo, checked: false }]);
       setNewTodo("");
     }
-    console.log("username before saving todos: ", username);
-    console.log("todos before saving todos: ", todos);
   };
 
   useEffect(() => {
-    console.log(todos);
-    if (todos.length > 0) {
-      saveRoutine({ username, todos });
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [todos]);
+    if (isLoading) {
+      return; // Skip saving when the component is in a loading state
+    }
+    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
+      saveRoutine({ currentUser, todos });
+    }
+  }, [todos, isLoading]);
 
   const toggleCheck = (index) => {
     setTodos(

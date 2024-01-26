@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   List,
   ListItem,
@@ -20,7 +20,7 @@ import AdjustOutlinedIcon from "@mui/icons-material/AdjustOutlined";
 import { motion, AnimatePresence } from "framer-motion";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useAuth } from "./../../contexts/Auth";
-
+import Checkbox from "@mui/material/Checkbox";
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   padding: theme.spacing(2),
@@ -51,17 +51,20 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function AktuellePriosMobile({
-  showVergangeneTodos,
-  setShowVergangeneTodos,
-  todos,
-  setTodos,
-  toLeft,
-}) {
+const RoundedCheckbox = styled(Checkbox)({
+  "&.MuiCheckbox-colorPrimary.Mui-checked .MuiSvgIcon-root": {
+    color: "white", // Ersetzen Sie YOUR_CUSTOM_COLOR durch Ihre gewünschte Farbe
+  },
+});
+
+function AktuellePriosMobile({ toLeft }) {
   const [newTodo, setNewTodo] = useState("");
   const { currentUser } = useAuth();
   const [hoverIndex, setHoverIndex] = useState(null);
-
+  const [todos, setTodos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const isFirstRender = useRef(true);
+  const initialData = useRef(null);
   /*useEffect(() => {
     const fetchTodos = async () => {
       const response = await GetTodos({username});
@@ -117,11 +120,36 @@ function AktuellePriosMobile({
   };
 
   useEffect(() => {
-    if (todos.length > 0) {
+    console.log(1);
+    const fetchTodos = async () => {
+      console.log(2);
+      setIsLoading(true);
+      const response = await GetPrios({ currentUser });
+      console.log("response", currentUser);
+      if (response) {
+        console.log(3);
+        setTodos(response);
+        initialData.current = response;
+      }
+      setIsLoading(false);
+    };
+
+    fetchTodos();
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (isLoading) {
+      return; // Skip saving when the component is in a loading state
+    }
+    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
       let priosData = todos;
       savePrios({ currentUser, priosData });
     }
-  }, [todos]);
+  }, [todos, isLoading]);
 
   const deleteTodo = (index) => {
     setTodos(todos.filter((todo, i) => i !== index));
@@ -145,11 +173,9 @@ function AktuellePriosMobile({
 
     // change background colour if dragging
     background: isDragging
-      ? "black"
-      : "linear-gradient(to right,  #028db0, #fa37c0)",
+      ? "linear-gradient(to bottom right,  #44CDDD, lightblue)"
+      : "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
     //background: isDragging ? "linear-gradient(to bottom right, black,  #550763)" : "#b608d4",
-    marginLeft: isHovering ? "20px" : "0px",
-    // styles we need to apply on draggables
     ...draggableStyle,
   });
 
@@ -192,7 +218,7 @@ function AktuellePriosMobile({
                           {...provided.droppableProps}
                           ref={provided.innerRef}
                         >
-                          {todos.map(({ text }, index) => {
+                          {todos.map(({ text, checked }, index) => {
                             return (
                               <Draggable
                                 key={index}
@@ -216,8 +242,16 @@ function AktuellePriosMobile({
                                     onMouseEnter={() => setHoverIndex(index)}
                                     onMouseLeave={() => setHoverIndex(null)}
                                   >
-                                    <ListItemIcon>
-                                      <AdjustOutlinedIcon color="inherit" />
+                                    <ListItemIcon sx={{ borderRadius: 15 }}>
+                                      <RoundedCheckbox
+                                        checked={checked}
+                                        onChange={() => {
+                                          const newTodos = [...todos];
+                                          newTodos[index].checked =
+                                            !newTodos[index].checked;
+                                          setTodos(newTodos);
+                                        }}
+                                      />
                                     </ListItemIcon>
                                     <ListItemText
                                       primaryTypographyProps={{

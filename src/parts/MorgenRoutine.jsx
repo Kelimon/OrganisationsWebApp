@@ -42,25 +42,21 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function MorgenRoutine({ todos, setTodos }) {
+function MorgenRoutine({}) {
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
   const { currentUser, isAdmin } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const isFirstRender = useRef(true);
   const initialData = useRef(null);
+  const [todos, setTodos] = useState([]);
 
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
       const response = await GetRoutine({ currentUser });
-      console.log("getroutine in morgenrotuine: ", response);
       setTodos(response.data.days);
       initialData.current = response.data.days;
-      console.log(
-        "is same: ",
-        JSON.stringify(todos) !== JSON.stringify(initialData.current)
-      );
       setIsLoading(false);
     };
 
@@ -84,8 +80,6 @@ function MorgenRoutine({ todos, setTodos }) {
       setTodos([...todos, { text: newTodo, checked: false }]);
       setNewTodo("");
     }
-    console.log("currentUser before saving routine: ", currentUser);
-    console.log("todos before saving todos: ", todos);
   };
 
   useEffect(() => {
@@ -107,7 +101,6 @@ function MorgenRoutine({ todos, setTodos }) {
         i === index ? { ...todo, checked: !todo.checked } : todo
       )
     );
-    console.log("routine check changed", todos);
   };
 
   const deleteTodo = (index) => {

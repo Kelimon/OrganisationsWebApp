@@ -267,16 +267,30 @@ class Chart extends React.Component {
     }
   };
 
+  today = () => {
+    const heute = new Date();
+    heute.setHours(0, 0, 0, 0);
+    const jahr = heute.getFullYear();
+    const monat = (heute.getMonth() + 1).toString().padStart(2, "0"); // Monate sind 0-indiziert
+    const tag = heute.getDate().toString().padStart(2, "0");
+    const stunden = heute.getHours().toString().padStart(2, "0");
+    const minuten = heute.getMinutes().toString().padStart(2, "0");
+    const sekunden = heute.getSeconds().toString().padStart(2, "0");
+    const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
+    return localDateTime;
+  };
+
   calculateLastTodo() {
     let result = 0;
-    for (let i = 0; i < this.props.todos.length; i++) {
-      if (this.props.todos[i].checked) {
+    const ownTodos = this.props.todos.filter(
+      (todo) => todo.date === this.today()
+    );
+    for (let i = 0; i < ownTodos.length; i++) {
+      if (ownTodos[i].checked) {
         result++;
       }
     }
-    return this.props.todos.length > 0
-      ? (result * 100) / this.props.todos.length
-      : 0;
+    return ownTodos.length > 0 ? (result * 100) / ownTodos.length : 0;
   }
   render() {
     if (this.state.todos) {

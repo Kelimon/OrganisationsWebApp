@@ -12,7 +12,6 @@ async function saveNotizen({ currentUser, note }) {
           notizen: note,
         }
       );
-      console.log("responsesavenotizen!: ", response);
     }
     return;
   } catch (error) {

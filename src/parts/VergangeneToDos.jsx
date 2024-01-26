@@ -75,7 +75,6 @@ function VergangeneToDos({}) {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
-  console.log("wtf is todos: ", todos);
 
   return (
     <StyledPaper>

@@ -6,7 +6,6 @@ async function GetRoutine({ currentUser }) {
     const response = await axios.get(
       `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getroutine?username=${currentUser}`
     );
-    console.log("responsegetroutine!: ", response);
     return response;
   } catch (error) {
     console.error("Login errorgetroutine:", error);

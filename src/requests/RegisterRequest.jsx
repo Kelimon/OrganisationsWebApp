@@ -9,8 +9,7 @@ async function RegisterRequest(username, password, setIsLoggedIn) {
         password,
       }
     );
-    console.log(response);
-    localStorage.setItem('username', response.data.username);
+    localStorage.setItem("username", response.data.username);
   } catch (error) {
     console.error("Login error:", error);
     throw error;

@@ -165,7 +165,7 @@ const useStyles = styled((theme) => ({
   },
   // ... and so on
 }));
-function HomePage({ todos, setTodos, routineList, setRoutineList }) {
+function HomePage({ todos, setTodos }) {
   const [inputValue, setInputValue] = useState("");
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -213,7 +213,7 @@ function HomePage({ todos, setTodos, routineList, setRoutineList }) {
             <Notizen />
           </NotizenGridItem>
           <MorgenRoutineGridItem item xs={12} sm={12} md={6} lg={4} xl={4}>
-            <MorgenRoutine todos={routineList} setTodos={setRoutineList} />
+            <MorgenRoutine />
           </MorgenRoutineGridItem>
           <KalenderGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
             <Scheduler />

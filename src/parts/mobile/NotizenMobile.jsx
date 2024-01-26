@@ -4,6 +4,7 @@ import { styled } from "@mui/system";
 import GetNotizen from "../../requests/GetNotizen";
 import saveNotizen from "../../requests/saveNotizen";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "./../../contexts/Auth";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   display: "flex", // Added this line
@@ -36,7 +37,10 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function NotizenMobile({ username, note, setNote, toLeft }) {
+function NotizenMobile({ toLeft }) {
+  const [note, setNote] = useState("");
+  const [lastSavedNote, setLastSavedNote] = useState("");
+  const { currentUser } = useAuth();
   const pageTransition = {
     in: {
       opacity: 10,
@@ -48,11 +52,33 @@ function NotizenMobile({ username, note, setNote, toLeft }) {
     },
   };
 
-  const SaveData = async () => {
-    if (note.length > 0) {
-      saveNotizen({ username, note });
-    }
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const response = await GetNotizen({ currentUser });
+      if (response.data.notizen.length > 0) {
+        setNote(response.data.notizen);
+      }
+    };
+
+    fetchTodos();
+  }, [currentUser]);
+
+  const saveNote = async () => {
+    // Hier kommt Ihre Logik zum Speichern der Notiz
+    await saveNotizen({ currentUser, note });
+    setLastSavedNote(note); // Aktualisieren des zuletzt gespeicherten Textes
   };
+  useEffect(() => {
+    // Funktion, die alle 5 Sekunden ausgeführt wird
+    const interval = setInterval(() => {
+      if (note !== lastSavedNote) {
+        saveNote(); // Speichern der Notiz
+      }
+    }, 5000); // 5000 Millisekunden = 5 Sekunden
+
+    // Bereinigungsfunktion
+    return () => clearInterval(interval);
+  }, [note, lastSavedNote]);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -71,18 +97,8 @@ function NotizenMobile({ username, note, setNote, toLeft }) {
               multiline
               rows={21}
               variant="outlined"
-              sx={{ color: "white" }}
+              sx={{ color: "black" }}
             />
-            <Button
-              onClick={() => {
-                SaveData();
-              }}
-              variant="contained"
-              color="secondary"
-              style={{ marginTop: 5, display: "flex", flexDirection: "column" }}
-            >
-              Save
-            </Button>
           </StyledPaper>
         </motion.div>
       </>

@@ -42,12 +42,12 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 
 function Notizen({}) {
   const [note, setNote] = useState("");
+  const [lastSavedNote, setLastSavedNote] = useState("");
   const { currentUser } = useAuth();
 
   useEffect(() => {
     const fetchTodos = async () => {
       const response = await GetNotizen({ currentUser });
-      console.log("notizen data: ", response.data.notizen);
       if (response.data.notizen.length > 0) {
         setNote(response.data.notizen);
       }
@@ -56,11 +56,22 @@ function Notizen({}) {
     fetchTodos();
   }, [currentUser]);
 
-  const SaveData = async () => {
-    if (note.length > 0) {
-      saveNotizen({ currentUser, note });
-    }
+  const saveNote = async () => {
+    // Hier kommt Ihre Logik zum Speichern der Notiz
+    await saveNotizen({ currentUser, note });
+    setLastSavedNote(note); // Aktualisieren des zuletzt gespeicherten Textes
   };
+  useEffect(() => {
+    // Funktion, die alle 5 Sekunden ausgeführt wird
+    const interval = setInterval(() => {
+      if (note !== lastSavedNote) {
+        saveNote(); // Speichern der Notiz
+      }
+    }, 2000); // 5000 Millisekunden = 5 Sekunden
+
+    // Bereinigungsfunktion
+    return () => clearInterval(interval);
+  }, [note, lastSavedNote]);
 
   return (
     <StyledPaper>
@@ -73,21 +84,6 @@ function Notizen({}) {
         variant="outlined"
         sx={{ color: "white", size: 100 }}
       />
-      <Button
-        onClick={() => {
-          SaveData();
-        }}
-        variant="contained"
-        color="secondary"
-        style={{
-          marginTop: 5,
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#44CDDD",
-        }}
-      >
-        Save
-      </Button>
     </StyledPaper>
   );
 }

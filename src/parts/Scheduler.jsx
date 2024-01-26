@@ -161,12 +161,9 @@ export default function Scheduler({}) {
   };
 
   React.useEffect(() => {
-    console.log("useeffect entered");
     const fetchTodos = async () => {
       setIsLoading(true);
-      console.log("fetchtodosentered");
       const response = await GetScheduleData({ currentUser });
-      console.log("schedule length and data", response);
       if (response.length > 0) {
         const meetingsWithDayjsDates = response.map((meeting) => ({
           ...meeting,
@@ -184,7 +181,6 @@ export default function Scheduler({}) {
   }, [currentUser]);
 
   const handleEdit = (index) => {
-    console.log("editing and paramter id: ", editingIndex, index);
     const meetingToEdit = meetings[index];
     setTitle(meetingToEdit.title);
     setDescription(meetingToEdit.description);
@@ -245,7 +241,6 @@ export default function Scheduler({}) {
           value={value}
           onChange={(newValue) => {
             setValue(newValue);
-            console.log("scheduler", newValue);
           }}
           sx={{
             height: "100%",

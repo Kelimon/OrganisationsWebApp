@@ -12,7 +12,6 @@ async function savePrios({ currentUser, priosData }) {
           priosData,
         }
       );
-      console.log("response!: ", response);
     }
     return;
   } catch (error) {
