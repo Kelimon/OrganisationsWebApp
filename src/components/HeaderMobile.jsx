@@ -15,7 +15,7 @@ import { useAuth } from "./../contexts/Auth";
 
 function HeaderMobile({}) {
   const navigate = useNavigate();
-  const { setIsLoggedIn, currentUser, isAdmin } = useAuth();
+  const { setIsLoggedIn, setIsAdmin, currentUser, isAdmin } = useAuth();
 
   if (false) {
     return (
@@ -127,25 +127,6 @@ function HeaderMobile({}) {
           {/* if you're using Create React App, you'd use <img src={logo} alt="Logo" /> instead */}
 
           <Box sx={{ flexGrow: 1 }} />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              marginTop: 1,
-            }}
-          >
-            {isAdmin && (
-              <Button
-                onClick={() => navigate("/forkingsuhaib")}
-                variant="contained"
-                color="warning"
-                style={{ height: 35, borderRadius: 15 }}
-              >
-                View Users
-              </Button>
-            )}
-          </Box>
         </Toolbar>
       </AppBar>
     );

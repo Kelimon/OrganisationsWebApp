@@ -171,7 +171,6 @@ function DevPage({
   setRoutineList,
   setIsLoggedIn,
 }) {
-  console.log("homepage ", isAdmin);
   const [inputValue, setInputValue] = useState("");
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));

@@ -64,12 +64,10 @@ function Monatsziele({}) {
       setNewTodo("");
     }
   };
-  console.log("Monatsziele currentusercheck: ", currentUser);
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
       const response = await GetMonatziele({ currentUser });
-      console.log("response from monatsziele: ", response);
       if (response) {
         setTodos(response);
         initialData.current = response;

@@ -68,7 +68,6 @@ function AktuellePrios({}) {
     const fetchTodos = async () => {
       setIsLoading(true);
       const response = await GetPrios({ currentUser });
-      console.log("response from aktuelleprios: ", response);
       if (response) {
         setTodos(response);
         initialData.current = response;

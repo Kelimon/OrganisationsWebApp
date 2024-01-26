@@ -57,11 +57,8 @@ function App() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [todos, setTodos] = useState([]);
 
-  const [routineList, setRoutineList] = useState([]);
-
   const [priosData, setPriosData] = useState([]);
   const [mzieleData, setMzieleData] = useState([]);
-  const [note, setNote] = useState("");
   const [meetings, setMeetings] = React.useState([]);
   const [vergangeneTodos, setVergangeneTodos] = useState([]);
   const [toLeft, setToLeft] = React.useState(false);
@@ -74,7 +71,6 @@ function App() {
         const response = await axios.get(
           "https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/checkAuthStatus"
         );
-        console.log("laula", response.data);
         // Wenn das Authentifizierungstoken gültig ist
         if (response.data.isAuthenticated) {
           setCurrentUser(response.data.username);
@@ -122,12 +118,7 @@ function App() {
               path="/login"
               element={
                 isLoggedIn ? (
-                  <HomePage
-                    todos={todos}
-                    setTodos={setTodos}
-                    routineList={routineList}
-                    setRoutineList={setRoutineList}
-                  />
+                  <HomePage todos={todos} setTodos={setTodos} />
                 ) : (
                   <LoginPage />
                 )
@@ -152,8 +143,6 @@ function App() {
               path="/home"
               element={
                 <ToDoListPage
-                  todos={todos}
-                  setTodos={setTodos}
                   vergangeneTodos={vergangeneTodos}
                   setVergangeneTodos={setVergangeneTodos}
                   toLeft={toLeft}
@@ -164,8 +153,6 @@ function App() {
               path="/todolist"
               element={
                 <ToDoListPage
-                  todos={todos}
-                  setTodos={setTodos}
                   vergangeneTodos={vergangeneTodos}
                   setVergangeneTodos={setVergangeneTodos}
                   toLeft={toLeft}
@@ -190,13 +177,7 @@ function App() {
             />
             <Route
               path="/morgenroutine"
-              element={
-                <MorgenRoutinePage
-                  todos={routineList}
-                  setTodos={setRoutineList}
-                  toLeft={toLeft}
-                />
-              }
+              element={<MorgenRoutinePage toLeft={toLeft} />}
             />
             <Route
               path="/scheduler"
@@ -208,12 +189,7 @@ function App() {
                 />
               }
             />
-            <Route
-              path="/notizen"
-              element={
-                <NotizenPage note={note} setNote={setNote} toLeft={toLeft} />
-              }
-            />
+            <Route path="/notizen" element={<NotizenPage toLeft={toLeft} />} />
             <Route
               path="/aktuelleprios"
               element={

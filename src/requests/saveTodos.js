@@ -5,6 +5,7 @@ async function saveTodos({ currentUser, ownTodos, selectedDay }) {
   try {
     const dayData = ownTodos;
     console.log("savetodos todos: ", ownTodos);
+    console.log("username: ", currentUser);
     const username = currentUser;
     const todosDay0 = ownTodos.filter((todo) => todo.day === 0);
     const todosDay1 = ownTodos.filter((todo) => todo.day === 1);

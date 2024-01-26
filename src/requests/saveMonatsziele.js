@@ -19,7 +19,6 @@ async function saveMonatsziele({ currentUser, mzieleData }) {
           },
         }
       );
-      console.log("responsesavemonatsziele: ", response);
     }
     return;
   } catch (error) {

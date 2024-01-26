@@ -8,7 +8,6 @@ function Header({}) {
   const navigate = useNavigate();
   const location = useLocation();
   const { setIsLoggedIn, isAdmin, currentUser } = useAuth();
-  console.log("is pana admin?: ", isAdmin);
 
   const handleToggle = () => {
     if (location.pathname === "/forkingsuhaib") {

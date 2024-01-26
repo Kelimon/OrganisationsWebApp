@@ -53,6 +53,7 @@ function ToDoList({ todos, setTodos }) {
   const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
   const todosForSelectedDay = ownTodos[selectedDay] || [];
 
+  // )
   const heute = new Date();
   heute.setHours(0, 0, 0, 0);
   heute.setDate(heute.getDate() + selectedDay); // Addiert selectedDay zum aktuellen Datum
@@ -64,8 +65,6 @@ function ToDoList({ todos, setTodos }) {
   const sekunden = heute.getSeconds().toString().padStart(2, "0");
   const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
 
-  console.log("localDateTime: ", localDateTime);
-
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
@@ -73,7 +72,6 @@ function ToDoList({ todos, setTodos }) {
       const latestDayData = response.data.days[response.data.days.length - 3];
       const end = response.data.days.length;
       const start = Math.max(end - 3, 0);
-      console.log("response", response.data.days);
       const lastThreeDayData = response.data.days
         .slice(start, end)
         .map((day) =>
@@ -84,8 +82,6 @@ function ToDoList({ todos, setTodos }) {
         )
         .flat();
 
-      console.log("datefrommongo", response.data.days[204].date);
-      console.log("latesthree", lastThreeDayData);
       if (latestDayData.data.length > 0) {
         setTodos(latestDayData.data);
         setOwnTodos(lastThreeDayData);
@@ -107,12 +103,11 @@ function ToDoList({ todos, setTodos }) {
       };
       setOwnTodos([...ownTodos, newTask]);
       if (selectedDay === 0) {
-        setTodos([...todos, newTask]);
+        setTodos([...ownTodos, newTask]);
       }
       setNewTodo("");
     }
   };
-  console.log("keo: ", ownTodos);
   renderCount.current += 1;
   useEffect(() => {
     if (isFirstRender.current) {
@@ -132,9 +127,8 @@ function ToDoList({ todos, setTodos }) {
       i === index ? { ...todo, checked: !todo.checked } : todo
     );
     setOwnTodos(updatedOwnTodos);
-    console.log("indexwhat: ", index);
     if (selectedDay === 0) {
-      const updatedTodos = todos.map((todo, i) =>
+      const updatedTodos = ownTodos.map((todo, i) =>
         i === index ? { ...todo, checked: !todo.checked } : todo
       );
       setTodos(updatedTodos);
@@ -156,7 +150,7 @@ function ToDoList({ todos, setTodos }) {
     setOwnTodos(updatedOwnTodos);
 
     if (selectedDay === 0) {
-      const updatedTodos = todos.filter((todo, i) => i !== index);
+      const updatedTodos = ownTodos.filter((todo, i) => i !== index);
       setTodos(updatedTodos);
     }
   };
@@ -180,7 +174,6 @@ function ToDoList({ todos, setTodos }) {
   // Übermorgen
   const uebermorgen = new Date();
   uebermorgen.setDate(uebermorgen.getDate() + 2);
-  console.log("owntodosis,", ownTodos);
   return (
     <>
       <StyledPaper>

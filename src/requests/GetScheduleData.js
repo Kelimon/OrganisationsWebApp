@@ -6,7 +6,6 @@ async function GetScheduleData({ currentUser }) {
     const response = await axios.get(
       `https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/getscheduledata?username=${currentUser}`
     );
-    console.log("responsschedulatat!: ", response);
     return response.data.scheduleData;
   } catch (error) {
     console.error("Login errorscheduledata:", error);
