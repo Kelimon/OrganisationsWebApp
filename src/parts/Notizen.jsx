@@ -36,7 +36,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
   flex: 1, // Nimmt den verfügbaren Platz ein
   "& .MuiOutlinedInput-root": {
-    height: "100%", // Füllt den umgebenden Container aus
+    height: "110%", // Füllt den umgebenden Container aus
     "&.Mui-focused": {
       height: "100%", // Stellt sicher, dass der Fokus-Stil die volle Höhe beibehält
     },
@@ -52,9 +52,23 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     height: "100%", // Stellt sicher, dass der FormControl die volle Höhe einnimmt
   },
   minHeight: "100px", // Minimale Höhe des Textfelds
-  maxHeight: "300px", // Maximale Höhe des Textfelds
   // Entfernen Sie Randabstände, falls diese von MUI gesetzt wurden
   margin: 0,
+  "& .MuiOutlinedInput-root": {
+    // ... andere Stile ...
+    "& fieldset": {
+      borderColor: "black", // Farbe des Randes
+      borderWidth: "2px", // Hier stellen Sie die Dicke des Randes ein
+    },
+    "&:hover fieldset": {
+      borderColor: "black", // Farbe des Randes beim Hover
+      borderWidth: "2px", // Dicke des Randes beim Hover
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "black", // Farbe des Randes beim Fokus
+      borderWidth: "2px", // Dicke des Randes beim Fokus
+    },
+  },
 }));
 
 function Notizen({}) {
@@ -97,7 +111,7 @@ function Notizen({}) {
         onChange={(e) => setNote(e.target.value)}
         label="Neue Notizen für den Tag"
         multiline
-        rows={18} // Diese Eigenschaft könnte nun irrelevant sein, da wir die Höhe manuell steuern
+        rows={20} // Diese Eigenschaft könnte nun irrelevant sein, da wir die Höhe manuell steuern
         variant="outlined"
         sx={{
           height: "100%", // Füllt den StyledPaper Container aus
