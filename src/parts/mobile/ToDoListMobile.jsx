@@ -79,7 +79,6 @@ function ToDoListMobile({
       x: "-1.5vw",
     },
   };
-  console.log("ToDoListMobile", todos);
 
   const getFormattedDate = (selectedDay) => {
     const currentDate = new Date();

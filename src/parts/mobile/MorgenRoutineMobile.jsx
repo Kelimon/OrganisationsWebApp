@@ -64,10 +64,6 @@ function MorgenRoutineMobile({ toLeft }) {
     const fetchTodos = async () => {
       setIsLoading(true);
       const response = await GetRoutine({ currentUser });
-      console.log("userrrr", currentUser);
-      console.log("response", response);
-      console.log("response.data", response.data);
-      console.log("response.data.days");
       setTodos(response.data.days);
       initialData.current = response.data.days;
       setIsLoading(false);

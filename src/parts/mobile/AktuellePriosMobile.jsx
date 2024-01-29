@@ -120,14 +120,10 @@ function AktuellePriosMobile({ toLeft }) {
   };
 
   useEffect(() => {
-    console.log(1);
     const fetchTodos = async () => {
-      console.log(2);
       setIsLoading(true);
       const response = await GetPrios({ currentUser });
-      console.log("response", currentUser);
       if (response) {
-        console.log(3);
         setTodos(response);
         initialData.current = response;
       }

@@ -15,7 +15,8 @@ import { useAuth } from "./../contexts/Auth";
 
 function HeaderMobile({}) {
   const navigate = useNavigate();
-  const { setIsLoggedIn, setIsAdmin, currentUser, isAdmin } = useAuth();
+  const { setIsLoggedIn, setIsAdmin, currentUser, isAdmin, setCurrentUser } =
+    useAuth();
 
   if (false) {
     return (
@@ -106,6 +107,8 @@ function HeaderMobile({}) {
                       localStorage.clear();
                       setIsLoggedIn(false);
                       navigate("/login");
+                      setIsAdmin(false);
+                      setCurrentUser("");
                     }}
                     fontSize={10}
                     sx={{

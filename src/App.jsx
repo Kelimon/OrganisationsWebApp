@@ -63,7 +63,7 @@ function App() {
   const [vergangeneTodos, setVergangeneTodos] = useState([]);
   const [toLeft, setToLeft] = React.useState(false);
   axios.defaults.withCredentials = true;
-
+  console.log("isadmin?", isAdmin);
   React.useEffect(() => {
     async function checkAuthStatus() {
       try {
@@ -76,7 +76,7 @@ function App() {
           setCurrentUser(response.data.username);
           setIsLoggedIn(true);
           setIsAdmin(response.data.isAdmin);
-          console.log(response.data.isAdmin);
+          console.log("isadmin 2?", response.data.isAdmin);
           //)
           //
         }
@@ -200,9 +200,7 @@ function App() {
               }
             />
           </Routes>
-          {currentUser && (
-            <BottomNavBar toLeft={toLeft} setToLeft={setToLeft} />
-          )}
+          {isLoggedIn && <BottomNavBar toLeft={toLeft} setToLeft={setToLeft} />}
         </HashRouter>
       </ThemeProvider>
     );
