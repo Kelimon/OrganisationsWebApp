@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Box, Paper, Button } from "@mui/material";
 import logo from "./../assets/Logo_2_verarbeitet.webp"; // if you're using Create React App
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./../contexts/Auth";
+import Cookies from "js-cookie";
 
 function Header({}) {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function Header({}) {
     <AppBar
       position="static"
       sx={{
-        backgroundColor: "#FAF4F4",
+        backgroundColor: "white",
         borderRadius: "10px",
         paddingBottom: "5px",
       }}
@@ -80,6 +81,7 @@ function Header({}) {
               onClick={() => {
                 localStorage.clear();
                 setIsLoggedIn(false);
+                Cookies.remove("authToken");
                 navigate("/login");
               }}
             >

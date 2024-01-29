@@ -6,9 +6,6 @@ import saveNotizen from "../requests/saveNotizen";
 import { useAuth } from "./../contexts/Auth";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "stretch", // dies stellt sicher, dass die Kinder (children) den Container voll ausfüllen
   margin: theme.spacing(3),
   padding: theme.spacing(7),
   borderRadius: 51,
@@ -16,7 +13,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxHeight: 500,
   height: 550,
   overflow: "auto",
-  boxShadow: theme.shadows[20], // Example shadow deptht dafür, dass Padding und Border in der Höhe berücksichtigt werden
+  boxShadow: theme.shadows[20], // Example shadow depth
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
@@ -37,7 +34,27 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
     color: "black", // Setze die Textfarbe des TextFields auf Weiß
   },
-  flex: 1, // Added this line
+  flex: 1, // Nimmt den verfügbaren Platz ein
+  "& .MuiOutlinedInput-root": {
+    height: "100%", // Füllt den umgebenden Container aus
+    "&.Mui-focused": {
+      height: "100%", // Stellt sicher, dass der Fokus-Stil die volle Höhe beibehält
+    },
+  },
+  "& .MuiOutlinedInput-inputMultiline": {
+    height: "100%", // Stellt sicher, dass der mehrzeilige Textbereich den Container ausfüllt
+    overflow: "auto", // Erlaubt das Scrollen, falls der Text die Höhe überschreitet
+  },
+  "& .MuiOutlinedInput-multiline": {
+    padding: 0, // Entfernt Padding innerhalb des Textfelds, falls gewünscht
+  },
+  "& .MuiFormControl-root": {
+    height: "100%", // Stellt sicher, dass der FormControl die volle Höhe einnimmt
+  },
+  minHeight: "100px", // Minimale Höhe des Textfelds
+  maxHeight: "300px", // Maximale Höhe des Textfelds
+  // Entfernen Sie Randabstände, falls diese von MUI gesetzt wurden
+  margin: 0,
 }));
 
 function Notizen({}) {
@@ -80,9 +97,12 @@ function Notizen({}) {
         onChange={(e) => setNote(e.target.value)}
         label="Neue Notizen für den Tag"
         multiline
-        rows={18}
+        rows={18} // Diese Eigenschaft könnte nun irrelevant sein, da wir die Höhe manuell steuern
         variant="outlined"
-        sx={{ color: "white", size: 100 }}
+        sx={{
+          height: "100%", // Füllt den StyledPaper Container aus
+          width: "100%", // Füllt die Breite des StyledPaper Containers aus
+        }}
       />
     </StyledPaper>
   );

@@ -18,6 +18,7 @@ import { useAuth } from "./../contexts/Auth";
 function RegisterPage({}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [authToken, setAuthToken] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
   const [passwordNotEqual, setPasswordNotEqual] = useState(false);
   const [passwordInvalid, setPasswordInvalid] = useState(false);
@@ -48,8 +49,14 @@ function RegisterPage({}) {
   const handleConfirmedPasswordChange = (e) => {
     setConfirmedPassword(e.target.value);
   };
+  const handleConfirmedTokenChange = (e) => {
+    setAuthToken(e.target.value);
+  };
 
   const handleRegister = () => {
+    if (!(authToken == "H9tPOIWxEY")) {
+      return;
+    }
     if (!(confirmedPassword == password)) {
       setPasswordNotEqual(true);
       setPasswordInvalid(false);
@@ -125,6 +132,20 @@ function RegisterPage({}) {
               type="password"
               value={confirmedPassword}
               onChange={handleConfirmedPasswordChange}
+              fullWidth
+              margin="normal"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); // Verhindert das standardmäßige Verhalten von Enter
+                  handleRegister();
+                }
+              }}
+            />
+            <TextField
+              label="Authetication Code"
+              type="password"
+              value={authToken}
+              onChange={handleConfirmedTokenChange}
               fullWidth
               margin="normal"
               onKeyDown={(e) => {

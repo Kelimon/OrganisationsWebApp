@@ -76,6 +76,8 @@ function App() {
           setCurrentUser(response.data.username);
           setIsLoggedIn(true);
           setIsAdmin(response.data.isAdmin);
+          console.log(response.data.isAdmin);
+          //)
           //
         }
       } catch (error) {
