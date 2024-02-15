@@ -57,9 +57,27 @@ class Chart extends React.Component {
         {
           name: "Erledigte ToDos",
           data: [0, 0, 0, 0, 0, 0, 0, 0, 0, this.calculateLastTodo()],
+          checked: [],
+          total: [],
         },
       ],
       options: {
+        tooltip: {
+          enabled: true,
+          x: {
+            format: "dd.MM.yyyy", // Formatieren Sie das Datum nach Ihren Wünschen
+          },
+          y: {
+            formatter: function (series, seriesIndex, dataPointIndex, w) {
+              console.log("series", series);
+              console.log("seriesIndex", seriesIndex);
+              console.log("dataPointIndex", dataPointIndex);
+              console.log("w", w);
+              console.log("w.config.series");
+              return `${Math.floor(series)}%`; // Formatieren Sie den Wert nach Ihren Wünschen
+            },
+          },
+        },
         stroke: {
           curve: "smooth", // this makes the line curvy
         },
@@ -189,6 +207,8 @@ class Chart extends React.Component {
 
   getCheckedPercentage = async (days) => {
     let checkedTasks = [];
+    let checked = [];
+    let total = [];
 
     // Determine how many days are missi
 
@@ -207,19 +227,28 @@ class Chart extends React.Component {
 
       if (totalTasksDaily > 0) {
         checkedTasks.push((checkedTasksDaily * 100) / totalTasksDaily);
+        checked.push(checkedTasksDaily);
+        total.push(totalTasksDaily);
       } else {
         checkedTasks.push(0);
+        checked.push(0);
+        total.push(0);
       }
     }
+    console.log("checkedArray", checked);
     await this.setState({
       todospercentage: checkedTasks,
       series: [
         {
           name: "Erledigte ToDos",
           data: checkedTasks,
+          checked: checked,
+          total: total,
         },
       ],
     });
+    console.log("state", this.state);
+
     return true;
   };
 
@@ -256,6 +285,7 @@ class Chart extends React.Component {
           },
         ],
       });
+      console.log("componentupdate", this.state.series);
     }
   }
 
