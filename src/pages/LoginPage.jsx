@@ -87,7 +87,11 @@ function LoginPage({}) {
           justifyContent="center"
           height="100vh"
         >
-          <Paper elevation={10} sx={{ padding: "2rem", borderRadius: "1rem" }}>
+          <Paper
+            elevation={10}
+            minWidth={"1000px"}
+            sx={{ padding: "2rem", borderRadius: "1rem" }}
+          >
             <Typography variant="h4" gutterBottom>
               Login
             </Typography>
@@ -113,10 +117,12 @@ function LoginPage({}) {
               fullWidth
               margin="normal"
             />
-            {credentialsInvalid && (
-              <Typography color="error" sx={{ minWidth: "100%" }}>
+            {credentialsInvalid ? (
+              <Typography color="error" minWidth={"710px"}>
                 Email or password incorrect.
               </Typography>
+            ) : (
+              <Typography minWidth={"710px"}></Typography>
             )}
 
             <Button

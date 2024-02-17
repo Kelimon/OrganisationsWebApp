@@ -22,17 +22,10 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { motion, AnimatePresence } from "framer-motion";
 import { StyledPaperMobile } from "./../../components/StyledPaperMobile";
 import { useAuth } from "./../../contexts/Auth";
-const StyledPaperMobile2 = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  paddingBottom: 0,
-  marginTop: 34,
-  borderRadius: 15, // Setzt die Rundung der Ecken
-  backgroundColor: "#333e", // Dunklere Farbe für den Block
-  maxHeight: 1000, // Feste Größe für den Block
-  height: "calc(100vh - 260px)",
-  overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-}));
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import FontColor from "./../../components/FontColor";
+
+const fontColor = FontColor();
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
@@ -55,15 +48,18 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
 }));
 
 function ToDoListMobile({
+  todos,
+  setTodos,
   setShowVergangeneTodos,
+  selectedDay,
+  setSelectedDay,
   showVergangeneTodos,
   toLeft,
 }) {
-  const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
   const isSmallScreen = useMediaQuery(useTheme().breakpoints.down("sm"));
-  const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
+
   const { currentUser, isAdmin } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -105,6 +101,20 @@ function ToDoListMobile({
       setNewTodo("");
     }
   };
+
+  const getItemStyle = () => ({
+    // some basic styles to make the items look a bit nicer
+    userSelect: "none",
+    padding: 8 * 1.5,
+    margin: `0 0 8px 0`,
+    borderRadius: 10,
+
+    // change background colour if dragging
+    background: "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
+    // add margin if hovering
+    // styles we need to apply on draggables
+  });
+
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
@@ -132,9 +142,11 @@ function ToDoListMobile({
     fetchTodos();
   }, [currentUser]);
   useEffect(() => {
+    console.log("saving todos");
     if (todos.length > 0) {
-      saveTodos({ currentUser, ownTodos: todos, selectedDay });
+      saveTodos({ currentUser, todos: todos, selectedDay });
     }
+    console.log("saved todos");
   }, [todos]);
 
   const toggleCheck = (index) => {
@@ -170,23 +182,19 @@ function ToDoListMobile({
             exit="out"
             variants={pageTransition}
           >
-            <Button
-              variant="outlined"
-              onClick={() => setShowVergangeneTodos(!showVergangeneTodos)}
-              style={{
-                position: "absolute",
-                right: "5%",
-              }}
-              sx={{
-                border: "none",
-                "&:focus": {
-                  outline: "none",
-                },
-              }}
-            >
-              Vergangene ToDos
-            </Button>
-            <StyledPaperMobile>
+            <Box>
+              <Button
+                variant="text"
+                onClick={() => setShowVergangeneTodos(true)}
+                style={{
+                  position: "absolute",
+                  right: "0%",
+                }}
+              >
+                Vergangene ToDos
+              </Button>
+            </Box>
+            <Box height={"92vh"} marginTop="30px">
               <Typography
                 color={"white"}
                 variant="h6"
@@ -238,39 +246,43 @@ function ToDoListMobile({
                             key={index}
                             onMouseEnter={() => setHoverIndex(index)}
                             onMouseLeave={() => setHoverIndex(null)}
+                            style={getItemStyle(
+                              false, // as this list isn't draggable, set isDragging to false
+                              {}, // no draggableProps here
+                              hoverIndex === index
+                            )}
                           >
                             <Checkbox
                               checked={todo.checked}
-                              onChange={() => toggleCheck(index)}
-                              style={{ color: "black" }}
+                              onChange={() => toggleCheck(todos.indexOf(todo))}
+                              style={{ color: fontColor }}
                             />
                             <ListItemText
                               primaryTypographyProps={{
-                                style: { color: "black" },
+                                style: { color: fontColor },
                               }}
                               primary={todo.text}
-                              color={"black"}
                             />
                             {hoverIndex === index && (
                               <IconButton
-                                onClick={() => deleteTodo(index)}
-                                color="error"
+                                onClick={() => deleteTodo(todos.indexOf(todo))}
+                                color="black"
                               >
-                                <DeleteIcon color="red" />
+                                <DeleteIcon />
                               </IconButton>
                             )}
                           </ListItem>
                         ))}
                   </List>
                 </Box>
-                <Box mt={3} display="flex">
+                <Box mt={3} display="flex" marginBottom={"100px"}>
                   <WhiteTextField
                     InputLabelProps={{
                       style: { color: "black" },
                     }}
                     value={newTodo}
                     onChange={(e) => setNewTodo(e.target.value)}
-                    label="New To-Do"
+                    label="Neues To-Do"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
                   />
@@ -288,13 +300,16 @@ function ToDoListMobile({
                     onClick={addTodo}
                     variant="contained"
                     color="secondary"
-                    style={{ borderRadius: 7, width: "2vw" }} // add flexShrink: 0 to prevent the button from shrinking
+                    style={{
+                      borderRadius: 7,
+                      backgroundColor: "#44CDDD",
+                    }} // add flexShrink: 0 to prevent the button from shrinking
                   >
-                    Add
+                    <AddCircleIcon />
                   </Button>
                 </Box>
               </Box>
-            </StyledPaperMobile>
+            </Box>
           </motion.div>
         </>
       </AnimatePresence>

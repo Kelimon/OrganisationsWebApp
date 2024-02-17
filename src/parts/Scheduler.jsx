@@ -39,7 +39,8 @@ import { useAuth } from "./../contexts/Auth";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
-  borderRadius: 15,
+  padding: theme.spacing(5),
+  borderRadius: 51,
   backgroundColor: "white",
   maxHeight: 532,
   height: 550,
@@ -47,7 +48,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
-  border: "2px solid black",
+  boxShadow: theme.shadows[20], // Example shadow depth
 }));
 
 // Define a styled component for the highlighted day
@@ -300,7 +301,10 @@ export default function Scheduler({}) {
                   "& .MuiPickersDay-root": { backgroundColor, color: "black" },
                 }}
               >
-                <DayComponent {...DayComponentProps} />
+                <DayComponent
+                  {...DayComponentProps}
+                  onClick={() => handleClickDate(date)}
+                />
                 {meetingOnThisDay && (
                   <span
                     style={{
@@ -326,6 +330,7 @@ export default function Scheduler({}) {
               width: "66%",
               overflow: "auto",
               backgroundColor: "white",
+              borderRadius: 1,
             }}
           >
             <Box
@@ -440,7 +445,7 @@ export default function Scheduler({}) {
               .map((meeting, index) => (
                 <Paper
                   sx={{
-                    borderRadius: 2,
+                    borderRadius: 5,
                     backgroundColor: meeting.color,
                     margin: "10px",
                     padding: "10px",

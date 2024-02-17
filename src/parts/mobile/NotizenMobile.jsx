@@ -1,39 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { Button, Paper, TextField } from "@mui/material";
+import { Button, Paper, TextField, Box } from "@mui/material";
 import { styled } from "@mui/system";
 import GetNotizen from "../../requests/GetNotizen";
 import saveNotizen from "../../requests/saveNotizen";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./../../contexts/Auth";
 
-const StyledPaper = styled(Paper)(({ theme }) => ({
+const StyledPaper = styled(Box)(({ theme }) => ({
   display: "flex", // Added this line
   flexDirection: "column", // Added this line
   margin: theme.spacing(2),
-  padding: theme.spacing(2),
+  padding: theme.spacing(0),
   marginTop: 34,
   borderRadius: 15, // Setzt die Rundung der Ecken
-  backgroundColor: "#333e", // Dunklere Farbe für den Block
+  backgroundColor: "#f0f0f5", // Dunklere Farbe für den Block
   height: "calc(100vh - 275px)",
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white",
+      borderColor: "black",
+      borderRadius: 13,
     },
     "&:hover fieldset": {
-      borderColor: "white",
+      borderColor: "black",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white",
+      borderColor: "black",
     },
   },
   "& .MuiInputLabel-root": {
-    color: "white",
+    color: "black",
   },
   "& .MuiInputBase-input": {
-    color: "white", // Setze die Textfarbe des TextFields auf Weiß
+    color: "black", // Setze die Textfarbe des TextFields auf Weiß
   },
 }));
 
@@ -68,6 +69,28 @@ function NotizenMobile({ toLeft }) {
     await saveNotizen({ currentUser, note });
     setLastSavedNote(note); // Aktualisieren des zuletzt gespeicherten Textes
   };
+
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    // Event-Handler, der bei Größenänderung des Fensters aufgerufen wird
+    function handleResize() {
+      setWindowHeight(window.innerHeight);
+    }
+
+    // Event-Listener hinzufügen
+    window.addEventListener("resize", handleResize);
+
+    // Initialwert setzen
+    handleResize();
+
+    // Bereinigungsfunktion, um den Event-Listener zu entfernen
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Berechnung der rowsCount basierend auf der Fensterhöhe
+  const rowsCount = Math.floor(windowHeight / 30); // Beispiel: 24px pro Zeile
+
   useEffect(() => {
     // Funktion, die alle 5 Sekunden ausgeführt wird
     const interval = setInterval(() => {
@@ -95,7 +118,7 @@ function NotizenMobile({ toLeft }) {
               onChange={(e) => setNote(e.target.value)}
               label="Neue Notizen für den Tag"
               multiline
-              rows={21}
+              rows={rowsCount}
               variant="outlined"
               sx={{ color: "black" }}
             />

@@ -10,7 +10,6 @@ async function LoginRequest(username, password) {
       }
     );
     localStorage.setItem("username", response.data.username);
-    localStorage.setItem("isAdmin", response.data.isAdmin);
     return {
       username: response.data.username,
       isAdmin: response.data.isAdmin,

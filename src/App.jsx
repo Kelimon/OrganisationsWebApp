@@ -76,6 +76,8 @@ function App() {
           setCurrentUser(response.data.username);
           setIsLoggedIn(true);
           setIsAdmin(response.data.isAdmin);
+          console.log(response.data.isAdmin);
+          //)
           //
         }
       } catch (error) {
@@ -176,13 +178,7 @@ function App() {
             />
             <Route
               path="/scheduler"
-              element={
-                <SchedulerPage
-                  meetings={meetings}
-                  setMeetings={setMeetings}
-                  toLeft={toLeft}
-                />
-              }
+              element={<SchedulerPage toLeft={toLeft} />}
             />
             <Route path="/notizen" element={<NotizenPage toLeft={toLeft} />} />
             <Route

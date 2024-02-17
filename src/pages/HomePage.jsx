@@ -171,6 +171,9 @@ function HomePage({ todos, setTodos }) {
   const matches = useMediaQuery(theme.breakpoints.up("md"));
   const { currentUser } = useAuth();
 
+  const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
+
+  console.log("halo", todos);
   const wrapperStyle = {
     display: "flex",
     flexWrap: "wrap",
@@ -191,10 +194,20 @@ function HomePage({ todos, setTodos }) {
         <Header />
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-            <ToDoList todos={todos} setTodos={setTodos} />
+            <ToDoList
+              todos={todos}
+              setTodos={setTodos}
+              selectedDay={selectedDay}
+              setSelectedDay={setSelectedDay}
+            />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
-            <VergangeneToDos />
+            <VergangeneToDos
+              todosFromTodoList={todos}
+              setTodosFromTodoList={setTodos}
+              selectedDay={selectedDay}
+              setSelectedDay={setSelectedDay}
+            />
           </Grid>
           <AktuellePriosGridItem item xs={12} sm={12} md={6} lg={4} xl={4}>
             <AktuellePrios />
@@ -215,7 +228,7 @@ function HomePage({ todos, setTodos }) {
           <MorgenRoutineGridItem item xs={12} sm={12} md={6} lg={4} xl={4}>
             <MorgenRoutine />
           </MorgenRoutineGridItem>
-          <KalenderGridItem item xs={12} sm={12} md={12} lg={8} xl={6}>
+          <KalenderGridItem item xs={12} sm={12} md={12} lg={12} xl={8}>
             <Scheduler />
           </KalenderGridItem>
         </Grid>

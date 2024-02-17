@@ -20,7 +20,10 @@ import saveRoutine from "../../requests/saveRoutine";
 import GetRoutine from "../../requests/GetRoutine";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./../../contexts/Auth";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import FontColor from "../../components/FontColor";
 
+const fontColor = FontColor();
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   padding: theme.spacing(2),
@@ -34,20 +37,20 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white", // Setze die Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Outline-Farbe auf Weiß
     },
     "&:hover fieldset": {
-      borderColor: "white", // Setze die Hover-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Hover-Outline-Farbe auf Weiß
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white", // Setze die Fokussierte-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Fokussierte-Outline-Farbe auf Weiß
     },
   },
   "& .MuiInputLabel-root": {
-    color: "white", // Setze die Label-Farbe auf Weiß
+    color: "black", // Setze die Label-Farbe auf Weiß
   },
   "& .MuiInputBase-input": {
-    color: "white", // Setze die Textfarbe des TextFields auf Weiß
+    color: "black", // Setze die Textfarbe des TextFields auf Weiß
   },
 }));
 
@@ -64,10 +67,7 @@ function MorgenRoutineMobile({ toLeft }) {
     const fetchTodos = async () => {
       setIsLoading(true);
       const response = await GetRoutine({ currentUser });
-      console.log("userrrr", currentUser);
-      console.log("response", response);
-      console.log("response.data", response.data);
-      console.log("response.data.days");
+
       setTodos(response.data.days);
       initialData.current = response.data.days;
       setIsLoading(false);
@@ -92,6 +92,19 @@ function MorgenRoutineMobile({ toLeft }) {
       setNewTodo("");
     }
   };
+
+  const getItemStyle = () => ({
+    // some basic styles to make the items look a bit nicer
+    userSelect: "none",
+    padding: 8 * 1.5,
+    margin: `0 0 8px 0`,
+    borderRadius: 10,
+
+    // change background colour if dragging
+    background: "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
+    // add margin if hovering
+    // styles we need to apply on draggables
+  });
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -128,8 +141,11 @@ function MorgenRoutineMobile({ toLeft }) {
             exit="out"
             variants={pageTransition}
           >
-            <StyledPaper>
-              <Typography color={"white"} variant="h6" align="center">
+            <Box>
+              <Typography></Typography>
+            </Box>
+            <Box height={"92vh"} marginTop="30px">
+              <Typography color={"black"} variant="h6" align="center">
                 Morgenroutine
               </Typography>
               <Box display="flex" flexDirection="column" height="90%">
@@ -141,23 +157,27 @@ function MorgenRoutineMobile({ toLeft }) {
                           key={index}
                           onMouseEnter={() => setHoverIndex(index)}
                           onMouseLeave={() => setHoverIndex(null)}
+                          style={getItemStyle(
+                            false, // as this list isn't draggable, set isDragging to false
+                            {}, // no draggableProps here
+                            hoverIndex === index
+                          )}
                         >
                           <Checkbox
                             checked={todo.checked}
                             onChange={() => toggleCheck(index)}
-                            style={{ color: "white" }}
+                            style={{ color: fontColor }}
                           />
                           <ListItemText
                             primaryTypographyProps={{
-                              style: { color: "white" },
+                              style: { color: fontColor },
                             }}
                             primary={todo.text}
-                            color={"white"}
                           />
                           {hoverIndex === index && (
                             <IconButton
                               onClick={() => deleteTodo(index)}
-                              color="error"
+                              color="black"
                             >
                               <DeleteIcon color="red" />
                             </IconButton>
@@ -166,14 +186,14 @@ function MorgenRoutineMobile({ toLeft }) {
                       ))}
                   </List>
                 </Box>
-                <Box mt={3} display="flex">
+                <Box mt={3} display="flex" marginBottom={"70px"}>
                   <WhiteTextField
                     InputLabelProps={{
-                      style: { color: "white" },
+                      style: { color: "black" },
                     }}
                     value={newTodo}
                     onChange={(e) => setNewTodo(e.target.value)}
-                    label="New Routine Task"
+                    label="Neue Routine"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
                   />
@@ -181,13 +201,15 @@ function MorgenRoutineMobile({ toLeft }) {
                     onClick={addTodo}
                     variant="contained"
                     color="secondary"
-                    style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
+                    style={{
+                      backgroundColor: "#44CDDD",
+                    }} // add flexShrink: 0 to prevent the button from shrinking
                   >
-                    Add
+                    <AddCircleIcon />
                   </Button>
                 </Box>
               </Box>
-            </StyledPaper>
+            </Box>
           </motion.div>
         </>
       </AnimatePresence>

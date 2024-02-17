@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   List,
   ListItem,
@@ -20,6 +20,13 @@ import AdjustOutlinedIcon from "@mui/icons-material/AdjustOutlined";
 import GetMonatziele from "../../requests/GetMonatsziele";
 import saveMonatsziele from "../../requests/saveMonatsziele";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "./../../contexts/Auth";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Checkbox from "@mui/material/Checkbox";
+
+import FontColor from "../../components/FontColor";
+
+const fontColor = FontColor();
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
@@ -34,33 +41,31 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white", // Setze die Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Outline-Farbe auf Weiß
     },
     "&:hover fieldset": {
-      borderColor: "white", // Setze die Hover-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Hover-Outline-Farbe auf Weiß
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white", // Setze die Fokussierte-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Fokussierte-Outline-Farbe auf Weiß
     },
   },
   "& .MuiInputLabel-root": {
-    color: "white", // Setze die Label-Farbe auf Weiß
+    color: "black", // Setze die Label-Farbe auf Weiß
   },
   "& .MuiInputBase-input": {
-    color: "white", // Setze die Textfarbe des TextFields auf Weiß
+    color: "black", // Setze die Textfarbe des TextFields auf Weiß
   },
 }));
 
-function MonatszieleMobile({
-  username,
-  showVergangeneTodos,
-  setShowVergangeneTodos,
-  todos,
-  setTodos,
-}) {
+function MonatszieleMobile({ username, setShowVergangeneTodos }) {
   const [newTodo, setNewTodo] = useState("");
-
+  const [todos, setTodos] = useState([]);
   const [hoverIndex, setHoverIndex] = useState(null);
+  const { currentUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+  const isFirstRender = useRef(true);
+  const initialData = useRef(null);
 
   /*useEffect(() => {
     const fetchTodos = async () => {
@@ -74,17 +79,42 @@ function MonatszieleMobile({
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
-      setTodos([...todos, { text: newTodo, id: newTodo }]);
+      setTodos([...todos, { text: newTodo, checked: false, id: newTodo }]);
       setNewTodo("");
     }
   };
 
   useEffect(() => {
-    if (todos.length > 0) {
-      let mzieleData = todos;
-      saveMonatsziele({ username, mzieleData });
+    const fetchTodos = async () => {
+      setIsLoading(true);
+      const response = await GetMonatziele({ currentUser });
+      if (response) {
+        const todosWithChecked = response.map((todo) => ({
+          ...todo,
+          checked: todo.checked ?? false, // Use nullish coalescing operator to add 'checked' if it's not present
+        }));
+        setTodos(todosWithChecked);
+        initialData.current = todosWithChecked;
+      }
+      setIsLoading(false);
+    };
+
+    fetchTodos();
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [todos]);
+    if (isLoading) {
+      return; // Skip saving when the component is in a loading state
+    }
+
+    let mzieleData = todos;
+    console.log("mziele", mzieleData);
+    saveMonatsziele({ currentUser, mzieleData });
+  }, [todos, isLoading]);
 
   const deleteTodo = (index) => {
     setTodos(todos.filter((todo, i) => i !== index));
@@ -108,8 +138,8 @@ function MonatszieleMobile({
 
     // change background colour if dragging
     background: isDragging
-      ? "linear-gradient(to bottom right, black,  #550763)"
-      : "linear-gradient(to bottom right,  #870e9c, #ee05fa)",
+      ? "linear-gradient(to bottom right, #44CDDD,  lightblue)"
+      : "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
     // add margin if hovering
     marginLeft: isHovering ? "20px" : "0px",
     // styles we need to apply on draggables
@@ -137,27 +167,22 @@ function MonatszieleMobile({
             exit="out"
             variants={pageTransition}
           >
-            <Button
-              variant="outlined"
-              onClick={() => setShowVergangeneTodos(!showVergangeneTodos)}
-              style={{
-                position: "absolute",
-                left: "5%",
-              }}
-              sx={{
-                border: "none",
-                "&:focus": {
-                  outline: "none",
-                },
-              }}
-            >
-              Aktuelle Prioritäten
-            </Button>
-            <StyledPaper>
-              <Typography color={"white"} variant="h6" align="center">
+            <Box>
+              <Button
+                variant="text"
+                onClick={() => setShowVergangeneTodos(false)}
+                style={{
+                  position: "absolute",
+                }}
+              >
+                Aktuelle Prioritäten
+              </Button>
+            </Box>
+            <Box height={"92vh"} marginTop="30px">
+              <Typography color={"black"} variant="h6" align="center">
                 Monatsziele
               </Typography>
-              <Box display="flex" flexDirection="column" height="90%">
+              <Box class="container" height="90%">
                 <Box flexGrow="1" overflow="auto">
                   <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="todos">
@@ -166,7 +191,7 @@ function MonatszieleMobile({
                           {...provided.droppableProps}
                           ref={provided.innerRef}
                         >
-                          {todos.map(({ text }, index) => {
+                          {todos.map(({ text, checked }, index) => {
                             return (
                               <Draggable
                                 key={index}
@@ -190,9 +215,16 @@ function MonatszieleMobile({
                                     onMouseEnter={() => setHoverIndex(index)}
                                     onMouseLeave={() => setHoverIndex(null)}
                                   >
-                                    <ListItemIcon>
-                                      <AdjustOutlinedIcon color="inherit" />
-                                    </ListItemIcon>
+                                    <Checkbox
+                                      checked={checked}
+                                      onChange={() => {
+                                        const newTodos = [...todos];
+                                        newTodos[index].checked =
+                                          !newTodos[index].checked;
+                                        setTodos(newTodos);
+                                      }}
+                                      style={{ color: fontColor }}
+                                    />
                                     <ListItemText
                                       primaryTypographyProps={{
                                         style: { color: "white" },
@@ -219,14 +251,14 @@ function MonatszieleMobile({
                     </Droppable>
                   </DragDropContext>
                 </Box>
-                <Box mt={3} display="flex">
+                <Box mt={3} display="flex" marginBottom={"155px"}>
                   <WhiteTextField
                     InputLabelProps={{
-                      style: { color: "white" },
+                      style: { color: "black" },
                     }}
                     value={newTodo}
                     onChange={(e) => setNewTodo(e.target.value)}
-                    label="New monthly Goal"
+                    label="Neues Monatsziel"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
                   />
@@ -234,13 +266,15 @@ function MonatszieleMobile({
                     onClick={addTodo}
                     variant="contained"
                     color="secondary"
-                    style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
+                    style={{
+                      backgroundColor: "#44CDDD",
+                    }} // add flexShrink: 0 to prevent the button from shrinking
                   >
-                    Add
+                    <AddCircleIcon />
                   </Button>
                 </Box>
               </Box>
-            </StyledPaper>
+            </Box>
           </motion.div>
         </>
       </AnimatePresence>
