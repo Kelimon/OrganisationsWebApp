@@ -50,10 +50,15 @@ function LoginPage({}) {
   const handleLogin = async () => {
     try {
       const result = await LoginRequest(email, password);
+
+      if (result.isAdmin == true) {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+
       setCurrentUser(result.username);
       setIsLoggedIn(true);
-      setIsAdmin(result.isAdmin);
-
       navigate("/home");
     } catch (error) {
       setCredentialsInvalid(true);
@@ -78,7 +83,10 @@ function LoginPage({}) {
 
   return (
     <>
-      <AppBar position="fixed" style={{ backgroundColor: "black" }}></AppBar>
+      <AppBar
+        position="fixed"
+        style={{ backgroundColor: "black", width: "19px" }}
+      ></AppBar>
       <Container>
         <Box
           display="flex"
@@ -89,8 +97,13 @@ function LoginPage({}) {
         >
           <Paper
             elevation={10}
-            minWidth={"1000px"}
-            sx={{ padding: "2rem", borderRadius: "1rem" }}
+            sx={{
+              padding: "2rem",
+              borderRadius: "1rem",
+              maxWidth: "80%", // Maximale Breite des Login-Papers
+              width: "600px", // Breite des Login-Papers als Prozentsatz des Container-Elements
+              // Wenn Sie eine feste Breite möchten, ersetzen Sie '100%' durch z.B. '400px'
+            }}
           >
             <Typography variant="h4" gutterBottom>
               Login
@@ -118,7 +131,7 @@ function LoginPage({}) {
               margin="normal"
             />
             {credentialsInvalid ? (
-              <Typography color="error" minWidth={"710px"}>
+              <Typography color="error" minWidth={"50%"}>
                 Email or password incorrect.
               </Typography>
             ) : (

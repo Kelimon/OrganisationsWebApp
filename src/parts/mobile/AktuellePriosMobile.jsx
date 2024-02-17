@@ -128,12 +128,9 @@ function AktuellePriosMobile({ toLeft, setShowVergangeneTodos }) {
   };
   console.log("prios", todos);
   useEffect(() => {
-    console.log(1);
     const fetchTodos = async () => {
-      console.log(2);
       setIsLoading(true);
       const response = await GetPrios({ currentUser });
-      console.log("response", currentUser);
       if (response) {
         console.log("totods", response);
         const todosWithChecked = response.map((todo) => ({

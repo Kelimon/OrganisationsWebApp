@@ -228,7 +228,7 @@ function HomePage({ todos, setTodos }) {
           <MorgenRoutineGridItem item xs={12} sm={12} md={6} lg={4} xl={4}>
             <MorgenRoutine />
           </MorgenRoutineGridItem>
-          <KalenderGridItem item xs={12} sm={12} md={12} lg={12} xl={8}>
+          <KalenderGridItem item xs={12} sm={12} md={12} lg={8} xl={8}>
             <Scheduler />
           </KalenderGridItem>
         </Grid>

@@ -98,7 +98,7 @@ function RegisterPage({}) {
   return (
     <>
       <AppBar position="fixed" style={{ backgroundColor: "black" }}></AppBar>
-      <Container maxWidth="sm">
+      <Container>
         <Box
           display="flex"
           flexDirection="column"
@@ -106,7 +106,15 @@ function RegisterPage({}) {
           justifyContent="center"
           height="100vh"
         >
-          <Paper elevation={10} sx={{ padding: "2rem", borderRadius: "1rem" }}>
+          <Paper
+            elevation={10}
+            sx={{
+              padding: "2rem",
+              borderRadius: "1rem",
+              maxWidth: "80%", // Maximale Breite des Login-Papers
+              width: "600px",
+            }}
+          >
             <Typography variant="h4" gutterBottom>
               Register
             </Typography>

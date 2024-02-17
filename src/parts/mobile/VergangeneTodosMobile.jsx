@@ -124,7 +124,6 @@ function VergangeneTodosMobile({
       x: "-1.5vw",
     },
   };
-  console.log("todos vergangenetodosmobile", todos);
   return (
     <>
       <AnimatePresence exitBeforeEnter>

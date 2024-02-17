@@ -8,8 +8,8 @@ import Cookies from "js-cookie";
 function Header({}) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setIsLoggedIn, isAdmin, currentUser } = useAuth();
-
+  const { setIsLoggedIn, isAdmin, currentUser, setIsAdmin, setCurrentUser } =
+    useAuth();
   const handleToggle = () => {
     if (location.pathname === "/forkingsuhaib") {
       navigate("/home");
@@ -83,6 +83,8 @@ function Header({}) {
                 setIsLoggedIn(false);
                 Cookies.remove("authToken");
                 navigate("/login");
+                setIsAdmin(false);
+                setCurrentUser("");
               }}
             >
               Logout
