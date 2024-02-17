@@ -13,11 +13,13 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import saveTodos from "./../../requests/saveTodos";
 import { CSSTransition } from "react-transition-group";
 import "./../../testing/animation.css";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./../../contexts/Auth";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 
 import {
   List,
@@ -58,7 +60,12 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
 }));
 
-function VergangeneTodosMobile({ setShowVergangeneTodos }) {
+function VergangeneTodosMobile({
+  setShowVergangeneTodos,
+  todosFromTodoList,
+  setTodosFromTodoList,
+  selectedDay,
+}) {
   const [showPastTodos, setShowPastTodos] = useState(false);
   const { currentUser, isAdmin } = useAuth();
   const [todos, setTodos] = useState([]);
@@ -82,6 +89,17 @@ function VergangeneTodosMobile({ setShowVergangeneTodos }) {
   };
 }, []); */
 
+  const heute = new Date();
+  heute.setHours(0, 0, 0, 0);
+  heute.setDate(heute.getDate() + selectedDay); // Addiert selectedDay zum aktuellen Datum
+  const jahr = heute.getFullYear();
+  const monat = (heute.getMonth() + 1).toString().padStart(2, "0"); // Monate sind 0-indiziert
+  const tag = heute.getDate().toString().padStart(2, "0");
+  const stunden = heute.getHours().toString().padStart(2, "0");
+  const minuten = heute.getMinutes().toString().padStart(2, "0");
+  const sekunden = heute.getSeconds().toString().padStart(2, "0");
+  const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
+  console.log("selecteday", selectedDay);
   useEffect(() => {
     const fetchTodos = async () => {
       const response = (await GetTodos({ currentUser })).data.days.slice(0, -3);
@@ -182,6 +200,48 @@ function VergangeneTodosMobile({ setShowVergangeneTodos }) {
                                           <CloseIcon />
                                         </TableCell>
                                       )}
+                                      <TableCell
+                                        sx={{ color: "#45CDDD", marginTop: -5 }}
+                                      >
+                                        <IconButton
+                                          onClick={() => {
+                                            setTodosFromTodoList([
+                                              ...todosFromTodoList,
+                                              {
+                                                text: todo.text,
+                                                checked: false,
+                                                day: selectedDay,
+                                                date: localDateTime,
+                                              },
+                                            ]);
+                                            console.log([
+                                              ...todosFromTodoList,
+                                              {
+                                                text: todo.text,
+                                                checked: false,
+                                                day: selectedDay,
+                                                date: localDateTime,
+                                              },
+                                            ]);
+                                            saveTodos({
+                                              currentUser,
+                                              todos: [
+                                                ...todosFromTodoList,
+                                                {
+                                                  text: todo.text,
+                                                  checked: false,
+                                                  day: selectedDay,
+                                                  date: localDateTime,
+                                                },
+                                              ],
+                                              selectedDay,
+                                            });
+                                          }}
+                                          color="inherit"
+                                        >
+                                          <ChecklistIcon />
+                                        </IconButton>
+                                      </TableCell>
                                     </TableRow>
                                   ))}
                               </TableBody>

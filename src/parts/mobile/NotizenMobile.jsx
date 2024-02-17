@@ -21,6 +21,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
       borderColor: "black",
+      borderRadius: 13,
     },
     "&:hover fieldset": {
       borderColor: "black",

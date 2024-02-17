@@ -22,6 +22,12 @@ import saveMonatsziele from "../../requests/saveMonatsziele";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./../../contexts/Auth";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Checkbox from "@mui/material/Checkbox";
+
+import FontColor from "../../components/FontColor";
+
+const fontColor = FontColor();
+
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   padding: theme.spacing(2),
@@ -73,7 +79,7 @@ function MonatszieleMobile({ username, setShowVergangeneTodos }) {
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
-      setTodos([...todos, { text: newTodo, id: newTodo }]);
+      setTodos([...todos, { text: newTodo, checked: false, id: newTodo }]);
       setNewTodo("");
     }
   };
@@ -83,8 +89,12 @@ function MonatszieleMobile({ username, setShowVergangeneTodos }) {
       setIsLoading(true);
       const response = await GetMonatziele({ currentUser });
       if (response) {
-        setTodos(response);
-        initialData.current = response;
+        const todosWithChecked = response.map((todo) => ({
+          ...todo,
+          checked: todo.checked ?? false, // Use nullish coalescing operator to add 'checked' if it's not present
+        }));
+        setTodos(todosWithChecked);
+        initialData.current = todosWithChecked;
       }
       setIsLoading(false);
     };
@@ -100,10 +110,10 @@ function MonatszieleMobile({ username, setShowVergangeneTodos }) {
     if (isLoading) {
       return; // Skip saving when the component is in a loading state
     }
-    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
-      let mzieleData = todos;
-      saveMonatsziele({ currentUser, mzieleData });
-    }
+
+    let mzieleData = todos;
+    console.log("mziele", mzieleData);
+    saveMonatsziele({ currentUser, mzieleData });
   }, [todos, isLoading]);
 
   const deleteTodo = (index) => {
@@ -181,7 +191,7 @@ function MonatszieleMobile({ username, setShowVergangeneTodos }) {
                           {...provided.droppableProps}
                           ref={provided.innerRef}
                         >
-                          {todos.map(({ text }, index) => {
+                          {todos.map(({ text, checked }, index) => {
                             return (
                               <Draggable
                                 key={index}
@@ -205,9 +215,16 @@ function MonatszieleMobile({ username, setShowVergangeneTodos }) {
                                     onMouseEnter={() => setHoverIndex(index)}
                                     onMouseLeave={() => setHoverIndex(null)}
                                   >
-                                    <ListItemIcon>
-                                      <AdjustOutlinedIcon color="inherit" />
-                                    </ListItemIcon>
+                                    <Checkbox
+                                      checked={checked}
+                                      onChange={() => {
+                                        const newTodos = [...todos];
+                                        newTodos[index].checked =
+                                          !newTodos[index].checked;
+                                        setTodos(newTodos);
+                                      }}
+                                      style={{ color: fontColor }}
+                                    />
                                     <ListItemText
                                       primaryTypographyProps={{
                                         style: { color: "white" },

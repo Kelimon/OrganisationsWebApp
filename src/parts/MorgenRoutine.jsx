@@ -21,7 +21,9 @@ import GetRoutine from "../requests/GetRoutine";
 import { useAuth } from "./../contexts/Auth";
 import { StyledPaper } from "./../components/StyledPaper";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import FontColor from "./../components/FontColor";
 
+const fontColor = FontColor();
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
@@ -132,12 +134,11 @@ function MorgenRoutine({}) {
                     <Checkbox
                       checked={todo.checked}
                       onChange={() => toggleCheck(index)}
-                      style={{ color: "black" }}
+                      style={{ color: fontColor }}
                     />
                     <ListItemText
-                      primaryTypographyProps={{ style: { color: "white" } }}
+                      primaryTypographyProps={{ style: { color: fontColor } }}
                       primary={todo.text}
-                      color={"black"}
                     />
                     {hoverIndex === index && (
                       <IconButton

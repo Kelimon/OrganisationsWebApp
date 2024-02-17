@@ -140,12 +140,11 @@ function VergangeneToDos({
                                   ...todosFromTodoList,
                                   {
                                     text: todo.text,
-                                    checked: todo.checked,
+                                    checked: false,
                                     day: selectedDay,
                                     date: localDateTime,
                                   },
                                 ]);
-                                console.log("verangene", todosFromTodoList);
                               }}
                               color="inherit"
                             >

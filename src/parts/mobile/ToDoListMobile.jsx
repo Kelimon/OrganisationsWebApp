@@ -23,18 +23,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { StyledPaperMobile } from "./../../components/StyledPaperMobile";
 import { useAuth } from "./../../contexts/Auth";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import FontColor from "./../../components/FontColor";
 
-const StyledPaperMobile2 = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  paddingBottom: 0,
-  marginTop: 34,
-  borderRadius: 15, // Setzt die Rundung der Ecken
-  backgroundColor: "#333e", // Dunklere Farbe für den Block
-  maxHeight: 1000, // Feste Größe für den Block
-  height: "calc(100vh - 260px)",
-  overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-}));
+const fontColor = FontColor();
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
@@ -57,15 +48,18 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
 }));
 
 function ToDoListMobile({
+  todos,
+  setTodos,
   setShowVergangeneTodos,
+  selectedDay,
+  setSelectedDay,
   showVergangeneTodos,
   toLeft,
 }) {
-  const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
   const isSmallScreen = useMediaQuery(useTheme().breakpoints.down("sm"));
-  const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
+
   const { currentUser, isAdmin } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -148,9 +142,11 @@ function ToDoListMobile({
     fetchTodos();
   }, [currentUser]);
   useEffect(() => {
+    console.log("saving todos");
     if (todos.length > 0) {
-      saveTodos({ currentUser, ownTodos: todos, selectedDay });
+      saveTodos({ currentUser, todos: todos, selectedDay });
     }
+    console.log("saved todos");
   }, [todos]);
 
   const toggleCheck = (index) => {
@@ -258,22 +254,21 @@ function ToDoListMobile({
                           >
                             <Checkbox
                               checked={todo.checked}
-                              onChange={() => toggleCheck(index)}
-                              style={{ color: "black" }}
+                              onChange={() => toggleCheck(todos.indexOf(todo))}
+                              style={{ color: fontColor }}
                             />
                             <ListItemText
                               primaryTypographyProps={{
-                                style: { color: "black" },
+                                style: { color: fontColor },
                               }}
                               primary={todo.text}
-                              color={"black"}
                             />
                             {hoverIndex === index && (
                               <IconButton
-                                onClick={() => deleteTodo(index)}
-                                color="error"
+                                onClick={() => deleteTodo(todos.indexOf(todo))}
+                                color="black"
                               >
-                                <DeleteIcon color="red" />
+                                <DeleteIcon />
                               </IconButton>
                             )}
                           </ListItem>

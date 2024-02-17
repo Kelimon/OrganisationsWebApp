@@ -83,16 +83,16 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
         .flat();
       console.log("latestDayData", latestDayData.data);
       console.log("lastThreeDayData", lastThreeDayData);
-      if (latestDayData.data.length > 0) {
-        setTodos(lastThreeDayData);
-        setOwnTodos(lastThreeDayData);
 
-        initialData.current = lastThreeDayData;
-      }
+      setTodos(lastThreeDayData);
+      setOwnTodos(lastThreeDayData);
+
+      initialData.current = lastThreeDayData;
+
       setIsLoading(false);
     };
     fetchTodos();
-  }, []);
+  }, [currentUser]);
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
@@ -120,7 +120,9 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
       saveTodos({ currentUser, todos, selectedDay });
     }
   }, [todos, isLoading]);
-
+  console.log("todos is", JSON.stringify(todos));
+  console.log("initialData is", JSON.stringify(initialData.current));
+  console.log("renderCount is", renderCount.current);
   const toggleCheck = (index) => {
     const updatedOwnTodos = todos.map((todo, i) =>
       i === index ? { ...todo, checked: !todo.checked } : todo
@@ -140,8 +142,6 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
 
   const deleteTodo = (index) => {
     const updatedOwnTodos = todos.filter((todo, i) => i !== index);
-    setTodos(updatedOwnTodos);
-
     setTodos(updatedOwnTodos);
   };
   const getItemStyle = () => ({

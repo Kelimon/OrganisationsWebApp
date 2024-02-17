@@ -177,7 +177,7 @@ function MorgenRoutineMobile({ toLeft }) {
                           {hoverIndex === index && (
                             <IconButton
                               onClick={() => deleteTodo(index)}
-                              color="error"
+                              color="black"
                             >
                               <DeleteIcon color="red" />
                             </IconButton>

@@ -23,11 +23,10 @@ import { useAuth } from "./../contexts/Auth";
 import Checkbox from "@mui/material/Checkbox";
 import { StyledPaper } from "./../components/StyledPaper";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-const RoundedCheckbox = styled(Checkbox)({
-  "&.MuiCheckbox-colorPrimary.Mui-checked .MuiSvgIcon-root": {
-    color: "black", // Ersetzen Sie YOUR_CUSTOM_COLOR durch Ihre gewünschte Farbe
-  },
-});
+
+import FontColor from "./../components/FontColor";
+
+const fontColor = FontColor();
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
@@ -61,7 +60,7 @@ function Monatsziele({}) {
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
-      setTodos([...todos, { text: newTodo, id: newTodo }]);
+      setTodos([...todos, { text: newTodo, checked: false, id: newTodo }]);
       setNewTodo("");
     }
   };
@@ -70,8 +69,13 @@ function Monatsziele({}) {
       setIsLoading(true);
       const response = await GetMonatziele({ currentUser });
       if (response) {
-        setTodos(response);
-        initialData.current = response;
+        const todosWithChecked = response.map((todo) => ({
+          ...todo,
+          checked: todo.checked ?? false, // Use nullish coalescing operator to add 'checked' if it's not present
+        }));
+        setTodos(todosWithChecked);
+
+        initialData.current = todosWithChecked;
       }
       setIsLoading(false);
     };
@@ -87,10 +91,8 @@ function Monatsziele({}) {
     if (isLoading) {
       return; // Skip saving when the component is in a loading state
     }
-    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
-      let mzieleData = todos;
-      saveMonatsziele({ currentUser, mzieleData });
-    }
+    let mzieleData = todos;
+    saveMonatsziele({ currentUser, mzieleData });
   }, [todos, isLoading]);
 
   const deleteTodo = (index) => {
@@ -157,7 +159,7 @@ function Monatsziele({}) {
                             onMouseEnter={() => setHoverIndex(index)}
                             onMouseLeave={() => setHoverIndex(null)}
                           >
-                            <RoundedCheckbox
+                            <Checkbox
                               checked={checked}
                               onChange={() => {
                                 const newTodos = [...todos];
@@ -165,11 +167,11 @@ function Monatsziele({}) {
                                   !newTodos[index].checked;
                                 setTodos(newTodos);
                               }}
-                              color="primary"
+                              style={{ color: fontColor }}
                             />
                             <ListItemText
                               primaryTypographyProps={{
-                                style: { color: "white" },
+                                style: { color: fontColor },
                               }}
                               primary={text}
                             />
