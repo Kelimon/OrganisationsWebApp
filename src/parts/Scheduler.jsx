@@ -301,7 +301,10 @@ export default function Scheduler({}) {
                   "& .MuiPickersDay-root": { backgroundColor, color: "black" },
                 }}
               >
-                <DayComponent {...DayComponentProps} />
+                <DayComponent
+                  {...DayComponentProps}
+                  onClick={() => handleClickDate(date)}
+                />
                 {meetingOnThisDay && (
                   <span
                     style={{

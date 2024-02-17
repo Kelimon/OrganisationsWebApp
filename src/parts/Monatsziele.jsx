@@ -22,6 +22,7 @@ import saveMonatsziele from "../requests/saveMonatsziele";
 import { useAuth } from "./../contexts/Auth";
 import Checkbox from "@mui/material/Checkbox";
 import { StyledPaper } from "./../components/StyledPaper";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 const RoundedCheckbox = styled(Checkbox)({
   "&.MuiCheckbox-colorPrimary.Mui-checked .MuiSvgIcon-root": {
     color: "black", // Ersetzen Sie YOUR_CUSTOM_COLOR durch Ihre gewünschte Farbe
@@ -205,7 +206,7 @@ function Monatsziele({}) {
                 addTodo();
               }
             }}
-            label="New monthly Goal"
+            label="Neues Monatsziel"
             fullWidth
             style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
           />
@@ -219,7 +220,7 @@ function Monatsziele({}) {
               backgroundColor: "#44CDDD",
             }} // add flexShrink: 0 to prevent the button from shrinking
           >
-            Add
+            <AddCircleIcon />
           </Button>
         </Box>
       </Box>

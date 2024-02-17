@@ -21,11 +21,12 @@ function ToDoListPage({
 
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         {showVergangeneTodos ? (
-          <VergangeneTodosMobile />
+          <VergangeneTodosMobile
+            setShowVergangeneTodos={setShowVergangeneTodos}
+          />
         ) : (
           <ToDoListMobile
             setShowVergangeneTodos={setShowVergangeneTodos}
-            showVergangeneTodos={showVergangeneTodos}
             toLeft={toLeft}
           />
         )}

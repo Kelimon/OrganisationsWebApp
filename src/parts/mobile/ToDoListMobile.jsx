@@ -22,6 +22,8 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { motion, AnimatePresence } from "framer-motion";
 import { StyledPaperMobile } from "./../../components/StyledPaperMobile";
 import { useAuth } from "./../../contexts/Auth";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+
 const StyledPaperMobile2 = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   padding: theme.spacing(2),
@@ -105,6 +107,20 @@ function ToDoListMobile({
       setNewTodo("");
     }
   };
+
+  const getItemStyle = () => ({
+    // some basic styles to make the items look a bit nicer
+    userSelect: "none",
+    padding: 8 * 1.5,
+    margin: `0 0 8px 0`,
+    borderRadius: 10,
+
+    // change background colour if dragging
+    background: "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
+    // add margin if hovering
+    // styles we need to apply on draggables
+  });
+
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
@@ -170,23 +186,19 @@ function ToDoListMobile({
             exit="out"
             variants={pageTransition}
           >
-            <Button
-              variant="outlined"
-              onClick={() => setShowVergangeneTodos(!showVergangeneTodos)}
-              style={{
-                position: "absolute",
-                right: "5%",
-              }}
-              sx={{
-                border: "none",
-                "&:focus": {
-                  outline: "none",
-                },
-              }}
-            >
-              Vergangene ToDos
-            </Button>
-            <StyledPaperMobile>
+            <Box>
+              <Button
+                variant="text"
+                onClick={() => setShowVergangeneTodos(true)}
+                style={{
+                  position: "absolute",
+                  right: "0%",
+                }}
+              >
+                Vergangene ToDos
+              </Button>
+            </Box>
+            <Box height={"92vh"} marginTop="30px">
               <Typography
                 color={"white"}
                 variant="h6"
@@ -238,6 +250,11 @@ function ToDoListMobile({
                             key={index}
                             onMouseEnter={() => setHoverIndex(index)}
                             onMouseLeave={() => setHoverIndex(null)}
+                            style={getItemStyle(
+                              false, // as this list isn't draggable, set isDragging to false
+                              {}, // no draggableProps here
+                              hoverIndex === index
+                            )}
                           >
                             <Checkbox
                               checked={todo.checked}
@@ -263,14 +280,14 @@ function ToDoListMobile({
                         ))}
                   </List>
                 </Box>
-                <Box mt={3} display="flex">
+                <Box mt={3} display="flex" marginBottom={"100px"}>
                   <WhiteTextField
                     InputLabelProps={{
                       style: { color: "black" },
                     }}
                     value={newTodo}
                     onChange={(e) => setNewTodo(e.target.value)}
-                    label="New To-Do"
+                    label="Neues To-Do"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
                   />
@@ -288,13 +305,16 @@ function ToDoListMobile({
                     onClick={addTodo}
                     variant="contained"
                     color="secondary"
-                    style={{ borderRadius: 7, width: "2vw" }} // add flexShrink: 0 to prevent the button from shrinking
+                    style={{
+                      borderRadius: 7,
+                      backgroundColor: "#44CDDD",
+                    }} // add flexShrink: 0 to prevent the button from shrinking
                   >
-                    Add
+                    <AddCircleIcon />
                   </Button>
                 </Box>
               </Box>
-            </StyledPaperMobile>
+            </Box>
           </motion.div>
         </>
       </AnimatePresence>

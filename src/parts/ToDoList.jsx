@@ -20,6 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useAuth } from "./../contexts/Auth";
 import { render } from "react-dom";
 import { StyledPaper } from "./../components/StyledPaper";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
@@ -263,7 +264,7 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
                   addTodo();
                 }
               }}
-              label="New To-Do"
+              label="Neues To-Do"
               fullWidth
               style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
             />
@@ -288,7 +289,7 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
                 backgroundColor: "#44CDDD",
               }} // add flexShrink: 0 to prevent the button from shrinking
             >
-              Add
+              <AddCircleIcon />
             </Button>
           </Box>
         </Box>

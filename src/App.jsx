@@ -178,13 +178,7 @@ function App() {
             />
             <Route
               path="/scheduler"
-              element={
-                <SchedulerPage
-                  meetings={meetings}
-                  setMeetings={setMeetings}
-                  toLeft={toLeft}
-                />
-              }
+              element={<SchedulerPage toLeft={toLeft} />}
             />
             <Route path="/notizen" element={<NotizenPage toLeft={toLeft} />} />
             <Route

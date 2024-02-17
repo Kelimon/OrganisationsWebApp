@@ -20,6 +20,7 @@ import AdjustOutlinedIcon from "@mui/icons-material/AdjustOutlined";
 import { useAuth } from "./../contexts/Auth";
 import Checkbox from "@mui/material/Checkbox";
 import { StyledPaper } from "./../components/StyledPaper";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 const RoundedCheckbox = styled(Checkbox)({
   "&.MuiCheckbox-colorPrimary.Mui-checked .MuiSvgIcon-root": {
@@ -205,7 +206,7 @@ function AktuellePrios({}) {
                 addTodo();
               }
             }}
-            label="New Priority"
+            label="Neue Priorität"
             fullWidth
             style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
           />
@@ -219,7 +220,7 @@ function AktuellePrios({}) {
               backgroundColor: "#44CDDD",
             }} // add flexShrink: 0 to prevent the button from shrinking
           >
-            Add
+            <AddCircleIcon />
           </Button>
         </Box>
       </Box>

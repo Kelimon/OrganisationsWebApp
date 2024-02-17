@@ -20,6 +20,7 @@ import saveRoutine from "../requests/saveRoutine";
 import GetRoutine from "../requests/GetRoutine";
 import { useAuth } from "./../contexts/Auth";
 import { StyledPaper } from "./../components/StyledPaper";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
@@ -163,7 +164,7 @@ function MorgenRoutine({}) {
                   addTodo();
                 }
               }}
-              label="New Routine Task"
+              label="Neue Routine"
               fullWidth
               style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
             />
@@ -177,7 +178,7 @@ function MorgenRoutine({}) {
                 backgroundColor: "#44CDDD",
               }} // add flexShrink: 0 to prevent the button from shrinking
             >
-              Add
+              <AddCircleIcon />
             </Button>
           </Box>
         </Box>

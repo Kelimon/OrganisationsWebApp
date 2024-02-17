@@ -21,6 +21,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useAuth } from "./../../contexts/Auth";
 import Checkbox from "@mui/material/Checkbox";
+import "./../../assets/aktuellepriosmobile.css";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   padding: theme.spacing(2),
@@ -29,25 +32,26 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: "#333e",
   height: "calc(100vh - 275px)",
   overflow: "auto",
+  overflowY: "auto",
 }));
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white", // Setze die Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Outline-Farbe auf Weiß
     },
     "&:hover fieldset": {
-      borderColor: "white", // Setze die Hover-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Hover-Outline-Farbe auf Weiß
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white", // Setze die Fokussierte-Outline-Farbe auf Weiß
+      borderColor: "black", // Setze die Fokussierte-Outline-Farbe auf Weiß
     },
   },
   "& .MuiInputLabel-root": {
-    color: "white", // Setze die Label-Farbe auf Weiß
+    color: "black", // Setze die Label-Farbe auf Weiß
   },
   "& .MuiInputBase-input": {
-    color: "white", // Setze die Textfarbe des TextFields auf Weiß
+    color: "black", // Setze die Textfarbe des TextFields auf Weiß
   },
 }));
 
@@ -57,7 +61,7 @@ const RoundedCheckbox = styled(Checkbox)({
   },
 });
 
-function AktuellePriosMobile({ toLeft }) {
+function AktuellePriosMobile({ toLeft, setShowVergangeneTodos }) {
   const [newTodo, setNewTodo] = useState("");
   const { currentUser } = useAuth();
   const [hoverIndex, setHoverIndex] = useState(null);
@@ -65,6 +69,7 @@ function AktuellePriosMobile({ toLeft }) {
   const [isLoading, setIsLoading] = useState(true);
   const isFirstRender = useRef(true);
   const initialData = useRef(null);
+  const [gotData, setGotData] = useState(false);
   /*useEffect(() => {
     const fetchTodos = async () => {
       const response = await GetTodos({username});
@@ -132,6 +137,7 @@ function AktuellePriosMobile({ toLeft }) {
         initialData.current = response;
       }
       setIsLoading(false);
+      setGotData(true);
     };
 
     fetchTodos();
@@ -147,7 +153,9 @@ function AktuellePriosMobile({ toLeft }) {
     }
     if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
       let priosData = todos;
-      savePrios({ currentUser, priosData });
+      if (gotData) {
+        savePrios({ currentUser, priosData });
+      }
     }
   }, [todos, isLoading]);
 
@@ -189,27 +197,23 @@ function AktuellePriosMobile({ toLeft }) {
             exit="out"
             variants={pageTransition}
           >
-            <Button
-              variant="outlined"
-              onClick={() => setShowVergangeneTodos(!showVergangeneTodos)}
-              style={{
-                position: "absolute",
-                right: "5%",
-              }}
-              sx={{
-                border: "none",
-                "&:focus": {
-                  outline: "none",
-                },
-              }}
-            >
-              Monatsziele
-            </Button>
-            <StyledPaper>
-              <Typography color={"white"} variant="h6" align="center">
+            <Box>
+              <Button
+                variant="text"
+                onClick={() => setShowVergangeneTodos(true)}
+                style={{
+                  position: "absolute",
+                  right: "0%",
+                }}
+              >
+                Monatsziele
+              </Button>
+            </Box>
+            <Box height={"92vh"} marginTop="30px">
+              <Typography color={"black"} variant="h6" align="center">
                 Aktuelle Prioritäten
               </Typography>
-              <Box display="flex" flexDirection="column" height="90%">
+              <Box class="container">
                 <Box flexGrow="1" overflow="auto">
                   <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="todos">
@@ -279,14 +283,14 @@ function AktuellePriosMobile({ toLeft }) {
                     </Droppable>
                   </DragDropContext>
                 </Box>
-                <Box mt={3} display="flex">
+                <Box mt={3} display="flex" marginBottom={"155px"}>
                   <WhiteTextField
                     InputLabelProps={{
-                      style: { color: "white" },
+                      style: { color: "black" },
                     }}
                     value={newTodo}
                     onChange={(e) => setNewTodo(e.target.value)}
-                    label="New Priority"
+                    label="Neue Priorität"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
                   />
@@ -294,13 +298,16 @@ function AktuellePriosMobile({ toLeft }) {
                     onClick={addTodo}
                     variant="contained"
                     color="secondary"
-                    style={{ height: 45, flexShrink: 0, marginTop: 5 }} // add flexShrink: 0 to prevent the button from shrinking
+                    style={{
+                      borderRadius: 7,
+                      backgroundColor: "#44CDDD",
+                    }} // add flexShrink: 0 to prevent the button from shrinking
                   >
-                    Add
+                    <AddCircleIcon />
                   </Button>
                 </Box>
               </Box>
-            </StyledPaper>
+            </Box>
           </motion.div>
         </>
       </AnimatePresence>

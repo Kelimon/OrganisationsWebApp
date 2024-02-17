@@ -31,19 +31,19 @@ import {
 } from "@mui/material";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
-  backgroundColor: "#333e", //replace with your color
+  backgroundColor: "white", //replace with your color
   borderRadius: 0,
 }));
 
 const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
-  backgroundColor: "#4f4f4f", //replace with your color
+  backgroundColor: "#F5F5F5", //replace with your color
   borderRadius: 7,
   margin: "2px",
   color: "white",
 }));
 
 const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-  backgroundColor: "#4f4f4f", //replace with your color
+  backgroundColor: "#f0f0f5", //replace with your color
   borderRadius: 12,
   color: "white",
   margin: 7,
@@ -58,7 +58,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
 }));
 
-function VergangeneTodosMobile({}) {
+function VergangeneTodosMobile({ setShowVergangeneTodos }) {
   const [showPastTodos, setShowPastTodos] = useState(false);
   const { currentUser, isAdmin } = useAuth();
   const [todos, setTodos] = useState([]);
@@ -118,32 +118,22 @@ function VergangeneTodosMobile({}) {
             variants={pageTransition}
           >
             <Button
-              variant="outlined"
-              onClick={() => setShowVergangeneTodos(!showVergangeneTodos)}
-              style={{
-                position: "absolute",
-                left: "5%",
-              }}
-              sx={{
-                border: "none",
-                "&:focus": {
-                  outline: "none",
-                },
-              }}
+              variant="text"
+              onClick={() => setShowVergangeneTodos(false)}
+              style={{}}
             >
               ToDos
             </Button>
 
-            <StyledPaper>
+            <Box>
               <div>
                 <Button
                   onClick={() => setShowPastTodos(!showPastTodos)}
                   variant="contained"
-                  color="secondary"
                   fullWidth
                   sx={{
-                    backgroundColor:
-                      "linear-gradient(to bottom right, #680e78,  #b608d4)",
+                    color:
+                      "linear-gradient(to bottom right, #44CDDD,  #44CDDD)",
                     borderRadius: 4,
                   }}
                 >
@@ -163,7 +153,7 @@ function VergangeneTodosMobile({}) {
                           <StyledAccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                           >
-                            <Typography variant="h6">
+                            <Typography variant="h6" color={"black"}>
                               {formatDate(day.date)}
                             </Typography>
                           </StyledAccordionSummary>
@@ -174,7 +164,9 @@ function VergangeneTodosMobile({}) {
                                   day.data.map((todo, index) => (
                                     <TableRow key={index}>
                                       <TableCell sx={{ color: "white" }}>
-                                        {todo.text}
+                                        <Typography color={"black"}>
+                                          {todo.text}
+                                        </Typography>
                                       </TableCell>
                                       {todo.checked ? (
                                         <TableCell sx={{ color: "#17ff2e" }}>
@@ -200,7 +192,7 @@ function VergangeneTodosMobile({}) {
                   </div>
                 </CSSTransition>
               </div>
-            </StyledPaper>
+            </Box>
           </motion.div>
         </>
       </AnimatePresence>
