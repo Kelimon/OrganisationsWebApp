@@ -10,6 +10,7 @@ import {
   IconButton,
   Typography,
   Box,
+  Grid,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -183,60 +184,64 @@ function ToDoListMobile({
             variants={pageTransition}
           >
             <Box>
-              <Button
-                variant="text"
-                onClick={() => setShowVergangeneTodos(true)}
-                style={{
-                  position: "absolute",
-                  right: "0%",
-                }}
-              >
-                Vergangene ToDos
-              </Button>
-            </Box>
-            <Box height={"92vh"} marginTop="30px">
-              <Typography
-                color={"white"}
-                variant="h6"
-                align="center"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
+              <Box>
                 <Button
-                  onClick={() => {
-                    setSelectedDay(selectedDay - 1);
-                  }}
                   variant="text"
-                  color="secondary"
-                  style={{ borderRadius: 7, width: "2vw", flexShrink: 0 }}
-                  disabled={selectedDay === 0}
+                  onClick={() => setShowVergangeneTodos(true)}
+                  style={{
+                    position: "fixed",
+                    right: "0%",
+                  }}
                 >
-                  Gestern
+                  Vergangene ToDos
                 </Button>
-                <Typography color={"black"} variant="h6" align="center">
-                  To Do's
+              </Box>
+              <Box marginTop="30px">
+                <Typography
+                  color={"white"}
+                  variant="h6"
+                  align="center"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Button
+                    onClick={() => {
+                      setSelectedDay(selectedDay - 1);
+                    }}
+                    variant="text"
+                    color="secondary"
+                    style={{ borderRadius: 7, width: "2vw", flexShrink: 0 }}
+                    disabled={selectedDay === 0}
+                  >
+                    Gestern
+                  </Button>
+                  <Typography color={"black"} variant="h6" align="center">
+                    To Do's
+                  </Typography>
+                  <Button
+                    onClick={() => {
+                      setSelectedDay(selectedDay + 1);
+                    }}
+                    variant="text"
+                    color="secondary"
+                    disabled={selectedDay === 2}
+                    style={{ borderRadius: 7, width: "2vw", flexShrink: 0 }}
+                  >
+                    Morgen
+                  </Button>
                 </Typography>
-                <Button
-                  onClick={() => {
-                    setSelectedDay(selectedDay + 1);
-                  }}
-                  variant="text"
-                  color="secondary"
-                  disabled={selectedDay === 2}
-                  style={{ borderRadius: 7, width: "2vw", flexShrink: 0 }}
+                <Typography color={"black"} align="center">
+                  {getFormattedDate(selectedDay)}{" "}
+                  {/* Hier wird das Datum eingefügt */}
+                </Typography>
+                <Box
+                  direction="column"
+                  justifyContent="flex-end"
+                  alignItems="stretch"
                 >
-                  Morgen
-                </Button>
-              </Typography>
-              <Typography color={"black"} align="center">
-                {getFormattedDate(selectedDay)}{" "}
-                {/* Hier wird das Datum eingefügt */}
-              </Typography>
-              <Box display="flex" flexDirection="column" height="90%">
-                <Box flexGrow="1" overflow="auto">
                   <List>
                     {Array.isArray(todos) &&
                       todos
@@ -274,39 +279,47 @@ function ToDoListMobile({
                           </ListItem>
                         ))}
                   </List>
-                </Box>
-                <Box mt={3} display="flex" marginBottom={"100px"}>
-                  <WhiteTextField
-                    InputLabelProps={{
-                      style: { color: "black" },
+                  <Box
+                    mt={3}
+                    display="flex"
+                    style={{
+                      position: "sticky",
+                      bottom: 0,
+                      backgroundColor: "inherit",
                     }}
-                    value={newTodo}
-                    onChange={(e) => setNewTodo(e.target.value)}
-                    label="Neues To-Do"
-                    fullWidth
-                    style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-                  />
-                  {false && (
-                    <IconButton
+                  >
+                    <WhiteTextField
+                      InputLabelProps={{
+                        style: { color: "black" },
+                      }}
+                      value={newTodo}
+                      onChange={(e) => setNewTodo(e.target.value)}
+                      label="Neues To-Do"
+                      fullWidth
+                      style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
+                    />
+                    {false && (
+                      <IconButton
+                        onClick={addTodo}
+                        variant="contained"
+                        color="secondary"
+                        style={{}} // add flexShrink: 0 to prevent the button from shrinking
+                      >
+                        <AddIcon sx={{ fontSize: 34 }} />
+                      </IconButton>
+                    )}
+                    <Button
                       onClick={addTodo}
                       variant="contained"
                       color="secondary"
-                      style={{}} // add flexShrink: 0 to prevent the button from shrinking
+                      style={{
+                        borderRadius: 7,
+                        backgroundColor: "#44CDDD",
+                      }} // add flexShrink: 0 to prevent the button from shrinking
                     >
-                      <AddIcon sx={{ fontSize: 34 }} />
-                    </IconButton>
-                  )}
-                  <Button
-                    onClick={addTodo}
-                    variant="contained"
-                    color="secondary"
-                    style={{
-                      borderRadius: 7,
-                      backgroundColor: "#44CDDD",
-                    }} // add flexShrink: 0 to prevent the button from shrinking
-                  >
-                    <AddCircleIcon />
-                  </Button>
+                      <AddCircleIcon />
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
             </Box>
