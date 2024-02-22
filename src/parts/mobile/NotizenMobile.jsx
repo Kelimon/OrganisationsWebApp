@@ -56,7 +56,7 @@ function NotizenMobile({ toLeft }) {
   useEffect(() => {
     const fetchTodos = async () => {
       const response = await GetNotizen({ currentUser });
-      if (response.data.notizen.length > 0) {
+      if (response?.data?.notizen?.length > 0) {
         setNote(response.data.notizen);
       }
     };
@@ -89,7 +89,7 @@ function NotizenMobile({ toLeft }) {
   }, []);
 
   // Berechnung der rowsCount basierend auf der Fensterhöhe
-  const rowsCount = Math.floor(windowHeight / 30); // Beispiel: 24px pro Zeile
+  const rowsCount = Math.floor((windowHeight - 100) / 28); // Beispiel: 24px pro Zeile
 
   useEffect(() => {
     // Funktion, die alle 5 Sekunden ausgeführt wird

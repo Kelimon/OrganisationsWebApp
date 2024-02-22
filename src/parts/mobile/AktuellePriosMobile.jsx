@@ -126,21 +126,15 @@ function AktuellePriosMobile({ toLeft, setShowVergangeneTodos }) {
       setNewTodo("");
     }
   };
-  console.log("prios", todos);
   useEffect(() => {
-    console.log(1);
     const fetchTodos = async () => {
-      console.log(2);
       setIsLoading(true);
       const response = await GetPrios({ currentUser });
-      console.log("response", currentUser);
       if (response) {
-        console.log("totods", response);
         const todosWithChecked = response.map((todo) => ({
           ...todo,
           checked: todo.checked ?? false, // Use nullish coalescing operator to add 'checked' if it's not present
         }));
-        console.log("checkedtodos", todosWithChecked);
         setTodos(todosWithChecked);
         // Make sure to create a deep copy of todosWithChecked to ensure independence
         initialData.current = JSON.parse(JSON.stringify(todosWithChecked));
@@ -151,22 +145,17 @@ function AktuellePriosMobile({ toLeft, setShowVergangeneTodos }) {
 
     fetchTodos();
   }, [currentUser]);
-  console.log("intialdata", initialData.current);
   useEffect(() => {
-    console.log(1);
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-    console.log(2);
     if (isLoading) {
       return; // Skip saving when the component is in a loading state
     }
 
     let priosData = todos;
-    console.log(4);
     if (gotData) {
-      console.log(5);
       savePrios({ currentUser, priosData });
     }
   }, [todos, isLoading]);
@@ -209,112 +198,115 @@ function AktuellePriosMobile({ toLeft, setShowVergangeneTodos }) {
             variants={pageTransition}
           >
             <Box>
-              <Button
-                variant="text"
-                onClick={() => setShowVergangeneTodos(true)}
-                style={{
-                  position: "absolute",
-                  right: "0%",
-                }}
-              >
-                Monatsziele
-              </Button>
-            </Box>
-            <Box height={"92vh"} marginTop="30px">
-              <Typography color={"black"} variant="h6" align="center">
-                Aktuelle Prioritäten
-              </Typography>
-              <Box class="container">
-                <Box flexGrow="1" overflow="auto">
-                  <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="todos">
-                      {(provided) => (
-                        <List
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                        >
-                          {todos.map(({ text, checked }, index) => {
-                            return (
-                              <Draggable
-                                key={index}
-                                draggableId={`draggable-${index}-${text}`}
-                                index={index}
-                              >
-                                {(provided, snapshot) => (
-                                  <ListItem
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    sx={{
-                                      transition: "margin-left 0.4s",
-                                      height: "4rem",
-                                    }} // update here
-                                    style={getItemStyle(
-                                      snapshot.isDragging,
-                                      provided.draggableProps.style,
-                                      index === hoverIndex
-                                    )}
-                                    onMouseEnter={() => setHoverIndex(index)}
-                                    onMouseLeave={() => setHoverIndex(null)}
-                                  >
-                                    <Checkbox
-                                      checked={checked}
-                                      onChange={() => {
-                                        const newTodos = [...todos];
-                                        newTodos[index].checked =
-                                          !newTodos[index].checked;
-                                        setTodos(newTodos);
-                                      }}
-                                      style={{ color: fontColor }}
-                                    />
-                                    <ListItemText
-                                      primaryTypographyProps={{
-                                        style: { color: "white" },
-                                      }}
-                                      primary={text}
-                                    />
-                                    {hoverIndex === index && (
-                                      <IconButton
-                                        onClick={() => deleteTodo(index)}
-                                        color="inherit"
-                                      >
-                                        <DeleteIcon color="black" />
-                                      </IconButton>
-                                    )}
-                                  </ListItem>
-                                )}
-                              </Draggable>
-                            );
-                          })}
+              <Box>
+                <Button
+                  variant="text"
+                  onClick={() => setShowVergangeneTodos(true)}
+                  style={{
+                    position: "absolute",
+                    right: "0%",
+                    top: "0px",
+                  }}
+                >
+                  Monatsziele
+                </Button>
+              </Box>
+              <Box marginTop="30px">
+                <Typography color={"black"} variant="h6" align="center">
+                  Aktuelle Prioritäten
+                </Typography>
+                <Box class="container" style={{ paddingBottom: "45px" }}>
+                  <Box mt={3} display="flex">
+                    <WhiteTextField
+                      InputLabelProps={{
+                        style: { color: "black" },
+                      }}
+                      value={newTodo}
+                      onChange={(e) => setNewTodo(e.target.value)}
+                      label="Neue Priorität"
+                      fullWidth
+                      style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
+                    />
+                    <Button
+                      onClick={addTodo}
+                      variant="contained"
+                      color="secondary"
+                      style={{
+                        borderRadius: 7,
+                        backgroundColor: "#44CDDD",
+                      }} // add flexShrink: 0 to prevent the button from shrinking
+                    >
+                      <AddCircleIcon />
+                    </Button>
+                  </Box>
+                  <Box flexGrow="1" overflow="auto">
+                    <DragDropContext onDragEnd={handleOnDragEnd}>
+                      <Droppable droppableId="todos">
+                        {(provided) => (
+                          <List
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                          >
+                            {todos.map(({ text, checked }, index) => {
+                              return (
+                                <Draggable
+                                  key={index}
+                                  draggableId={`draggable-${index}-${text}`}
+                                  index={index}
+                                >
+                                  {(provided, snapshot) => (
+                                    <ListItem
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      sx={{
+                                        transition: "margin-left 0.4s",
+                                        height: "4rem",
+                                      }} // update here
+                                      style={getItemStyle(
+                                        snapshot.isDragging,
+                                        provided.draggableProps.style,
+                                        index === hoverIndex
+                                      )}
+                                      onMouseEnter={() => setHoverIndex(index)}
+                                      onMouseLeave={() => setHoverIndex(null)}
+                                    >
+                                      <Checkbox
+                                        checked={checked}
+                                        onChange={() => {
+                                          const newTodos = [...todos];
+                                          newTodos[index].checked =
+                                            !newTodos[index].checked;
+                                          setTodos(newTodos);
+                                        }}
+                                        style={{ color: fontColor }}
+                                      />
+                                      <ListItemText
+                                        primaryTypographyProps={{
+                                          style: { color: "white" },
+                                        }}
+                                        primary={text}
+                                      />
+                                      {hoverIndex === index && (
+                                        <IconButton
+                                          onClick={() => deleteTodo(index)}
+                                          color="inherit"
+                                        >
+                                          <DeleteIcon color="black" />
+                                        </IconButton>
+                                      )}
+                                    </ListItem>
+                                  )}
+                                </Draggable>
+                              );
+                            })}
 
-                          {provided.placeholder}
-                        </List>
-                      )}
-                    </Droppable>
-                  </DragDropContext>
-                </Box>
-                <Box mt={3} display="flex" marginBottom={"155px"}>
-                  <WhiteTextField
-                    InputLabelProps={{
-                      style: { color: "black" },
-                    }}
-                    value={newTodo}
-                    onChange={(e) => setNewTodo(e.target.value)}
-                    label="Neue Priorität"
-                    fullWidth
-                    style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-                  />
-                  <Button
-                    onClick={addTodo}
-                    variant="contained"
-                    color="secondary"
-                    style={{
-                      borderRadius: 7,
-                      backgroundColor: "#44CDDD",
-                    }} // add flexShrink: 0 to prevent the button from shrinking
-                  >
-                    <AddCircleIcon />
-                  </Button>
+                            {provided.placeholder}
+                          </List>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
+                  </Box>
                 </Box>
               </Box>
             </Box>

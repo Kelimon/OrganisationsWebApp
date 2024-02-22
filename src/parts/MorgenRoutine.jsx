@@ -22,7 +22,7 @@ import { useAuth } from "./../contexts/Auth";
 import { StyledPaper } from "./../components/StyledPaper";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import FontColor from "./../components/FontColor";
-
+import "./../components/styledpaper.css";
 const fontColor = FontColor();
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
@@ -112,7 +112,7 @@ function MorgenRoutine({}) {
 
   return (
     <>
-      <StyledPaper>
+      <StyledPaper className="my-container">
         <Typography color={"black"} variant="h6" align="center">
           Morgenroutine
         </Typography>

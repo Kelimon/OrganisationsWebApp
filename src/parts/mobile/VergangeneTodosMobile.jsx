@@ -99,7 +99,6 @@ function VergangeneTodosMobile({
   const minuten = heute.getMinutes().toString().padStart(2, "0");
   const sekunden = heute.getSeconds().toString().padStart(2, "0");
   const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
-  console.log("selecteday", selectedDay);
   useEffect(() => {
     const fetchTodos = async () => {
       const response = (await GetTodos({ currentUser })).data.days.slice(0, -3);
@@ -124,7 +123,6 @@ function VergangeneTodosMobile({
       x: "-1.5vw",
     },
   };
-  console.log("todos vergangenetodosmobile", todos);
   return (
     <>
       <AnimatePresence exitBeforeEnter>
@@ -214,15 +212,7 @@ function VergangeneTodosMobile({
                                                 date: localDateTime,
                                               },
                                             ]);
-                                            console.log([
-                                              ...todosFromTodoList,
-                                              {
-                                                text: todo.text,
-                                                checked: false,
-                                                day: selectedDay,
-                                                date: localDateTime,
-                                              },
-                                            ]);
+
                                             saveTodos({
                                               currentUser,
                                               todos: [

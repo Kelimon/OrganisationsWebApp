@@ -8,7 +8,6 @@ async function GetNotizen({ currentUser }) {
     );
     return response;
   } catch (error) {
-    console.error("Login errornotizen:", error);
     throw error;
   }
 }

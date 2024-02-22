@@ -23,7 +23,7 @@ import { useAuth } from "./../contexts/Auth";
 import Checkbox from "@mui/material/Checkbox";
 import { StyledPaper } from "./../components/StyledPaper";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-
+import "./../components/styledpaper.css";
 import FontColor from "./../components/FontColor";
 
 const fontColor = FontColor();
@@ -125,7 +125,7 @@ function Monatsziele({}) {
   });
 
   return (
-    <StyledPaper>
+    <StyledPaper className="my-container">
       <Typography color={"black"} variant="h6" align="center">
         Monatsziele
       </Typography>

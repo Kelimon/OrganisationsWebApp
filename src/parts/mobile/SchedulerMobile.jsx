@@ -82,8 +82,12 @@ export default function SchedulerMobile({ username, toLeft }) {
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [startHour, setStartHour] = React.useState(null);
-  const [endHour, setEndHour] = React.useState(null);
+  const [startHour, setStartHour] = React.useState(
+    Dayjs().startOf("hour").add(1, "hour")
+  );
+  const [endHour, setEndHour] = React.useState(
+    Dayjs().startOf("hour").add(2, "hour")
+  );
   const [meetings, setMeetings] = React.useState([]);
   const [color, setColor] = React.useState("#9c27b0"); // default color
   const theme = useTheme();
@@ -229,7 +233,6 @@ export default function SchedulerMobile({ username, toLeft }) {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
-                  height: "200vh",
                 }}
               >
                 <StaticDatePicker
@@ -339,6 +342,7 @@ export default function SchedulerMobile({ username, toLeft }) {
               animate="in"
               exit="out"
               variants={pageTransition}
+              style={{ paddingBottom: "45px" }}
             >
               <Box
                 sx={{
@@ -366,27 +370,27 @@ export default function SchedulerMobile({ username, toLeft }) {
                 </IconButton>
               </Box>
               <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add Event</DialogTitle>
+                <DialogTitle>Termin hinzufügen</DialogTitle>
                 <DialogContent>
                   <TextField
                     autoFocus
                     margin="dense"
                     id="title"
-                    label="Title"
+                    label="Titel"
                     type="text"
                     fullWidth
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
                   <MobileTimePicker
-                    label="Start Hour"
+                    label="Beginn"
                     value={startHour}
                     onChange={setStartHour}
                     ampm={false}
                   />
 
                   <MobileTimePicker
-                    label="End Hour"
+                    label="Ende"
                     value={endHour}
                     onChange={setEndHour}
                     ampm={false}
@@ -395,7 +399,7 @@ export default function SchedulerMobile({ username, toLeft }) {
                     autoFocus
                     margin="dense"
                     id="description"
-                    label="Description"
+                    label="Beschreibung"
                     type="text"
                     fullWidth
                     value={description}

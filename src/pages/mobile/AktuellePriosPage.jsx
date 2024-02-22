@@ -10,11 +10,10 @@ import { useAuth } from "./../../contexts/Auth";
 
 function AktuellePriosPage({ toLeft }) {
   const [showVergangeneTodos, setShowVergangeneTodos] = useState(false);
-  console.log("setshowmonatsziele", showVergangeneTodos);
   return (
     <>
       <HeaderMobile />
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
         {!showVergangeneTodos ? (
           <AktuellePriosMobile
             toLeft={toLeft}

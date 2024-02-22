@@ -1,0 +1,21 @@
+@media (max-width: 1450px) {
+  /* Adjust this value based on your needs */
+  .my-container {
+    padding: 50px !important;
+    margin: 20px !important;
+  }
+  .my-text {
+    /* Smaller font size */
+  }
+  /* More responsive adjustments */
+}
+
+@media (max-width: 1280px) {
+  /* Adjust this value based on your needs */
+  .my-container {
+    padding: 25px !important;
+    margin: 17px !important;
+  }
+
+  /* More responsive adjustments */
+}

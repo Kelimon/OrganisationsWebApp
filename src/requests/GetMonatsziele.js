@@ -8,7 +8,6 @@ async function GetMonatziele({ currentUser }) {
     );
     return response.data.mziele;
   } catch (error) {
-    console.error("Login error:", error);
     throw error;
   }
 }

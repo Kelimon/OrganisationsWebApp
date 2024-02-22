@@ -16,7 +16,7 @@ import {
   Box,
 } from "@mui/material";
 import { StyledPaper } from "./../components/StyledPaper";
-
+import "./../components/styledpaper.css";
 class Chart extends React.Component {
   constructor(props) {
     super(props);
@@ -69,11 +69,6 @@ class Chart extends React.Component {
           },
           y: {
             formatter: function (series, seriesIndex, dataPointIndex, w) {
-              console.log("series", series);
-              console.log("seriesIndex", seriesIndex);
-              console.log("dataPointIndex", dataPointIndex);
-              console.log("w", w);
-              console.log("w.config.series");
               return `${Math.floor(series)}%`; // Formatieren Sie den Wert nach Ihren Wünschen
             },
           },
@@ -235,7 +230,6 @@ class Chart extends React.Component {
         total.push(0);
       }
     }
-    console.log("checkedArray", checked);
     await this.setState({
       todospercentage: checkedTasks,
       series: [
@@ -247,7 +241,6 @@ class Chart extends React.Component {
         },
       ],
     });
-    console.log("state", this.state);
 
     return true;
   };
@@ -285,7 +278,6 @@ class Chart extends React.Component {
           },
         ],
       });
-      console.log("componentupdate", this.state.series);
     }
   }
 
@@ -325,7 +317,7 @@ class Chart extends React.Component {
   render() {
     if (this.state.todos) {
       return (
-        <StyledPaper ref={this.myRef}>
+        <StyledPaper ref={this.myRef} className="my-container">
           <ReactApexChart
             options={this.state.options}
             series={this.state.series}

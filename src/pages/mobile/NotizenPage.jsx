@@ -5,11 +5,11 @@ import Header from "../../parts/Header";
 import NotizenMobile from "../../parts/mobile/NotizenMobile";
 import HeaderMobile from "../../components/HeaderMobile";
 
-function NotizenPage({ note, setNote, toLeft  }) {
+function NotizenPage({ note, setNote, toLeft }) {
   return (
     <>
-      <HeaderMobile/>
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <HeaderMobile />
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
         <NotizenMobile note={note} setNote={setNote} toLeft={toLeft} />
       </Box>
     </>

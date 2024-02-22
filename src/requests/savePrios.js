@@ -3,7 +3,6 @@ import axios from "axios";
 
 async function savePrios({ currentUser, priosData }) {
   const username = currentUser;
-  console.log("saving prios", priosData);
   try {
     if (currentUser.length > 1) {
       const response = await axios.post(
@@ -16,7 +15,6 @@ async function savePrios({ currentUser, priosData }) {
     }
     return;
   } catch (error) {
-    console.error("Login error:", error);
     throw error;
   }
 }

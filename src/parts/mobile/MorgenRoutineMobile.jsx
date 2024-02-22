@@ -144,11 +144,37 @@ function MorgenRoutineMobile({ toLeft }) {
             <Box>
               <Typography></Typography>
             </Box>
-            <Box height={"92vh"} marginTop="30px">
+            <Box>
               <Typography color={"black"} variant="h6" align="center">
                 Morgenroutine
               </Typography>
-              <Box display="flex" flexDirection="column" height="90%">
+              <Box mt={3} display="flex">
+                <WhiteTextField
+                  InputLabelProps={{
+                    style: { color: "black" },
+                  }}
+                  value={newTodo}
+                  onChange={(e) => setNewTodo(e.target.value)}
+                  label="Neue Routine"
+                  fullWidth
+                  style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
+                />
+                <Button
+                  onClick={addTodo}
+                  variant="contained"
+                  color="secondary"
+                  style={{
+                    backgroundColor: "#44CDDD",
+                  }} // add flexShrink: 0 to prevent the button from shrinking
+                >
+                  <AddCircleIcon />
+                </Button>
+              </Box>
+              <Box
+                display="flex"
+                flexDirection="column"
+                style={{ paddingBottom: "45px" }}
+              >
                 <Box flexGrow="1" overflow="auto">
                   <List>
                     {Array.isArray(todos) &&
@@ -185,28 +211,6 @@ function MorgenRoutineMobile({ toLeft }) {
                         </ListItem>
                       ))}
                   </List>
-                </Box>
-                <Box mt={3} display="flex" marginBottom={"70px"}>
-                  <WhiteTextField
-                    InputLabelProps={{
-                      style: { color: "black" },
-                    }}
-                    value={newTodo}
-                    onChange={(e) => setNewTodo(e.target.value)}
-                    label="Neue Routine"
-                    fullWidth
-                    style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-                  />
-                  <Button
-                    onClick={addTodo}
-                    variant="contained"
-                    color="secondary"
-                    style={{
-                      backgroundColor: "#44CDDD",
-                    }} // add flexShrink: 0 to prevent the button from shrinking
-                  >
-                    <AddCircleIcon />
-                  </Button>
                 </Box>
               </Box>
             </Box>

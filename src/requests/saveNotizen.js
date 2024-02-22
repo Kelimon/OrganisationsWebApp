@@ -15,7 +15,6 @@ async function saveNotizen({ currentUser, note }) {
     }
     return;
   } catch (error) {
-    console.error("Login errorsavenotizen:", error);
     throw error;
   }
 }

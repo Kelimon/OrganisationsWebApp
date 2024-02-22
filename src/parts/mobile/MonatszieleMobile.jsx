@@ -112,7 +112,6 @@ function MonatszieleMobile({ username, setShowVergangeneTodos }) {
     }
 
     let mzieleData = todos;
-    console.log("mziele", mzieleData);
     saveMonatsziele({ currentUser, mzieleData });
   }, [todos, isLoading]);
 
@@ -178,11 +177,33 @@ function MonatszieleMobile({ username, setShowVergangeneTodos }) {
                 Aktuelle Prioritäten
               </Button>
             </Box>
-            <Box height={"92vh"} marginTop="30px">
+            <Box marginTop="30px">
               <Typography color={"black"} variant="h6" align="center">
                 Monatsziele
               </Typography>
-              <Box class="container" height="90%">
+              <Box class="container" style={{ marginBottom: "45px" }}>
+                <Box mt={3} display="flex">
+                  <WhiteTextField
+                    InputLabelProps={{
+                      style: { color: "black" },
+                    }}
+                    value={newTodo}
+                    onChange={(e) => setNewTodo(e.target.value)}
+                    label="Neues Monatsziel"
+                    fullWidth
+                    style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
+                  />
+                  <Button
+                    onClick={addTodo}
+                    variant="contained"
+                    color="secondary"
+                    style={{
+                      backgroundColor: "#44CDDD",
+                    }} // add flexShrink: 0 to prevent the button from shrinking
+                  >
+                    <AddCircleIcon />
+                  </Button>
+                </Box>
                 <Box flexGrow="1" overflow="auto">
                   <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId="todos">
@@ -250,28 +271,6 @@ function MonatszieleMobile({ username, setShowVergangeneTodos }) {
                       )}
                     </Droppable>
                   </DragDropContext>
-                </Box>
-                <Box mt={3} display="flex" marginBottom={"155px"}>
-                  <WhiteTextField
-                    InputLabelProps={{
-                      style: { color: "black" },
-                    }}
-                    value={newTodo}
-                    onChange={(e) => setNewTodo(e.target.value)}
-                    label="Neues Monatsziel"
-                    fullWidth
-                    style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-                  />
-                  <Button
-                    onClick={addTodo}
-                    variant="contained"
-                    color="secondary"
-                    style={{
-                      backgroundColor: "#44CDDD",
-                    }} // add flexShrink: 0 to prevent the button from shrinking
-                  >
-                    <AddCircleIcon />
-                  </Button>
                 </Box>
               </Box>
             </Box>

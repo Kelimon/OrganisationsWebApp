@@ -3,7 +3,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // import default styles
 import { styled } from "@mui/system";
 import { Paper } from "@mui/material";
-
+import "./../components/styledpaper.css";
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   padding: theme.spacing(2),
@@ -27,7 +27,7 @@ const Kalender = () => {
   };
 
   return (
-    <StyledPaper>
+    <StyledPaper className="my-container">
       <StyledCalendar onChange={onChange} value={date} />
     </StyledPaper>
   );

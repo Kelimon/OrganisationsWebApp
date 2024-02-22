@@ -22,7 +22,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { StyledPaper } from "./../components/StyledPaper";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import FontColor from "./../components/FontColor";
-
+import "./../components/styledpaper.css";
 const fontColor = FontColor();
 
 const RoundedCheckbox = styled(Checkbox)({
@@ -123,7 +123,7 @@ function AktuellePrios({}) {
   });
 
   return (
-    <StyledPaper>
+    <StyledPaper className="my-container">
       <Typography color={"black"} variant="h6" align="center">
         Aktuelle Prioritäten
       </Typography>

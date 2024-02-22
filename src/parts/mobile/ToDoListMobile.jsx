@@ -25,6 +25,8 @@ import { StyledPaperMobile } from "./../../components/StyledPaperMobile";
 import { useAuth } from "./../../contexts/Auth";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import FontColor from "./../../components/FontColor";
+import { useSwipeable } from "react-swipeable";
+import { select } from "@syncfusion/ej2-base";
 
 const fontColor = FontColor();
 
@@ -76,7 +78,6 @@ function ToDoListMobile({
       x: "-1.5vw",
     },
   };
-  console.log("ToDoListMobile", todos);
 
   const getFormattedDate = (selectedDay) => {
     const currentDate = new Date();
@@ -87,6 +88,16 @@ function ToDoListMobile({
       year: "numeric",
     });
   };
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () =>
+      setSelectedDay(Math.max(0, Math.min(selectedDay + 1, 2))),
+    onSwipedRight: () =>
+      setSelectedDay(Math.max(0, Math.min(selectedDay - 1, 2))),
+    // Prevent default touch action to prevent scroll on swipe
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true, // If you want to track mouse events as swipes on desktop
+  });
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
@@ -143,11 +154,9 @@ function ToDoListMobile({
     fetchTodos();
   }, [currentUser]);
   useEffect(() => {
-    console.log("saving todos");
     if (todos.length > 0) {
       saveTodos({ currentUser, todos: todos, selectedDay });
     }
-    console.log("saved todos");
   }, [todos]);
 
   const toggleCheck = (index) => {
@@ -189,14 +198,15 @@ function ToDoListMobile({
                   variant="text"
                   onClick={() => setShowVergangeneTodos(true)}
                   style={{
-                    position: "fixed",
+                    position: "absolute",
                     right: "0%",
+                    top: "0px",
                   }}
                 >
                   Vergangene ToDos
                 </Button>
               </Box>
-              <Box marginTop="30px">
+              <Box marginTop="30px" {...handlers} height="80vh">
                 <Typography
                   color={"white"}
                   variant="h6"
@@ -204,45 +214,82 @@ function ToDoListMobile({
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "space-between",
+                    justifyContent: "center",
                   }}
                 >
-                  <Button
-                    onClick={() => {
-                      setSelectedDay(selectedDay - 1);
-                    }}
-                    variant="text"
-                    color="secondary"
-                    style={{ borderRadius: 7, width: "2vw", flexShrink: 0 }}
-                    disabled={selectedDay === 0}
-                  >
-                    Gestern
-                  </Button>
                   <Typography color={"black"} variant="h6" align="center">
                     To Do's
                   </Typography>
-                  <Button
-                    onClick={() => {
-                      setSelectedDay(selectedDay + 1);
-                    }}
-                    variant="text"
-                    color="secondary"
-                    disabled={selectedDay === 2}
-                    style={{ borderRadius: 7, width: "2vw", flexShrink: 0 }}
-                  >
-                    Morgen
-                  </Button>
                 </Typography>
                 <Typography color={"black"} align="center">
                   {getFormattedDate(selectedDay)}{" "}
                   {/* Hier wird das Datum eingefügt */}
                 </Typography>
                 <Box
+                  mt={3}
+                  display="flex"
+                  style={{
+                    position: "sticky",
+                    bottom: 0,
+                    backgroundColor: "inherit",
+                  }}
+                >
+                  <WhiteTextField
+                    InputLabelProps={{
+                      style: { color: "black" },
+                    }}
+                    value={newTodo}
+                    onChange={(e) => setNewTodo(e.target.value)}
+                    label="Neues To-Do"
+                    fullWidth
+                    style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
+                  />
+                  {false && (
+                    <IconButton
+                      onClick={addTodo}
+                      variant="contained"
+                      color="secondary"
+                      style={{}} // add flexShrink: 0 to prevent the button from shrinking
+                    >
+                      <AddIcon sx={{ fontSize: 34 }} />
+                    </IconButton>
+                  )}
+                  <Button
+                    onClick={addTodo}
+                    variant="contained"
+                    color="secondary"
+                    style={{
+                      borderRadius: 7,
+                      backgroundColor: "#44CDDD",
+                    }} // add flexShrink: 0 to prevent the button from shrinking
+                  >
+                    <AddCircleIcon />
+                  </Button>
+                </Box>
+                <Box
                   direction="column"
                   justifyContent="flex-end"
                   alignItems="stretch"
+                  style={{ paddingBottom: "45px" }}
                 >
                   <List>
+                    {todos.filter((todo) => todo.date == localDateTime)
+                      .length === 0 && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: "50vh", // Dies füllt die Höhe des übergeordneten Containers
+                          minHeight: "200px", // Mindesthöhe, um sicherzustellen, dass es sichtbar ist, auch wenn es leer ist
+                        }}
+                      >
+                        <Typography color={"black"} align="center">
+                          Keine Todos für den {getFormattedDate(selectedDay)}{" "}
+                          vorhanden
+                        </Typography>
+                      </Box>
+                    )}
                     {Array.isArray(todos) &&
                       todos
                         .filter((todo) => todo.date == localDateTime)
@@ -279,47 +326,6 @@ function ToDoListMobile({
                           </ListItem>
                         ))}
                   </List>
-                  <Box
-                    mt={3}
-                    display="flex"
-                    style={{
-                      position: "sticky",
-                      bottom: 0,
-                      backgroundColor: "inherit",
-                    }}
-                  >
-                    <WhiteTextField
-                      InputLabelProps={{
-                        style: { color: "black" },
-                      }}
-                      value={newTodo}
-                      onChange={(e) => setNewTodo(e.target.value)}
-                      label="Neues To-Do"
-                      fullWidth
-                      style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
-                    />
-                    {false && (
-                      <IconButton
-                        onClick={addTodo}
-                        variant="contained"
-                        color="secondary"
-                        style={{}} // add flexShrink: 0 to prevent the button from shrinking
-                      >
-                        <AddIcon sx={{ fontSize: 34 }} />
-                      </IconButton>
-                    )}
-                    <Button
-                      onClick={addTodo}
-                      variant="contained"
-                      color="secondary"
-                      style={{
-                        borderRadius: 7,
-                        backgroundColor: "#44CDDD",
-                      }} // add flexShrink: 0 to prevent the button from shrinking
-                    >
-                      <AddCircleIcon />
-                    </Button>
-                  </Box>
                 </Box>
               </Box>
             </Box>

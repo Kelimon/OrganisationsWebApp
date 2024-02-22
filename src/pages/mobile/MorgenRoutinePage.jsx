@@ -9,9 +9,13 @@ import HeaderMobile from "../../components/HeaderMobile";
 function MorgenRoutinePage({ todos, setTodos, toLeft }) {
   return (
     <>
-      <HeaderMobile/>
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-        <MorgenRoutineMobile todos={todos} setTodos={setTodos} toLeft={toLeft} />
+      <HeaderMobile />
+      <Box>
+        <MorgenRoutineMobile
+          todos={todos}
+          setTodos={setTodos}
+          toLeft={toLeft}
+        />
       </Box>
     </>
   );

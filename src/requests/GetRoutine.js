@@ -8,7 +8,6 @@ async function GetRoutine({ currentUser }) {
     );
     return response;
   } catch (error) {
-    console.error("Login errorgetroutine:", error);
     throw error;
   }
 }

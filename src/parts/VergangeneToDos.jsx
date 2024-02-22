@@ -20,6 +20,7 @@ import { useAuth } from "./../contexts/Auth";
 import { Paper } from "@mui/material";
 import { StyledPaper } from "./../components/StyledPaper";
 import ChecklistIcon from "@mui/icons-material/Checklist";
+import "./../components/styledpaper.css";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   backgroundColor: "white", //replace with your color
@@ -94,7 +95,7 @@ function VergangeneToDos({
   };
 
   return (
-    <StyledPaper>
+    <StyledPaper className="my-container">
       <div>
         <Button
           onClick={() => setShowPastTodos(!showPastTodos)}

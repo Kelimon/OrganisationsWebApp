@@ -21,6 +21,7 @@ import { useAuth } from "./../contexts/Auth";
 import { render } from "react-dom";
 import { StyledPaper } from "./../components/StyledPaper";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import "./../components/styledpaper.css";
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
@@ -63,8 +64,7 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
   const minuten = heute.getMinutes().toString().padStart(2, "0");
   const sekunden = heute.getSeconds().toString().padStart(2, "0");
   const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
-  console.log("owntodos", ownTodos);
-  console.log("todos", todos);
+
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
@@ -81,8 +81,6 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
           }))
         )
         .flat();
-      console.log("latestDayData", latestDayData.data);
-      console.log("lastThreeDayData", lastThreeDayData);
 
       setTodos(lastThreeDayData);
       setOwnTodos(lastThreeDayData);
@@ -120,9 +118,7 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
       saveTodos({ currentUser, todos, selectedDay });
     }
   }, [todos, isLoading]);
-  console.log("todos is", JSON.stringify(todos));
-  console.log("initialData is", JSON.stringify(initialData.current));
-  console.log("renderCount is", renderCount.current);
+
   const toggleCheck = (index) => {
     const updatedOwnTodos = todos.map((todo, i) =>
       i === index ? { ...todo, checked: !todo.checked } : todo
@@ -166,7 +162,7 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
   uebermorgen.setDate(uebermorgen.getDate() + 2);
   return (
     <>
-      <StyledPaper>
+      <StyledPaper className="my-container">
         <Typography
           color={"white"}
           variant="h6"

@@ -173,7 +173,6 @@ function HomePage({ todos, setTodos }) {
 
   const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
 
-  console.log("halo", todos);
   const wrapperStyle = {
     display: "flex",
     flexWrap: "wrap",
