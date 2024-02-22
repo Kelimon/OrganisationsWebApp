@@ -10,6 +10,7 @@ import { styled } from "@mui/system";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import IconButton from "@mui/material/IconButton";
 import TableRow from "@mui/material/TableRow";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -18,6 +19,8 @@ import "./../testing/animation.css";
 import { useAuth } from "./../contexts/Auth";
 import { Paper } from "@mui/material";
 import { StyledPaper } from "./../components/StyledPaper";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import "./../components/styledpaper.css";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   backgroundColor: "white", //replace with your color
@@ -38,7 +41,12 @@ const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   margin: 7,
 }));
 
-function VergangeneToDos({}) {
+function VergangeneToDos({
+  todosFromTodoList,
+  setTodosFromTodoList,
+  selectedDay,
+  setSelectDay,
+}) {
   const [todos, setTodos] = useState([]);
   const [showPastTodos, setShowPastTodos] = useState(false);
   const { currentUser, isAdmin } = useAuth();
@@ -61,6 +69,16 @@ function VergangeneToDos({}) {
     _isMounted = false;  // Update the flag when component unmounts
   };
 }, []); */
+  const heute = new Date();
+  heute.setHours(0, 0, 0, 0);
+  heute.setDate(heute.getDate() + selectedDay); // Addiert selectedDay zum aktuellen Datum
+  const jahr = heute.getFullYear();
+  const monat = (heute.getMonth() + 1).toString().padStart(2, "0"); // Monate sind 0-indiziert
+  const tag = heute.getDate().toString().padStart(2, "0");
+  const stunden = heute.getHours().toString().padStart(2, "0");
+  const minuten = heute.getMinutes().toString().padStart(2, "0");
+  const sekunden = heute.getSeconds().toString().padStart(2, "0");
+  const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -77,7 +95,7 @@ function VergangeneToDos({}) {
   };
 
   return (
-    <StyledPaper>
+    <StyledPaper className="my-container">
       <div>
         <Button
           onClick={() => setShowPastTodos(!showPastTodos)}
@@ -116,6 +134,24 @@ function VergangeneToDos({}) {
                               <CloseIcon />
                             </TableCell>
                           )}
+                          <TableCell sx={{ color: "#45CDDD", marginTop: -5 }}>
+                            <IconButton
+                              onClick={() => {
+                                setTodosFromTodoList([
+                                  ...todosFromTodoList,
+                                  {
+                                    text: todo.text,
+                                    checked: false,
+                                    day: selectedDay,
+                                    date: localDateTime,
+                                  },
+                                ]);
+                              }}
+                              color="inherit"
+                            >
+                              <ChecklistIcon />
+                            </IconButton>
+                          </TableCell>
                         </TableRow>
                       ))}
                   </TableBody>

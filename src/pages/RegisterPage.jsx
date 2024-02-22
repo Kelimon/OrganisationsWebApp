@@ -84,7 +84,6 @@ function RegisterPage({}) {
       })
       .catch((error) => {
         // Handle login error
-        console.error("notregistereddd", error);
         setEmailExists(true);
         setPasswordNotEqual(false);
         setPasswordInvalid(false);

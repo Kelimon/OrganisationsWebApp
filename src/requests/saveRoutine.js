@@ -13,11 +13,9 @@ async function saveRoutine({ currentUser, todos }) {
           dayData,
         }
       );
-      console.log("responsesaveroutine!: ", response);
     }
     return;
   } catch (error) {
-    console.error("Login errorsaveroutine:", error);
     throw error;
   }
 }

@@ -10,6 +10,7 @@ import {
   IconButton,
   Typography,
   Box,
+  Grid,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -22,17 +23,12 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { motion, AnimatePresence } from "framer-motion";
 import { StyledPaperMobile } from "./../../components/StyledPaperMobile";
 import { useAuth } from "./../../contexts/Auth";
-const StyledPaperMobile2 = styled(Paper)(({ theme }) => ({
-  margin: theme.spacing(2),
-  padding: theme.spacing(2),
-  paddingBottom: 0,
-  marginTop: 34,
-  borderRadius: 15, // Setzt die Rundung der Ecken
-  backgroundColor: "#333e", // Dunklere Farbe für den Block
-  maxHeight: 1000, // Feste Größe für den Block
-  height: "calc(100vh - 260px)",
-  overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
-}));
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import FontColor from "./../../components/FontColor";
+import { useSwipeable } from "react-swipeable";
+import { select } from "@syncfusion/ej2-base";
+
+const fontColor = FontColor();
 
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
@@ -55,15 +51,18 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
 }));
 
 function ToDoListMobile({
+  todos,
+  setTodos,
   setShowVergangeneTodos,
+  selectedDay,
+  setSelectedDay,
   showVergangeneTodos,
   toLeft,
 }) {
-  const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
   const isSmallScreen = useMediaQuery(useTheme().breakpoints.down("sm"));
-  const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
+
   const { currentUser, isAdmin } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -90,6 +89,16 @@ function ToDoListMobile({
     });
   };
 
+  const handlers = useSwipeable({
+    onSwipedLeft: () =>
+      setSelectedDay(Math.max(0, Math.min(selectedDay + 1, 2))),
+    onSwipedRight: () =>
+      setSelectedDay(Math.max(0, Math.min(selectedDay - 1, 2))),
+    // Prevent default touch action to prevent scroll on swipe
+    preventDefaultTouchmoveEvent: true,
+    trackMouse: true, // If you want to track mouse events as swipes on desktop
+  });
+
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
       setTodos([
@@ -104,6 +113,20 @@ function ToDoListMobile({
       setNewTodo("");
     }
   };
+
+  const getItemStyle = () => ({
+    // some basic styles to make the items look a bit nicer
+    userSelect: "none",
+    padding: 8 * 1.5,
+    margin: `0 0 8px 0`,
+    borderRadius: 10,
+
+    // change background colour if dragging
+    background: "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
+    // add margin if hovering
+    // styles we need to apply on draggables
+  });
+
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
@@ -132,7 +155,7 @@ function ToDoListMobile({
   }, [currentUser]);
   useEffect(() => {
     if (todos.length > 0) {
-      saveTodos({ currentUser, ownTodos: todos, selectedDay });
+      saveTodos({ currentUser, todos: todos, selectedDay });
     }
   }, [todos]);
 
@@ -169,107 +192,55 @@ function ToDoListMobile({
             exit="out"
             variants={pageTransition}
           >
-            <Button
-              variant="outlined"
-              onClick={() => setShowVergangeneTodos(!showVergangeneTodos)}
-              style={{
-                position: "absolute",
-                right: "5%",
-              }}
-              sx={{
-                border: "none",
-                "&:focus": {
-                  outline: "none",
-                },
-              }}
-            >
-              Vergangene ToDos
-            </Button>
-            <StyledPaperMobile>
-              <Typography
-                color={"white"}
-                variant="h6"
-                align="center"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
+            <Box>
+              <Box>
                 <Button
-                  onClick={() => {
-                    setSelectedDay(selectedDay - 1);
-                  }}
                   variant="text"
-                  color="secondary"
-                  style={{ borderRadius: 7, width: "2vw", flexShrink: 0 }}
-                  disabled={selectedDay === 0}
+                  onClick={() => setShowVergangeneTodos(true)}
+                  style={{
+                    position: "absolute",
+                    right: "0%",
+                    top: "0px",
+                  }}
                 >
-                  Gestern
+                  Vergangene ToDos
                 </Button>
-                <Typography color={"black"} variant="h6" align="center">
-                  To Do's
+              </Box>
+              <Box marginTop="30px" {...handlers} height="80vh">
+                <Typography
+                  color={"white"}
+                  variant="h6"
+                  align="center"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography color={"black"} variant="h6" align="center">
+                    To Do's
+                  </Typography>
                 </Typography>
-                <Button
-                  onClick={() => {
-                    setSelectedDay(selectedDay + 1);
+                <Typography color={"black"} align="center">
+                  {getFormattedDate(selectedDay)}{" "}
+                  {/* Hier wird das Datum eingefügt */}
+                </Typography>
+                <Box
+                  mt={3}
+                  display="flex"
+                  style={{
+                    position: "sticky",
+                    bottom: 0,
+                    backgroundColor: "inherit",
                   }}
-                  variant="text"
-                  color="secondary"
-                  disabled={selectedDay === 2}
-                  style={{ borderRadius: 7, width: "2vw", flexShrink: 0 }}
                 >
-                  Morgen
-                </Button>
-              </Typography>
-              <Typography color={"black"} align="center">
-                {getFormattedDate(selectedDay)}{" "}
-                {/* Hier wird das Datum eingefügt */}
-              </Typography>
-              <Box display="flex" flexDirection="column" height="90%">
-                <Box flexGrow="1" overflow="auto">
-                  <List>
-                    {Array.isArray(todos) &&
-                      todos
-                        .filter((todo) => todo.date == localDateTime)
-                        .map((todo, index) => (
-                          <ListItem
-                            key={index}
-                            onMouseEnter={() => setHoverIndex(index)}
-                            onMouseLeave={() => setHoverIndex(null)}
-                          >
-                            <Checkbox
-                              checked={todo.checked}
-                              onChange={() => toggleCheck(index)}
-                              style={{ color: "black" }}
-                            />
-                            <ListItemText
-                              primaryTypographyProps={{
-                                style: { color: "black" },
-                              }}
-                              primary={todo.text}
-                              color={"black"}
-                            />
-                            {hoverIndex === index && (
-                              <IconButton
-                                onClick={() => deleteTodo(index)}
-                                color="error"
-                              >
-                                <DeleteIcon color="red" />
-                              </IconButton>
-                            )}
-                          </ListItem>
-                        ))}
-                  </List>
-                </Box>
-                <Box mt={3} display="flex">
                   <WhiteTextField
                     InputLabelProps={{
                       style: { color: "black" },
                     }}
                     value={newTodo}
                     onChange={(e) => setNewTodo(e.target.value)}
-                    label="New To-Do"
+                    label="Neues To-Do"
                     fullWidth
                     style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
                   />
@@ -287,13 +258,77 @@ function ToDoListMobile({
                     onClick={addTodo}
                     variant="contained"
                     color="secondary"
-                    style={{ borderRadius: 7, width: "2vw" }} // add flexShrink: 0 to prevent the button from shrinking
+                    style={{
+                      borderRadius: 7,
+                      backgroundColor: "#44CDDD",
+                    }} // add flexShrink: 0 to prevent the button from shrinking
                   >
-                    Add
+                    <AddCircleIcon />
                   </Button>
                 </Box>
+                <Box
+                  direction="column"
+                  justifyContent="flex-end"
+                  alignItems="stretch"
+                  style={{ paddingBottom: "45px" }}
+                >
+                  <List>
+                    {todos.filter((todo) => todo.date == localDateTime)
+                      .length === 0 && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: "50vh", // Dies füllt die Höhe des übergeordneten Containers
+                          minHeight: "200px", // Mindesthöhe, um sicherzustellen, dass es sichtbar ist, auch wenn es leer ist
+                        }}
+                      >
+                        <Typography color={"black"} align="center">
+                          Keine Todos für den {getFormattedDate(selectedDay)}{" "}
+                          vorhanden
+                        </Typography>
+                      </Box>
+                    )}
+                    {Array.isArray(todos) &&
+                      todos
+                        .filter((todo) => todo.date == localDateTime)
+                        .map((todo, index) => (
+                          <ListItem
+                            key={index}
+                            onMouseEnter={() => setHoverIndex(index)}
+                            onMouseLeave={() => setHoverIndex(null)}
+                            style={getItemStyle(
+                              false, // as this list isn't draggable, set isDragging to false
+                              {}, // no draggableProps here
+                              hoverIndex === index
+                            )}
+                          >
+                            <Checkbox
+                              checked={todo.checked}
+                              onChange={() => toggleCheck(todos.indexOf(todo))}
+                              style={{ color: fontColor }}
+                            />
+                            <ListItemText
+                              primaryTypographyProps={{
+                                style: { color: fontColor },
+                              }}
+                              primary={todo.text}
+                            />
+                            {hoverIndex === index && (
+                              <IconButton
+                                onClick={() => deleteTodo(todos.indexOf(todo))}
+                                color="black"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            )}
+                          </ListItem>
+                        ))}
+                  </List>
+                </Box>
               </Box>
-            </StyledPaperMobile>
+            </Box>
           </motion.div>
         </>
       </AnimatePresence>

@@ -20,7 +20,10 @@ import saveRoutine from "../requests/saveRoutine";
 import GetRoutine from "../requests/GetRoutine";
 import { useAuth } from "./../contexts/Auth";
 import { StyledPaper } from "./../components/StyledPaper";
-
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import FontColor from "./../components/FontColor";
+import "./../components/styledpaper.css";
+const fontColor = FontColor();
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
@@ -109,7 +112,7 @@ function MorgenRoutine({}) {
 
   return (
     <>
-      <StyledPaper>
+      <StyledPaper className="my-container">
         <Typography color={"black"} variant="h6" align="center">
           Morgenroutine
         </Typography>
@@ -131,12 +134,11 @@ function MorgenRoutine({}) {
                     <Checkbox
                       checked={todo.checked}
                       onChange={() => toggleCheck(index)}
-                      style={{ color: "black" }}
+                      style={{ color: fontColor }}
                     />
                     <ListItemText
-                      primaryTypographyProps={{ style: { color: "white" } }}
+                      primaryTypographyProps={{ style: { color: fontColor } }}
                       primary={todo.text}
-                      color={"black"}
                     />
                     {hoverIndex === index && (
                       <IconButton
@@ -163,7 +165,7 @@ function MorgenRoutine({}) {
                   addTodo();
                 }
               }}
-              label="New Routine Task"
+              label="Neue Routine"
               fullWidth
               style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
             />
@@ -177,7 +179,7 @@ function MorgenRoutine({}) {
                 backgroundColor: "#44CDDD",
               }} // add flexShrink: 0 to prevent the button from shrinking
             >
-              Add
+              <AddCircleIcon />
             </Button>
           </Box>
         </Box>

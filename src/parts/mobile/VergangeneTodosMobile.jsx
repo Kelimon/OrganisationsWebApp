@@ -13,11 +13,13 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import saveTodos from "./../../requests/saveTodos";
 import { CSSTransition } from "react-transition-group";
 import "./../../testing/animation.css";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "./../../contexts/Auth";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 
 import {
   List,
@@ -31,19 +33,19 @@ import {
 } from "@mui/material";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
-  backgroundColor: "#333e", //replace with your color
+  backgroundColor: "white", //replace with your color
   borderRadius: 0,
 }));
 
 const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
-  backgroundColor: "#4f4f4f", //replace with your color
+  backgroundColor: "#F5F5F5", //replace with your color
   borderRadius: 7,
   margin: "2px",
   color: "white",
 }));
 
 const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-  backgroundColor: "#4f4f4f", //replace with your color
+  backgroundColor: "#f0f0f5", //replace with your color
   borderRadius: 12,
   color: "white",
   margin: 7,
@@ -58,7 +60,12 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   overflow: "auto", // Ermöglicht Scrollen, wenn der Inhalt zu groß ist
 }));
 
-function VergangeneTodosMobile({}) {
+function VergangeneTodosMobile({
+  setShowVergangeneTodos,
+  todosFromTodoList,
+  setTodosFromTodoList,
+  selectedDay,
+}) {
   const [showPastTodos, setShowPastTodos] = useState(false);
   const { currentUser, isAdmin } = useAuth();
   const [todos, setTodos] = useState([]);
@@ -82,6 +89,16 @@ function VergangeneTodosMobile({}) {
   };
 }, []); */
 
+  const heute = new Date();
+  heute.setHours(0, 0, 0, 0);
+  heute.setDate(heute.getDate() + selectedDay); // Addiert selectedDay zum aktuellen Datum
+  const jahr = heute.getFullYear();
+  const monat = (heute.getMonth() + 1).toString().padStart(2, "0"); // Monate sind 0-indiziert
+  const tag = heute.getDate().toString().padStart(2, "0");
+  const stunden = heute.getHours().toString().padStart(2, "0");
+  const minuten = heute.getMinutes().toString().padStart(2, "0");
+  const sekunden = heute.getSeconds().toString().padStart(2, "0");
+  const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
   useEffect(() => {
     const fetchTodos = async () => {
       const response = (await GetTodos({ currentUser })).data.days.slice(0, -3);
@@ -117,32 +134,22 @@ function VergangeneTodosMobile({}) {
             variants={pageTransition}
           >
             <Button
-              variant="outlined"
-              onClick={() => setShowVergangeneTodos(!showVergangeneTodos)}
-              style={{
-                position: "absolute",
-                left: "5%",
-              }}
-              sx={{
-                border: "none",
-                "&:focus": {
-                  outline: "none",
-                },
-              }}
+              variant="text"
+              onClick={() => setShowVergangeneTodos(false)}
+              style={{}}
             >
               ToDos
             </Button>
 
-            <StyledPaper>
+            <Box>
               <div>
                 <Button
                   onClick={() => setShowPastTodos(!showPastTodos)}
                   variant="contained"
-                  color="secondary"
                   fullWidth
                   sx={{
-                    backgroundColor:
-                      "linear-gradient(to bottom right, #680e78,  #b608d4)",
+                    color:
+                      "linear-gradient(to bottom right, #44CDDD,  #44CDDD)",
                     borderRadius: 4,
                   }}
                 >
@@ -162,7 +169,7 @@ function VergangeneTodosMobile({}) {
                           <StyledAccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                           >
-                            <Typography variant="h6">
+                            <Typography variant="h6" color={"black"}>
                               {formatDate(day.date)}
                             </Typography>
                           </StyledAccordionSummary>
@@ -173,7 +180,9 @@ function VergangeneTodosMobile({}) {
                                   day.data.map((todo, index) => (
                                     <TableRow key={index}>
                                       <TableCell sx={{ color: "white" }}>
-                                        {todo.text}
+                                        <Typography color={"black"}>
+                                          {todo.text}
+                                        </Typography>
                                       </TableCell>
                                       {todo.checked ? (
                                         <TableCell sx={{ color: "#17ff2e" }}>
@@ -189,6 +198,40 @@ function VergangeneTodosMobile({}) {
                                           <CloseIcon />
                                         </TableCell>
                                       )}
+                                      <TableCell
+                                        sx={{ color: "#45CDDD", marginTop: -5 }}
+                                      >
+                                        <IconButton
+                                          onClick={() => {
+                                            setTodosFromTodoList([
+                                              ...todosFromTodoList,
+                                              {
+                                                text: todo.text,
+                                                checked: false,
+                                                day: selectedDay,
+                                                date: localDateTime,
+                                              },
+                                            ]);
+
+                                            saveTodos({
+                                              currentUser,
+                                              todos: [
+                                                ...todosFromTodoList,
+                                                {
+                                                  text: todo.text,
+                                                  checked: false,
+                                                  day: selectedDay,
+                                                  date: localDateTime,
+                                                },
+                                              ],
+                                              selectedDay,
+                                            });
+                                          }}
+                                          color="inherit"
+                                        >
+                                          <ChecklistIcon />
+                                        </IconButton>
+                                      </TableCell>
                                     </TableRow>
                                   ))}
                               </TableBody>
@@ -199,7 +242,7 @@ function VergangeneTodosMobile({}) {
                   </div>
                 </CSSTransition>
               </div>
-            </StyledPaper>
+            </Box>
           </motion.div>
         </>
       </AnimatePresence>

@@ -8,7 +8,6 @@ async function GetTodos({ currentUser }) {
     );
     return response;
   } catch (error) {
-    console.error("Login error:", error);
     throw error;
   }
 }

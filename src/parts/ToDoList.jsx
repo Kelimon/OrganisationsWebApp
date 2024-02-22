@@ -20,6 +20,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { useAuth } from "./../contexts/Auth";
 import { render } from "react-dom";
 import { StyledPaper } from "./../components/StyledPaper";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import "./../components/styledpaper.css";
 const WhiteTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
@@ -41,7 +43,7 @@ const WhiteTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function ToDoList({ todos, setTodos }) {
+function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
   const [newTodo, setNewTodo] = useState("");
   const [hoverIndex, setHoverIndex] = useState(null);
   const { currentUser, isAdmin } = useAuth();
@@ -50,8 +52,6 @@ function ToDoList({ todos, setTodos }) {
   const initialData = useRef(null);
   const [ownTodos, setOwnTodos] = useState([]);
   const renderCount = useRef(0);
-  const [selectedDay, setSelectedDay] = useState(0); // 0 = heute, 1 = morgen, 2 = übermorgen
-  const todosForSelectedDay = ownTodos[selectedDay] || [];
 
   // )
   const heute = new Date();
@@ -82,16 +82,15 @@ function ToDoList({ todos, setTodos }) {
         )
         .flat();
 
-      if (latestDayData.data.length > 0) {
-        setTodos(latestDayData.data);
-        setOwnTodos(lastThreeDayData);
+      setTodos(lastThreeDayData);
+      setOwnTodos(lastThreeDayData);
 
-        initialData.current = lastThreeDayData;
-      }
+      initialData.current = lastThreeDayData;
+
       setIsLoading(false);
     };
     fetchTodos();
-  }, []);
+  }, [currentUser]);
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
@@ -102,9 +101,7 @@ function ToDoList({ todos, setTodos }) {
         date: localDateTime,
       };
       setOwnTodos([...ownTodos, newTask]);
-      if (selectedDay === 0) {
-        setTodos([...ownTodos, newTask]);
-      }
+      setTodos([...todos, newTask]);
       setNewTodo("");
     }
   };
@@ -117,22 +114,16 @@ function ToDoList({ todos, setTodos }) {
     if (isLoading) {
       return;
     }
-    if (JSON.stringify(ownTodos) !== JSON.stringify(initialData.current)) {
-      saveTodos({ currentUser, ownTodos, selectedDay });
+    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
+      saveTodos({ currentUser, todos, selectedDay });
     }
-  }, [ownTodos, isLoading]);
+  }, [todos, isLoading]);
 
   const toggleCheck = (index) => {
-    const updatedOwnTodos = ownTodos.map((todo, i) =>
+    const updatedOwnTodos = todos.map((todo, i) =>
       i === index ? { ...todo, checked: !todo.checked } : todo
     );
-    setOwnTodos(updatedOwnTodos);
-    if (selectedDay === 0) {
-      const updatedTodos = ownTodos.map((todo, i) =>
-        i === index ? { ...todo, checked: !todo.checked } : todo
-      );
-      setTodos(updatedTodos);
-    }
+    setTodos(updatedOwnTodos);
   };
 
   const getFormattedDate = (selectedDay) => {
@@ -146,13 +137,8 @@ function ToDoList({ todos, setTodos }) {
   };
 
   const deleteTodo = (index) => {
-    const updatedOwnTodos = ownTodos.filter((todo, i) => i !== index);
-    setOwnTodos(updatedOwnTodos);
-
-    if (selectedDay === 0) {
-      const updatedTodos = ownTodos.filter((todo, i) => i !== index);
-      setTodos(updatedTodos);
-    }
+    const updatedOwnTodos = todos.filter((todo, i) => i !== index);
+    setTodos(updatedOwnTodos);
   };
   const getItemStyle = () => ({
     // some basic styles to make the items look a bit nicer
@@ -176,7 +162,7 @@ function ToDoList({ todos, setTodos }) {
   uebermorgen.setDate(uebermorgen.getDate() + 2);
   return (
     <>
-      <StyledPaper>
+      <StyledPaper className="my-container">
         <Typography
           color={"white"}
           variant="h6"
@@ -226,7 +212,7 @@ function ToDoList({ todos, setTodos }) {
         <Box display="flex" flexDirection="column" height="90%">
           <Box flexGrow="1" overflow="auto">
             <List>
-              {ownTodos
+              {todos
                 .filter((todo) => todo.date == localDateTime)
                 .map((todo, index) => (
                   <ListItem
@@ -241,7 +227,7 @@ function ToDoList({ todos, setTodos }) {
                   >
                     <Checkbox
                       checked={todo.checked}
-                      onChange={() => toggleCheck(ownTodos.indexOf(todo))}
+                      onChange={() => toggleCheck(todos.indexOf(todo))}
                       style={{ color: "white" }}
                     />
                     <ListItemText
@@ -251,7 +237,7 @@ function ToDoList({ todos, setTodos }) {
                     />
                     {hoverIndex === index && (
                       <IconButton
-                        onClick={() => deleteTodo(ownTodos.indexOf(todo))}
+                        onClick={() => deleteTodo(todos.indexOf(todo))}
                         color="inherit"
                       >
                         <DeleteIcon color="black" />
@@ -274,7 +260,7 @@ function ToDoList({ todos, setTodos }) {
                   addTodo();
                 }
               }}
-              label="New To-Do"
+              label="Neues To-Do"
               fullWidth
               style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
             />
@@ -299,7 +285,7 @@ function ToDoList({ todos, setTodos }) {
                 backgroundColor: "#44CDDD",
               }} // add flexShrink: 0 to prevent the button from shrinking
             >
-              Add
+              <AddCircleIcon />
             </Button>
           </Box>
         </Box>

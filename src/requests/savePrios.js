@@ -15,7 +15,6 @@ async function savePrios({ currentUser, priosData }) {
     }
     return;
   } catch (error) {
-    console.error("Login error:", error);
     throw error;
   }
 }

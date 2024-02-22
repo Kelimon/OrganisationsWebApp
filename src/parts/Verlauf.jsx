@@ -15,7 +15,7 @@ import {
   Box,
 } from "@mui/material";
 import { StyledPaper } from "./../components/StyledPaper";
-
+import "./../components/styledpaper.css";
 class Verlauf extends React.Component {
   constructor(props) {
     super(props);
@@ -156,7 +156,7 @@ class Verlauf extends React.Component {
 
   render() {
     return (
-      <StyledPaper>
+      <StyledPaper className="my-container">
         <div id="chart">
           <ReactApexChart
             options={this.state.options}

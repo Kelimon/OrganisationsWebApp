@@ -4,7 +4,7 @@ import { styled } from "@mui/system";
 import GetNotizen from "../requests/GetNotizen";
 import saveNotizen from "../requests/saveNotizen";
 import { useAuth } from "./../contexts/Auth";
-
+import "./../components/styledpaper.css";
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(3),
   padding: theme.spacing(7),
@@ -105,7 +105,7 @@ function Notizen({}) {
   }, [note, lastSavedNote]);
 
   return (
-    <StyledPaper>
+    <StyledPaper className="my-container">
       <StyledTextField
         value={note}
         onChange={(e) => setNote(e.target.value)}

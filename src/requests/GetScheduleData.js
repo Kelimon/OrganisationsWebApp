@@ -8,7 +8,6 @@ async function GetScheduleData({ currentUser }) {
     );
     return response.data.scheduleData;
   } catch (error) {
-    console.error("Login errorscheduledata:", error);
     throw error;
   }
 }

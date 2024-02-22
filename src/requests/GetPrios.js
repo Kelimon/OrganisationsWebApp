@@ -8,7 +8,6 @@ async function GetPrios({ currentUser }) {
     );
     return response.data.prios;
   } catch (error) {
-    console.error("Login error:", error);
     throw error;
   }
 }

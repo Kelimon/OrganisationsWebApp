@@ -12,11 +12,9 @@ async function saveScheduleData({ currentUser, scheduleData }) {
           scheduleData,
         }
       );
-      console.log("responsescheuldata!: ", response);
     }
     return;
   } catch (error) {
-    console.error("Login errorschedulatat:", error);
     throw error;
   }
 }

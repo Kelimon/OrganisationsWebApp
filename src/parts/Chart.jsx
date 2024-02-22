@@ -16,7 +16,7 @@ import {
   Box,
 } from "@mui/material";
 import { StyledPaper } from "./../components/StyledPaper";
-
+import "./../components/styledpaper.css";
 class Chart extends React.Component {
   constructor(props) {
     super(props);
@@ -57,9 +57,22 @@ class Chart extends React.Component {
         {
           name: "Erledigte ToDos",
           data: [0, 0, 0, 0, 0, 0, 0, 0, 0, this.calculateLastTodo()],
+          checked: [],
+          total: [],
         },
       ],
       options: {
+        tooltip: {
+          enabled: true,
+          x: {
+            format: "dd.MM.yyyy", // Formatieren Sie das Datum nach Ihren Wünschen
+          },
+          y: {
+            formatter: function (series, seriesIndex, dataPointIndex, w) {
+              return `${Math.floor(series)}%`; // Formatieren Sie den Wert nach Ihren Wünschen
+            },
+          },
+        },
         stroke: {
           curve: "smooth", // this makes the line curvy
         },
@@ -189,6 +202,8 @@ class Chart extends React.Component {
 
   getCheckedPercentage = async (days) => {
     let checkedTasks = [];
+    let checked = [];
+    let total = [];
 
     // Determine how many days are missi
 
@@ -207,8 +222,12 @@ class Chart extends React.Component {
 
       if (totalTasksDaily > 0) {
         checkedTasks.push((checkedTasksDaily * 100) / totalTasksDaily);
+        checked.push(checkedTasksDaily);
+        total.push(totalTasksDaily);
       } else {
         checkedTasks.push(0);
+        checked.push(0);
+        total.push(0);
       }
     }
     await this.setState({
@@ -217,9 +236,12 @@ class Chart extends React.Component {
         {
           name: "Erledigte ToDos",
           data: checkedTasks,
+          checked: checked,
+          total: total,
         },
       ],
     });
+
     return true;
   };
 
@@ -295,7 +317,7 @@ class Chart extends React.Component {
   render() {
     if (this.state.todos) {
       return (
-        <StyledPaper ref={this.myRef}>
+        <StyledPaper ref={this.myRef} className="my-container">
           <ReactApexChart
             options={this.state.options}
             series={this.state.series}

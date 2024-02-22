@@ -17,7 +17,6 @@ async function LoginRequest(username, password) {
       isAdmin: response.data.isAdmin,
     };
   } catch (error) {
-    console.error("Login error:", error);
     throw error;
   }
 }

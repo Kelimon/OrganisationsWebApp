@@ -76,12 +76,10 @@ function App() {
           setCurrentUser(response.data.username);
           setIsLoggedIn(true);
           setIsAdmin(response.data.isAdmin);
-          console.log("isadmin 2?", response.data.isAdmin);
           //)
           //
         }
       } catch (error) {
-        console.error("Authentifizierungsprüfung fehlgeschlagen:", error);
         setIsLoggedIn(false);
       }
     }
@@ -92,7 +90,6 @@ function App() {
     try {
       return jwtDecode(token);
     } catch (e) {
-      console.error("Failed to decode token", e);
       return null;
     }
   }
@@ -178,13 +175,7 @@ function App() {
             />
             <Route
               path="/scheduler"
-              element={
-                <SchedulerPage
-                  meetings={meetings}
-                  setMeetings={setMeetings}
-                  toLeft={toLeft}
-                />
-              }
+              element={<SchedulerPage toLeft={toLeft} />}
             />
             <Route path="/notizen" element={<NotizenPage toLeft={toLeft} />} />
             <Route

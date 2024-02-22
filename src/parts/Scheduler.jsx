@@ -36,7 +36,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Clock from "../components/Clock";
 import { useAuth } from "./../contexts/Auth";
-
+import "./../components/styledpaper.css";
 const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: theme.spacing(2),
   padding: theme.spacing(5),
@@ -230,7 +230,7 @@ export default function Scheduler({}) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-      <StyledPaper>
+      <StyledPaper className="my-container">
         <StaticDatePicker
           slotProps={{
             toolbar: { toolbarFormat: "ddd DD MMMM", hidden: false },
@@ -301,7 +301,10 @@ export default function Scheduler({}) {
                   "& .MuiPickersDay-root": { backgroundColor, color: "black" },
                 }}
               >
-                <DayComponent {...DayComponentProps} />
+                <DayComponent
+                  {...DayComponentProps}
+                  onClick={() => handleClickDate(date)}
+                />
                 {meetingOnThisDay && (
                   <span
                     style={{

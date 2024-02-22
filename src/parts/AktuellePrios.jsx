@@ -20,6 +20,10 @@ import AdjustOutlinedIcon from "@mui/icons-material/AdjustOutlined";
 import { useAuth } from "./../contexts/Auth";
 import Checkbox from "@mui/material/Checkbox";
 import { StyledPaper } from "./../components/StyledPaper";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import FontColor from "./../components/FontColor";
+import "./../components/styledpaper.css";
+const fontColor = FontColor();
 
 const RoundedCheckbox = styled(Checkbox)({
   "&.MuiCheckbox-colorPrimary.Mui-checked .MuiSvgIcon-root": {
@@ -59,7 +63,7 @@ function AktuellePrios({}) {
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
-      setTodos([...todos, { text: newTodo, id: newTodo }]);
+      setTodos([...todos, { text: newTodo, checked: false, id: newTodo }]);
       setNewTodo("");
     }
   };
@@ -86,10 +90,8 @@ function AktuellePrios({}) {
     if (isLoading) {
       return; // Skip saving when the component is in a loading state
     }
-    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
-      let priosData = todos;
-      savePrios({ currentUser, priosData });
-    }
+    let priosData = todos;
+    savePrios({ currentUser, priosData });
   }, [todos, isLoading]);
 
   const deleteTodo = (index) => {
@@ -121,7 +123,7 @@ function AktuellePrios({}) {
   });
 
   return (
-    <StyledPaper>
+    <StyledPaper className="my-container">
       <Typography color={"black"} variant="h6" align="center">
         Aktuelle Prioritäten
       </Typography>
@@ -155,20 +157,20 @@ function AktuellePrios({}) {
                             onMouseEnter={() => setHoverIndex(index)}
                             onMouseLeave={() => setHoverIndex(null)}
                           >
-                            <ListItemIcon sx={{ borderRadius: 15 }}>
-                              <RoundedCheckbox
-                                checked={checked}
-                                onChange={() => {
-                                  const newTodos = [...todos];
-                                  newTodos[index].checked =
-                                    !newTodos[index].checked;
-                                  setTodos(newTodos);
-                                }}
-                              />
-                            </ListItemIcon>
+                            <Checkbox
+                              checked={checked}
+                              onChange={() => {
+                                const newTodos = [...todos];
+                                newTodos[index].checked =
+                                  !newTodos[index].checked;
+                                setTodos(newTodos);
+                              }}
+                              style={{ color: fontColor }}
+                            />
+
                             <ListItemText
                               primaryTypographyProps={{
-                                style: { color: "white" },
+                                style: { color: fontColor },
                               }}
                               primary={text}
                             />
@@ -205,7 +207,7 @@ function AktuellePrios({}) {
                 addTodo();
               }
             }}
-            label="New Priority"
+            label="Neue Priorität"
             fullWidth
             style={{ marginRight: 5 }} // add some margin to separate the TextField and Button
           />
@@ -219,7 +221,7 @@ function AktuellePrios({}) {
               backgroundColor: "#44CDDD",
             }} // add flexShrink: 0 to prevent the button from shrinking
           >
-            Add
+            <AddCircleIcon />
           </Button>
         </Box>
       </Box>

@@ -13,11 +13,14 @@ function AktuellePriosPage({ toLeft }) {
   return (
     <>
       <HeaderMobile />
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
         {!showVergangeneTodos ? (
-          <AktuellePriosMobile toLeft={toLeft} />
+          <AktuellePriosMobile
+            toLeft={toLeft}
+            setShowVergangeneTodos={setShowVergangeneTodos}
+          />
         ) : (
-          <MonatszieleMobile />
+          <MonatszieleMobile setShowVergangeneTodos={setShowVergangeneTodos} />
         )}
       </Box>
     </>

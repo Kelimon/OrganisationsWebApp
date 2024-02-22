@@ -5,16 +5,12 @@ import Header from "../../parts/Header";
 import SchedulerMobile from "../../parts/mobile/SchedulerMobile";
 import HeaderMobile from "../../components/HeaderMobile";
 
-function SchedulerPage({ meetings, setMeetings, toLeft }) {
+function SchedulerPage({ toLeft }) {
   return (
     <>
       <HeaderMobile />
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <SchedulerMobile
-          meetings={meetings}
-          setMeetings={setMeetings}
-          toLeft={toLeft}
-        />
+        <SchedulerMobile toLeft={toLeft} />
       </Box>
     </>
   );
