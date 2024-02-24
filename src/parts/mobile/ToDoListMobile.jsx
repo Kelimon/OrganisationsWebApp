@@ -26,6 +26,7 @@ import { useAuth } from "./../../contexts/Auth";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import FontColor from "./../../components/FontColor";
 import { useSwipeable } from "react-swipeable";
+import { Pagination, PaginationItem } from "@mui/material";
 import { select } from "@syncfusion/ej2-base";
 
 const fontColor = FontColor();
@@ -143,8 +144,7 @@ function ToDoListMobile({
           }))
         )
         .flat();
-
-      if (latestDayData.data.length > 0) {
+      if (lastThreeDayData.length > 0) {
         setTodos(lastThreeDayData);
 
         initialData.current = lastThreeDayData;
@@ -181,7 +181,10 @@ function ToDoListMobile({
   const minuten = heute.getMinutes().toString().padStart(2, "0");
   const sekunden = heute.getSeconds().toString().padStart(2, "0");
   const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
-
+  const handleChange = (event, value) => {
+    setSelectedDay(value);
+    // Hier könnten Sie auch die Animation hinzufügen
+  };
   return (
     <>
       <AnimatePresence exitBeforeEnter>
@@ -221,10 +224,52 @@ function ToDoListMobile({
                     To Do's
                   </Typography>
                 </Typography>
+
                 <Typography color={"black"} align="center">
                   {getFormattedDate(selectedDay)}{" "}
                   {/* Hier wird das Datum eingefügt */}
                 </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center", // Zentriert die Pagination-Komponente horizontal
+                    mt: 2, // Margin Top für etwas Abstand unter dem Datum
+                  }}
+                >
+                  <Pagination
+                    count={3}
+                    page={selectedDay + 1}
+                    onChange={handleChange}
+                    variant="outlined"
+                    shape="rounded"
+                    size="small"
+                    hideNextButton
+                    hidePrevButton
+                    renderItem={(item) => (
+                      <PaginationItem
+                        {...item}
+                        sx={{
+                          "&.MuiButtonBase-root": {
+                            borderRadius: "100px",
+                            fontSize: "0px",
+                            heigth: "10%",
+                            backgroundColor: "action.disabled", // Standard-Hintergrundfarbe für nicht ausgewählte Items
+                            transform: "scale(0.5)",
+                          },
+                          "&.Mui-selected": {
+                            backgroundColor: "#44CDDD",
+                            transform: "scale(0.7)",
+                          },
+
+                          "&:hover": {
+                            backgroundColor: "#ccdcde",
+                            transform: "scale(0.5)",
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Box>
                 <Box
                   mt={3}
                   display="flex"
