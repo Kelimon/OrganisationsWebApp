@@ -7,5 +7,5 @@ export default defineConfig({
     trailingSlash: "always",
   },
   plugins: [react()],
-  base: "/OrganisationsWebApp",
+  base: "/OrganisationsWebApp/",
 });
