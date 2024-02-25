@@ -233,7 +233,8 @@ function ToDoListMobile({
                   sx={{
                     display: "flex",
                     justifyContent: "center", // Zentriert die Pagination-Komponente horizontal
-                    mt: 2, // Margin Top für etwas Abstand unter dem Datum
+                    mt: 0, // Margin Top für etwas Abstand unter dem Datum
+                    mb: "-15px",
                   }}
                 >
                   <Pagination
@@ -249,21 +250,24 @@ function ToDoListMobile({
                       <PaginationItem
                         {...item}
                         sx={{
+                          margin: -0.3, // Entfernt den Außenabstand komplett
+                          padding: "0 10px", // Fügt einen kleinen Innenabstand zwischen den Punkten hinzu
                           "&.MuiButtonBase-root": {
                             borderRadius: "100px",
                             fontSize: "0px",
                             heigth: "10%",
                             backgroundColor: "action.disabled", // Standard-Hintergrundfarbe für nicht ausgewählte Items
-                            transform: "scale(0.5)",
+                            transform: "scale(0.4)",
+                            padding: "-10px",
                           },
                           "&.Mui-selected": {
                             backgroundColor: "#44CDDD",
-                            transform: "scale(0.7)",
+                            transform: "scale(0.6)",
                           },
 
                           "&:hover": {
                             backgroundColor: "#ccdcde",
-                            transform: "scale(0.5)",
+                            transform: "scale(0.6)",
                           },
                         }}
                       />
