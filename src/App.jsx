@@ -1,20 +1,14 @@
 import * as React from "react";
 import axios from "axios";
 import "./App.css";
-import { Paper, Grid, Card, CardContent } from "@mui/material";
-import { CardMedia } from "@mui/material";
 import { useState } from "react";
-import { HashRouter, Route, Routes, BrowserRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
-import { Login, Toll } from "@mui/icons-material";
 import RegisterPage from "./pages/RegisterPage";
-import AktuellePrios from "./parts/AktuellePrios";
-import SimpleList from "./parts/SimpleList";
 import "typeface-roboto";
 import { useMediaQuery, useTheme } from "@mui/material";
-import Dayjs from "dayjs";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ToDoListPage from "./pages/mobile/ToDoListPage";
@@ -23,25 +17,8 @@ import SchedulerPage from "./pages/mobile/SchedulerPage";
 import NotizenPage from "./pages/mobile/NotizenPage";
 import AktuellePriosPage from "./pages/mobile/AktuellePriosPage";
 import BottomNavBar from "./components/BottomNavBar";
-import GetMonatziele from "./requests/GetMonatsziele";
-import GetNotizen from "./requests/GetNotizen";
-import GetPrios from "./requests/GetPrios";
-import GetRoutine from "./requests/GetRoutine";
-import GetScheduleData from "./requests/GetScheduleData";
-import GetTodos from "./requests/GetTodos";
 import jwtDecode from "jwt-decode";
 import { useAuth } from "./contexts/Auth";
-
-const theme = createTheme({
-  palette: {
-    secondary: {
-      main: "#9c27b0",
-    },
-  },
-  typography: {
-    fontFamily: "Roboto, Arial, Bodoni",
-  },
-});
 
 function App() {
   //use states das weitergegeben wird
@@ -59,7 +36,6 @@ function App() {
 
   const [priosData, setPriosData] = useState([]);
   const [mzieleData, setMzieleData] = useState([]);
-  const [meetings, setMeetings] = React.useState([]);
   const [vergangeneTodos, setVergangeneTodos] = useState([]);
   const [toLeft, setToLeft] = React.useState(false);
   axios.defaults.withCredentials = true;
