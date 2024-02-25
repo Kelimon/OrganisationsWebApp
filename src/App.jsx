@@ -2,7 +2,13 @@ import * as React from "react";
 import axios from "axios";
 import "./App.css";
 import { useState } from "react";
-import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
+import {
+  HashRouter,
+  Route,
+  Routes,
+  Navigate,
+  BrowserRouter,
+} from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
