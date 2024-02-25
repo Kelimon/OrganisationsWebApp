@@ -4,7 +4,7 @@ import "./App.css";
 import { Paper, Grid, Card, CardContent } from "@mui/material";
 import { CardMedia } from "@mui/material";
 import { useState } from "react";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes, BrowserRouter } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
@@ -63,7 +63,6 @@ function App() {
   const [vergangeneTodos, setVergangeneTodos] = useState([]);
   const [toLeft, setToLeft] = React.useState(false);
   axios.defaults.withCredentials = true;
-  console.log("isadmin?", isAdmin);
   React.useEffect(() => {
     async function checkAuthStatus() {
       try {
@@ -96,7 +95,7 @@ function App() {
   if (!isSmallScreen) {
     return (
       <ThemeProvider theme={theme}>
-        <HashRouter>
+        <BrowserRouter basename="/OrganisationsWebApp">
           <Routes>
             <Route
               path="/home"
@@ -124,13 +123,13 @@ function App() {
             />
             <Route path="/register" element={<RegisterPage />} />
           </Routes>
-        </HashRouter>
+        </BrowserRouter>
       </ThemeProvider>
     );
   } else {
     return (
       <ThemeProvider theme={theme}>
-        <HashRouter>
+        <BrowserRouter basename="/OrganisationsWebApp">
           <Routes>
             <Route path="/register" element={<RegisterPage />} />
             <Route
@@ -192,7 +191,7 @@ function App() {
             />
           </Routes>
           {isLoggedIn && <BottomNavBar toLeft={toLeft} setToLeft={setToLeft} />}
-        </HashRouter>
+        </BrowserRouter>
       </ThemeProvider>
     );
   }
