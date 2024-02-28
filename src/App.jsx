@@ -88,7 +88,7 @@ function App() {
                 isLoggedIn ? (
                   <HomePage todos={todos} setTodos={setTodos} />
                 ) : (
-                  <LoginPage />
+                  <Navigate replace to="/login" />
                 )
               }
             />
@@ -96,7 +96,7 @@ function App() {
               path="/login"
               element={
                 isLoggedIn ? (
-                  <HomePage todos={todos} setTodos={setTodos} />
+                  <Navigate replace to="/home" />
                 ) : (
                   <LoginPage />
                 )
@@ -142,13 +142,7 @@ function App() {
               path="/login"
               element={
                 isLoggedIn ? (
-                  <ToDoListPage
-                    todos={todos}
-                    setTodos={setTodos}
-                    vergangeneTodos={vergangeneTodos}
-                    setVergangeneTodos={setVergangeneTodos}
-                    toLeft={toLeft}
-                  />
+                  <Navigate replace to="/todolist" />
                 ) : (
                   <LoginPage />
                 )
