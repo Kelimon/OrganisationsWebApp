@@ -77,7 +77,7 @@ function App() {
   if (!isSmallScreen) {
     return (
       <ThemeProvider theme={theme}>
-        <BrowserRouter basename="/OrganisationsWebApp">
+        <HashRouter>
           <Routes>
             <Route
               path="/home"
@@ -105,13 +105,13 @@ function App() {
             />
             <Route path="/register" element={<RegisterPage />} />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </ThemeProvider>
     );
   } else {
     return (
       <ThemeProvider theme={theme}>
-        <BrowserRouter basename="/OrganisationsWebApp">
+        <HashRouter>
           <Routes>
             <Route path="/register" element={<RegisterPage />} />
             <Route
@@ -173,7 +173,7 @@ function App() {
             />
           </Routes>
           {isLoggedIn && <BottomNavBar toLeft={toLeft} setToLeft={setToLeft} />}
-        </BrowserRouter>
+        </HashRouter>
       </ThemeProvider>
     );
   }
