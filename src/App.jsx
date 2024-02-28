@@ -75,9 +75,107 @@ function App() {
     }
   }
   if (!isSmallScreen) {
-    return <h1>not small screen</h1>;
+    return (
+      <ThemeProvider theme={theme}>
+        <BrowserRouter basename="/OrganisationsWebApp">
+          <Routes>
+            <Route
+              path="/home"
+              element={
+                isLoggedIn ? (
+                  <HomePage todos={todos} setTodos={setTodos} />
+                ) : (
+                  <LoginPage />
+                )
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                isLoggedIn ? (
+                  <HomePage todos={todos} setTodos={setTodos} />
+                ) : (
+                  <LoginPage />
+                )
+              }
+            />
+            <Route
+              path="/forkingsuhaib"
+              element={isAdmin ? <AdminPage /> : <h1>unauthorized</h1>}
+            />
+            <Route path="/register" element={<RegisterPage />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    );
   } else {
-    return <h1>small screen</h1>;
+    return (
+      <ThemeProvider theme={theme}>
+        <BrowserRouter basename="/OrganisationsWebApp">
+          <Routes>
+            <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/home"
+              element={
+                <ToDoListPage
+                  vergangeneTodos={vergangeneTodos}
+                  setVergangeneTodos={setVergangeneTodos}
+                  toLeft={toLeft}
+                />
+              }
+            />
+            <Route
+              path="/todolist"
+              element={
+                <ToDoListPage
+                  vergangeneTodos={vergangeneTodos}
+                  setVergangeneTodos={setVergangeneTodos}
+                  toLeft={toLeft}
+                />
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                isLoggedIn ? (
+                  <ToDoListPage
+                    todos={todos}
+                    setTodos={setTodos}
+                    vergangeneTodos={vergangeneTodos}
+                    setVergangeneTodos={setVergangeneTodos}
+                    toLeft={toLeft}
+                  />
+                ) : (
+                  <LoginPage />
+                )
+              }
+            />
+            <Route
+              path="/morgenroutine"
+              element={<MorgenRoutinePage toLeft={toLeft} />}
+            />
+            <Route
+              path="/scheduler"
+              element={<SchedulerPage toLeft={toLeft} />}
+            />
+            <Route path="/notizen" element={<NotizenPage toLeft={toLeft} />} />
+            <Route
+              path="/aktuelleprios"
+              element={
+                <AktuellePriosPage
+                  priosData={priosData}
+                  setPriosData={setPriosData}
+                  mzieleData={mzieleData}
+                  setMzieleData={setMzieleData}
+                  toLeft={toLeft}
+                />
+              }
+            />
+          </Routes>
+          {isLoggedIn && <BottomNavBar toLeft={toLeft} setToLeft={setToLeft} />}
+        </BrowserRouter>
+      </ThemeProvider>
+    );
   }
 }
 
