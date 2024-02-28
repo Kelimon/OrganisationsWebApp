@@ -90,7 +90,7 @@ function Header({}) {
               Logout
             </Button>
           </Paper>
-          {isAdmin && (
+          {(isAdmin == true) && (
             <Button
               onClick={handleToggle}
               color="warning"

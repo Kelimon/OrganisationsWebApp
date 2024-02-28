@@ -54,6 +54,7 @@ function App() {
         );
         // Wenn das Authentifizierungstoken gültig ist
         if (response.data.isAuthenticated) {
+          
           setCurrentUser(response.data.username);
           setIsLoggedIn(true);
           setIsAdmin(response.data.isAdmin);
