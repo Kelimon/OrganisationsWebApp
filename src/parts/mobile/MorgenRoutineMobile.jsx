@@ -143,7 +143,7 @@ function MorgenRoutineMobile({ toLeft }) {
             <Box>
               <Typography></Typography>
             </Box>
-            <Box>
+            <Box marginTop="30px">
               <Typography color={"black"} variant="h6" align="center">
                 Morgenroutine
               </Typography>
