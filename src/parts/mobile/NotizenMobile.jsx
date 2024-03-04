@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Paper, TextField, Box } from "@mui/material";
+import { Button, Paper, TextField, Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import GetNotizen from "../../requests/GetNotizen";
 import saveNotizen from "../../requests/saveNotizen";
@@ -42,6 +42,8 @@ function NotizenMobile({ toLeft }) {
   const [note, setNote] = useState("");
   const [lastSavedNote, setLastSavedNote] = useState("");
   const { currentUser } = useAuth();
+
+  localStorage.setItem("test", "#NoitzenMobile");
   const pageTransition = {
     in: {
       opacity: 10,
@@ -97,12 +99,12 @@ function NotizenMobile({ toLeft }) {
       if (note !== lastSavedNote) {
         saveNote(); // Speichern der Notiz
       }
-    }, 5000); // 5000 Millisekunden = 5 Sekunden
+    }, 1000); // 5000 Millisekunden = 5 Sekunden
 
     // Bereinigungsfunktion
     return () => clearInterval(interval);
   }, [note, lastSavedNote]);
-
+  const localstoragetest = localStorage.getItem("test");
   return (
     <AnimatePresence exitBeforeEnter>
       <>
@@ -123,6 +125,7 @@ function NotizenMobile({ toLeft }) {
               sx={{ color: "black" }}
             />
           </StyledPaper>
+          <Typography color="black">{localstoragetest}</Typography>
         </motion.div>
       </>
     </AnimatePresence>

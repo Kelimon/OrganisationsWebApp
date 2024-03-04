@@ -54,7 +54,6 @@ function App() {
         );
         // Wenn das Authentifizierungstoken gültig ist
         if (response.data.isAuthenticated) {
-          
           setCurrentUser(response.data.username);
           setIsLoggedIn(true);
           setIsAdmin(response.data.isAdmin);
@@ -79,7 +78,6 @@ function App() {
     return (
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          
           <Routes>
             <Route path="/" element={<Navigate replace to="/login" />} />
             <Route
@@ -95,11 +93,7 @@ function App() {
             <Route
               path="/login"
               element={
-                isLoggedIn ? (
-                  <Navigate replace to="/home" />
-                ) : (
-                  <LoginPage />
-                )
+                isLoggedIn ? <Navigate replace to="/home" /> : <LoginPage />
               }
             />
             <Route
@@ -131,21 +125,21 @@ function App() {
             <Route
               path="/todolist"
               element={
-                <ToDoListPage
-                  vergangeneTodos={vergangeneTodos}
-                  setVergangeneTodos={setVergangeneTodos}
-                  toLeft={toLeft}
-                />
+                isLoggedIn ? (
+                  <ToDoListPage
+                    vergangeneTodos={vergangeneTodos}
+                    setVergangeneTodos={setVergangeneTodos}
+                    toLeft={toLeft}
+                  />
+                ) : (
+                  <Navigate replace to="/login" />
+                )
               }
             />
             <Route
               path="/login"
               element={
-                isLoggedIn ? (
-                  <Navigate replace to="/todolist" />
-                ) : (
-                  <LoginPage />
-                )
+                isLoggedIn ? <Navigate replace to="/todolist" /> : <LoginPage />
               }
             />
             <Route

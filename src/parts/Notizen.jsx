@@ -98,7 +98,7 @@ function Notizen({}) {
       if (note !== lastSavedNote) {
         saveNote(); // Speichern der Notiz
       }
-    }, 2000); // 5000 Millisekunden = 5 Sekunden
+    }, 1000); // 5000 Millisekunden = 5 Sekunden
 
     // Bereinigungsfunktion
     return () => clearInterval(interval);
