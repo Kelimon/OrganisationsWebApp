@@ -152,7 +152,6 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
     // add margin if hovering
     // styles we need to apply on draggables
   });
-
   // Morgen
   const morgen = new Date();
   morgen.setDate(morgen.getDate() + 1);

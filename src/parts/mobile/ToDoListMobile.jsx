@@ -89,7 +89,6 @@ function ToDoListMobile({
       year: "numeric",
     });
   };
-
   const handlers = useSwipeable({
     onSwipedLeft: () =>
       setSelectedDay(Math.max(0, Math.min(selectedDay + 1, 2))),
@@ -144,20 +143,26 @@ function ToDoListMobile({
           }))
         )
         .flat();
-      if (lastThreeDayData.length > 0) {
-        setTodos(lastThreeDayData);
+      setTodos(lastThreeDayData);
 
-        initialData.current = lastThreeDayData;
-      }
+      initialData.current = lastThreeDayData;
+
       setIsLoading(false);
     };
     fetchTodos();
   }, [currentUser]);
   useEffect(() => {
-    if (todos.length > 0) {
-      saveTodos({ currentUser, todos: todos, selectedDay });
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-  }, [todos]);
+    if (isLoading) {
+      return;
+    }
+    if (JSON.stringify(todos) !== JSON.stringify(initialData.current)) {
+      saveTodos({ currentUser, todos, selectedDay });
+    }
+  }, [todos, isLoading]);
 
   const toggleCheck = (index) => {
     setTodos(
@@ -170,7 +175,6 @@ function ToDoListMobile({
   const deleteTodo = (index) => {
     setTodos(todos.filter((todo, i) => i !== index));
   };
-
   const heute = new Date();
   heute.setHours(0, 0, 0, 0);
   heute.setDate(heute.getDate() + selectedDay); // Addiert selectedDay zum aktuellen Datum
