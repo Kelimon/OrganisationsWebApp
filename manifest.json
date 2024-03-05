@@ -14,6 +14,6 @@
       }
     ],
     "start_url": "plana.sk",
-    "display": "standalone"
+    "display": "browser"
   }
   
