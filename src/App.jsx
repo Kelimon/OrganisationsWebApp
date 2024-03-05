@@ -56,6 +56,7 @@ function App() {
 
         if (!token) {
           setIsLoggedIn(false);
+          setIsLoading(false);
           return;
         }
 
