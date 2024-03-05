@@ -39,7 +39,7 @@ function BottomNavBar({ toLeft, setToLeft }) {
         bottom: 0,
         width: "102%",
         backgroundColor: "#13131A",
-        borderRadius: 10,
+
         left: -5,
         border: "none",
       }}
