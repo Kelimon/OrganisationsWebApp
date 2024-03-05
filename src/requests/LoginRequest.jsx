@@ -9,7 +9,8 @@ async function LoginRequest(username, password) {
         password,
       }
     );
-    localStorage.setItem("username", response.data.username);
+    localStorage.setItem("token", response.data.token);
+
     return {
       username: response.data.username,
       isAdmin: response.data.isAdmin,

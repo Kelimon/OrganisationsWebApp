@@ -48,10 +48,22 @@ function App() {
   React.useEffect(() => {
     async function checkAuthStatus() {
       try {
+        // Authentifizierungstoken aus dem Local Storage abrufen
+
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          setIsLoggedIn(false);
+          return;
+        }
+
+        const baseUrl =
+          "https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/checkAuthStatus";
+
+        // Die URL mit dem Token als Query-Parameter anhängen
+        const urlWithToken = `${baseUrl}?token=${encodeURIComponent(token)}`;
         // Senden einer Anfrage an den Server, um den Authentifizierungsstatus zu überprüfen
-        const response = await axios.get(
-          "https://eu-west-1.aws.data.mongodb-api.com/app/application-3-qcyry/endpoint/checkAuthStatus"
-        );
+        const response = await axios.get(urlWithToken);
         // Wenn das Authentifizierungstoken gültig ist
         if (response.data.isAuthenticated) {
           setCurrentUser(response.data.username);
