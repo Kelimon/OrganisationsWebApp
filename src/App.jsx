@@ -15,7 +15,7 @@ import AdminPage from "./pages/AdminPage";
 import RegisterPage from "./pages/RegisterPage";
 import "typeface-roboto";
 import { useMediaQuery, useTheme } from "@mui/material";
-
+import { Box, CircularProgress } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ToDoListPage from "./pages/mobile/ToDoListPage";
 import MorgenRoutinePage from "./pages/mobile/MorgenRoutinePage";
@@ -44,10 +44,12 @@ function App() {
   const [mzieleData, setMzieleData] = useState([]);
   const [vergangeneTodos, setVergangeneTodos] = useState([]);
   const [toLeft, setToLeft] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   axios.defaults.withCredentials = true;
   React.useEffect(() => {
     async function checkAuthStatus() {
       try {
+        setIsLoading(true);
         // Authentifizierungstoken aus dem Local Storage abrufen
 
         const token = localStorage.getItem("token");
@@ -75,6 +77,7 @@ function App() {
       } catch (error) {
         setIsLoggedIn(false);
       }
+      setIsLoading(false);
     }
 
     checkAuthStatus();
@@ -85,6 +88,18 @@ function App() {
     } catch (e) {
       return null;
     }
+  }
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress size={60} />
+      </Box>
+    );
   }
   if (!isSmallScreen) {
     return (
