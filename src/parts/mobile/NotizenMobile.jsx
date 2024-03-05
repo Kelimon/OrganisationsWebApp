@@ -125,7 +125,7 @@ function NotizenMobile({ toLeft }) {
               sx={{ color: "black" }}
             />
           </StyledPaper>
-          <Typography color="black">{localstoragetest}</Typography>
+          
         </motion.div>
       </>
     </AnimatePresence>
