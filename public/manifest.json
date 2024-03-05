@@ -1,6 +1,6 @@
 {
     "short_name": "Plana",
-    "name": "Planap",
+    "name": "Plana",
     "icons": [
       {
         "src": "/Logo_2_verarbeitet.webp",
@@ -13,6 +13,7 @@
         "sizes": "512x512"
       }
     ],
-    "start_url": "plana.sk"
+    "start_url": "plana.sk",
+    "display": "standalone"
   }
   
