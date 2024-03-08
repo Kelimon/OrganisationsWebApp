@@ -117,7 +117,7 @@ function Monatsziele({}) {
 
     // change background colour if dragging
     background: isDragging
-      ? "linear-gradient(to bottom right, #44CDDD, lightblue)"
+      ? "linear-gradient(to bottom right, #44CDDD, #118491)"
       : "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
     // add margin if hovering
     // styles we need to apply on draggables

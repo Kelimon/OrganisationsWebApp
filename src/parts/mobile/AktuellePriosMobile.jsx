@@ -182,7 +182,7 @@ function AktuellePriosMobile({ toLeft, setShowVergangeneTodos }) {
 
     // change background colour if dragging
     background: isDragging
-      ? "linear-gradient(to bottom right,  #44CDDD, lightblue)"
+      ? "linear-gradient(to bottom right,  #44CDDD, #118491)"
       : "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
     //background: isDragging ? "linear-gradient(to bottom right, black,  #550763)" : "#b608d4",
     ...draggableStyle,

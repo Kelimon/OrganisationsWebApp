@@ -12,6 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import { styled } from "@mui/system";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import saveTodos from "./../requests/saveTodos";
 import GetTodos from "./../requests/GetTodos";
@@ -140,7 +141,17 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
     const updatedOwnTodos = todos.filter((todo, i) => i !== index);
     setTodos(updatedOwnTodos);
   };
-  const getItemStyle = () => ({
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(todos);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setTodos(items);
+  };
+
+  const getItemStyle = (isDragging, draggableStyle) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
     padding: 8 * 1.5,
@@ -148,9 +159,12 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
     borderRadius: 10,
 
     // change background colour if dragging
-    background: "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
+    background: isDragging
+      ? "linear-gradient(to bottom right, #44CDDD, #118491)"
+      : "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
     // add margin if hovering
     // styles we need to apply on draggables
+    ...draggableStyle,
   });
   // Morgen
   const morgen = new Date();
@@ -210,41 +224,71 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
         </Typography>
         <Box display="flex" flexDirection="column" height="90%">
           <Box flexGrow="1" overflow="auto">
-            <List>
-              {todos
-                .filter((todo) => todo.date == localDateTime)
-                .map((todo, index) => (
-                  <ListItem
-                    key={index}
-                    onMouseEnter={() => setHoverIndex(index)}
-                    onMouseLeave={() => setHoverIndex(null)}
-                    style={getItemStyle(
-                      false, // as this list isn't draggable, set isDragging to false
-                      {}, // no draggableProps here
-                      hoverIndex === index
-                    )}
-                  >
-                    <Checkbox
-                      checked={todo.checked}
-                      onChange={() => toggleCheck(todos.indexOf(todo))}
-                      style={{ color: "white" }}
-                    />
-                    <ListItemText
-                      primaryTypographyProps={{ style: { color: "white" } }}
-                      primary={todo.text}
-                      color={"white"}
-                    />
-                    {hoverIndex === index && (
-                      <IconButton
-                        onClick={() => deleteTodo(todos.indexOf(todo))}
-                        color="inherit"
-                      >
-                        <DeleteIcon color="black" />
-                      </IconButton>
-                    )}
-                  </ListItem>
-                ))}
-            </List>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+              <Droppable droppableId="todos">
+                {(provided) => (
+                  <List {...provided.droppableProps} ref={provided.innerRef}>
+                    {todos
+                      .filter((todo) => todo.date == localDateTime)
+                      .map((todo, index) => {
+                        return (
+                          <Draggable
+                            key={index}
+                            draggableId={`draggable-${index}-${todo}`}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <ListItem
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                sx={{
+                                  transition: "margin-left 0.4s",
+                                  height: "4rem",
+                                }} // update here
+                                key={index}
+                                onMouseEnter={() => setHoverIndex(index)}
+                                onMouseLeave={() => setHoverIndex(null)}
+                                style={getItemStyle(
+                                  snapshot.isDragging,
+                                  provided.draggableProps.style,
+                                  index === hoverIndex
+                                )}
+                              >
+                                <Checkbox
+                                  checked={todo.checked}
+                                  onChange={() =>
+                                    toggleCheck(todos.indexOf(todo))
+                                  }
+                                  style={{ color: "white" }}
+                                />
+                                <ListItemText
+                                  primaryTypographyProps={{
+                                    style: { color: "white" },
+                                  }}
+                                  primary={todo.text}
+                                  color={"white"}
+                                />
+                                {hoverIndex === index && (
+                                  <IconButton
+                                    onClick={() =>
+                                      deleteTodo(todos.indexOf(todo))
+                                    }
+                                    color="inherit"
+                                  >
+                                    <DeleteIcon color="black" />
+                                  </IconButton>
+                                )}
+                              </ListItem>
+                            )}
+                          </Draggable>
+                        );
+                      })}
+                    {provided.placeholder}
+                  </List>
+                )}
+              </Droppable>
+            </DragDropContext>
           </Box>
           <Box mt={3} display="flex">
             <WhiteTextField

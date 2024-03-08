@@ -21,6 +21,7 @@ import GetRoutine from "../requests/GetRoutine";
 import { useAuth } from "./../contexts/Auth";
 import { StyledPaper } from "./../components/StyledPaper";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import FontColor from "./../components/FontColor";
 import "./../components/styledpaper.css";
 const fontColor = FontColor();
@@ -65,7 +66,17 @@ function MorgenRoutine({}) {
 
     fetchTodos();
   }, []);
-  const getItemStyle = () => ({
+
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(todos);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setTodos(items);
+  };
+  const getItemStyle = (isDragging, draggableStyle) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
     padding: 8 * 1.5,
@@ -73,9 +84,12 @@ function MorgenRoutine({}) {
     borderRadius: 10,
 
     // change background colour if dragging
-    background: "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
+    background: isDragging
+      ? "linear-gradient(to bottom right, #44CDDD, #118491)"
+      : "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
     // add margin if hovering
     // styles we need to apply on draggables
+    ...draggableStyle,
   });
 
   const addTodo = () => {
@@ -118,39 +132,61 @@ function MorgenRoutine({}) {
         </Typography>
         <Box display="flex" flexDirection="column" height="90%">
           <Box flexGrow="1" overflow="auto">
-            <List>
-              {Array.isArray(todos) &&
-                todos.map((todo, index) => (
-                  <ListItem
-                    key={index}
-                    onMouseEnter={() => setHoverIndex(index)}
-                    onMouseLeave={() => setHoverIndex(null)}
-                    style={getItemStyle(
-                      false, // as this list isn't draggable, set isDragging to false
-                      {}, // no draggableProps here
-                      hoverIndex === index
-                    )}
-                  >
-                    <Checkbox
-                      checked={todo.checked}
-                      onChange={() => toggleCheck(index)}
-                      style={{ color: fontColor }}
-                    />
-                    <ListItemText
-                      primaryTypographyProps={{ style: { color: fontColor } }}
-                      primary={todo.text}
-                    />
-                    {hoverIndex === index && (
-                      <IconButton
-                        onClick={() => deleteTodo(index)}
-                        color="#4f4f4f"
-                      >
-                        <DeleteIcon color="black" />
-                      </IconButton>
-                    )}
-                  </ListItem>
-                ))}
-            </List>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+              <Droppable droppableId="todos">
+                {(provided) => (
+                  <List {...provided.droppableProps} ref={provided.innerRef}>
+                    {Array.isArray(todos) &&
+                      todos.map((todo, index) => {
+                        return (
+                          <Draggable
+                            key={index}
+                            draggableId={`draggable-${index}-${todo}`}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <ListItem
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                key={index}
+                                onMouseEnter={() => setHoverIndex(index)}
+                                onMouseLeave={() => setHoverIndex(null)}
+                                style={getItemStyle(
+                                  snapshot.isDragging,
+                                  provided.draggableProps.style,
+                                  index === hoverIndex
+                                )}
+                              >
+                                <Checkbox
+                                  checked={todo.checked}
+                                  onChange={() => toggleCheck(index)}
+                                  style={{ color: fontColor }}
+                                />
+                                <ListItemText
+                                  primaryTypographyProps={{
+                                    style: { color: fontColor },
+                                  }}
+                                  primary={todo.text}
+                                />
+                                {hoverIndex === index && (
+                                  <IconButton
+                                    onClick={() => deleteTodo(index)}
+                                    color="#4f4f4f"
+                                  >
+                                    <DeleteIcon color="black" />
+                                  </IconButton>
+                                )}
+                              </ListItem>
+                            )}
+                          </Draggable>
+                        );
+                      })}
+                    {provided.placeholder}
+                  </List>
+                )}
+              </Droppable>
+            </DragDropContext>
           </Box>
           <Box mt={3} display="flex">
             <WhiteTextField
