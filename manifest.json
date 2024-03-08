@@ -1,20 +1,19 @@
 {
-    "short_name": "Plana",
-    "name": "Plana",
-    "icons": [
-      {
-        "src": "/Logo_2_verarbeitet.webp",
-        "type": "image/webp",
-        "sizes": "192x192"
-      },
-      {
-        "src": "/Logo_2_verarbeitet.webp",
-        "type": "image/webp",
-        "sizes": "512x512"
-      }
-    ],
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#ffffff"
-  }
-  
+  "short_name": "Plana",
+  "name": "Plana",
+  "icons": [
+    {
+      "src": "/bw_borz_white.webp",
+      "type": "image/webp",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/bw_borz_white.webp",
+      "type": "image/webp",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff"
+}
