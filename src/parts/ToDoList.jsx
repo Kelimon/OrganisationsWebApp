@@ -56,16 +56,21 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
 
   // )
   const heute = new Date();
+  if (heute.getHours() < 3) {
+    // Setze das Datum einen Tag zurück, wenn es vor 3 Uhr morgens ist
+    heute.setDate(heute.getDate() - 1);
+  }
   heute.setHours(0, 0, 0, 0);
+
   heute.setDate(heute.getDate() + selectedDay); // Addiert selectedDay zum aktuellen Datum
   const jahr = heute.getFullYear();
   const monat = (heute.getMonth() + 1).toString().padStart(2, "0"); // Monate sind 0-indiziert
   const tag = heute.getDate().toString().padStart(2, "0");
+
   const stunden = heute.getHours().toString().padStart(2, "0");
   const minuten = heute.getMinutes().toString().padStart(2, "0");
   const sekunden = heute.getSeconds().toString().padStart(2, "0");
   const localDateTime = `${jahr}-${monat}-${tag}T${stunden}:${minuten}:${sekunden}Z`;
-
   useEffect(() => {
     const fetchTodos = async () => {
       setIsLoading(true);
@@ -129,6 +134,10 @@ function ToDoList({ todos, setTodos, selectedDay, setSelectedDay }) {
 
   const getFormattedDate = (selectedDay) => {
     const currentDate = new Date();
+    if (currentDate.getHours() < 3) {
+      // Setze das Datum einen Tag zurück, wenn es vor 3 Uhr morgens ist
+      currentDate.setDate(currentDate.getDate() - 1);
+    }
     currentDate.setDate(currentDate.getDate() + selectedDay);
     return currentDate.toLocaleDateString("de-DE", {
       day: "numeric",

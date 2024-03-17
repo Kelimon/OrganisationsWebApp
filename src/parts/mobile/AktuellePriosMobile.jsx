@@ -176,8 +176,8 @@ function AktuellePriosMobile({ toLeft, setShowVergangeneTodos }) {
   const getItemStyle = (isDragging, draggableStyle, isHovering) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
-    padding: 8 * 2,
-    margin: `0 0 ${8}px 0`,
+    padding: 8 * 1.5,
+    margin: `0 0 8px 0`,
     borderRadius: 10,
 
     // change background colour if dragging

@@ -15,6 +15,7 @@ import {
 import { styled } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import saveTodos from "./../../requests/saveTodos";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import GetTodos from "./../../requests/GetTodos";
 import RegisterRequest from "../../requests/RegisterRequest";
 import AddIcon from "@mui/icons-material/Add";
@@ -66,6 +67,7 @@ function ToDoListMobile({
 
   const { currentUser, isAdmin } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
 
   const isFirstRender = useRef(true);
   const initialData = useRef(null);
@@ -82,6 +84,10 @@ function ToDoListMobile({
 
   const getFormattedDate = (selectedDay) => {
     const currentDate = new Date();
+    if (currentDate.getHours() < 3) {
+      // Setze das Datum einen Tag zurück, wenn es vor 3 Uhr morgens ist
+      currentDate.setDate(currentDate.getDate() - 1);
+    }
     currentDate.setDate(currentDate.getDate() + selectedDay);
     return currentDate.toLocaleDateString("de-DE", {
       day: "numeric",
@@ -89,15 +95,23 @@ function ToDoListMobile({
       year: "numeric",
     });
   };
-  const handlers = useSwipeable({
-    onSwipedLeft: () =>
-      setSelectedDay(Math.max(0, Math.min(selectedDay + 1, 2))),
-    onSwipedRight: () =>
-      setSelectedDay(Math.max(0, Math.min(selectedDay - 1, 2))),
-    // Prevent default touch action to prevent scroll on swipe
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true, // If you want to track mouse events as swipes on desktop
-  });
+  const onBeforeDragStart = () => {
+    setIsDragging(true);
+  };
+
+  const handlers = useSwipeable(
+    isDragging
+      ? {}
+      : {
+          onSwipedLeft: () =>
+            setSelectedDay(Math.max(0, Math.min(selectedDay + 1, 2))),
+          onSwipedRight: () =>
+            setSelectedDay(Math.max(0, Math.min(selectedDay - 1, 2))),
+          // Prevent default touch action to prevent scroll on swipe
+          preventDefaultTouchmoveEvent: true,
+          trackMouse: true, // If you want to track mouse events as swipes on desktop
+        }
+  );
 
   const addTodo = () => {
     if (newTodo.trim().length > 0) {
@@ -114,7 +128,17 @@ function ToDoListMobile({
     }
   };
 
-  const getItemStyle = () => ({
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(todos);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setTodos(items);
+    setIsDragging(false); // Update the dragging state when the drag ends
+  };
+  const getItemStyle = (isDragging, draggableStyle, isHovering) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
     padding: 8 * 1.5,
@@ -122,9 +146,11 @@ function ToDoListMobile({
     borderRadius: 10,
 
     // change background colour if dragging
-    background: "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
-    // add margin if hovering
-    // styles we need to apply on draggables
+    background: isDragging
+      ? "linear-gradient(to bottom right,  #44CDDD, #118491)"
+      : "linear-gradient(to bottom right,  #44CDDD, #44CDDD)",
+    //background: isDragging ? "linear-gradient(to bottom right, black,  #550763)" : "#b608d4",
+    ...draggableStyle,
   });
 
   useEffect(() => {
@@ -176,6 +202,10 @@ function ToDoListMobile({
     setTodos(todos.filter((todo, i) => i !== index));
   };
   const heute = new Date();
+  if (heute.getHours() < 3) {
+    // Setze das Datum einen Tag zurück, wenn es vor 3 Uhr morgens ist
+    heute.setDate(heute.getDate() - 1);
+  }
   heute.setHours(0, 0, 0, 0);
   heute.setDate(heute.getDate() + selectedDay); // Addiert selectedDay zum aktuellen Datum
   const jahr = heute.getFullYear();
@@ -325,60 +355,89 @@ function ToDoListMobile({
                   alignItems="stretch"
                   style={{ paddingBottom: "45px" }}
                 >
-                  <List>
-                    {todos.filter((todo) => todo.date == localDateTime)
-                      .length === 0 && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          height: "50vh", // Dies füllt die Höhe des übergeordneten Containers
-                          minHeight: "200px", // Mindesthöhe, um sicherzustellen, dass es sichtbar ist, auch wenn es leer ist
-                        }}
-                      >
-                        <Typography color={"black"} align="center">
-                          Keine Todos für den {getFormattedDate(selectedDay)}{" "}
-                          vorhanden
-                        </Typography>
-                      </Box>
-                    )}
-                    {Array.isArray(todos) &&
-                      todos
-                        .filter((todo) => todo.date == localDateTime)
-                        .map((todo, index) => (
-                          <ListItem
-                            key={index}
-                            onMouseEnter={() => setHoverIndex(index)}
-                            onMouseLeave={() => setHoverIndex(null)}
-                            style={getItemStyle(
-                              false, // as this list isn't draggable, set isDragging to false
-                              {}, // no draggableProps here
-                              hoverIndex === index
-                            )}
-                          >
-                            <Checkbox
-                              checked={todo.checked}
-                              onChange={() => toggleCheck(todos.indexOf(todo))}
-                              style={{ color: fontColor }}
-                            />
-                            <ListItemText
-                              primaryTypographyProps={{
-                                style: { color: fontColor },
+                  <DragDropContext
+                    onBeforeDragStart={onBeforeDragStart}
+                    onDragEnd={handleOnDragEnd}
+                  >
+                    <Droppable droppableId="todos">
+                      {(provided) => (
+                        <List
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                        >
+                          {todos.filter((todo) => todo.date == localDateTime)
+                            .length === 0 && (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: "50vh", // Dies füllt die Höhe des übergeordneten Containers
+                                minHeight: "200px", // Mindesthöhe, um sicherzustellen, dass es sichtbar ist, auch wenn es leer ist
                               }}
-                              primary={todo.text}
-                            />
-                            {hoverIndex === index && (
-                              <IconButton
-                                onClick={() => deleteTodo(todos.indexOf(todo))}
-                                color="black"
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            )}
-                          </ListItem>
-                        ))}
-                  </List>
+                            >
+                              <Typography color={"black"} align="center">
+                                Keine Todos für den{" "}
+                                {getFormattedDate(selectedDay)} vorhanden
+                              </Typography>
+                            </Box>
+                          )}
+                          {Array.isArray(todos) &&
+                            todos
+                              .filter((todo) => todo.date == localDateTime)
+                              .map((todo, index) => (
+                                <Draggable
+                                  key={index}
+                                  draggableId={`draggable-${index}-${todo}`}
+                                  index={index}
+                                >
+                                  {(provided, snapshot) => (
+                                    <ListItem
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      key={index}
+                                      onMouseEnter={() => setHoverIndex(index)}
+                                      onMouseLeave={() => setHoverIndex(null)}
+                                      style={getItemStyle(
+                                        snapshot.isDragging,
+                                        provided.draggableProps.style,
+                                        index === hoverIndex
+                                      )}
+                                    >
+                                      <Checkbox
+                                        checked={todo.checked}
+                                        onChange={() =>
+                                          toggleCheck(todos.indexOf(todo))
+                                        }
+                                        style={{ color: fontColor }}
+                                      />
+                                      <ListItemText
+                                        primaryTypographyProps={{
+                                          style: { color: fontColor },
+                                        }}
+                                        primary={todo.text}
+                                      />
+                                      {hoverIndex === index && (
+                                        <IconButton
+                                          onClick={() =>
+                                            deleteTodo(todos.indexOf(todo))
+                                          }
+                                          color="black"
+                                        >
+                                          <DeleteIcon />
+                                        </IconButton>
+                                      )}
+                                    </ListItem>
+                                  )}
+                                </Draggable>
+                              ))}
+
+                          {provided.placeholder}
+                        </List>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
                 </Box>
               </Box>
             </Box>

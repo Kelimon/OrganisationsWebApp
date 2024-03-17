@@ -32,6 +32,10 @@ export default saveTodos;
 
 function dateformatter() {
   const heute1 = new Date();
+  if (heute1.getHours() < 3) {
+    // Setze das Datum einen Tag zurück, wenn es vor 3 Uhr morgens ist
+    heute1.setDate(heute1.getDate() - 1);
+  }
   heute1.setHours(0, 0, 0, 0);
   heute1.setDate(heute1.getDate()); // Addiert selectedDay zum aktuellen Datum
   const jahr1 = heute1.getFullYear();
@@ -43,6 +47,10 @@ function dateformatter() {
   const localDateTime1 = `${jahr1}-${monat1}-${tag1}T${stunden1}:${minuten1}:${sekunden1}Z`;
 
   const heute2 = new Date();
+  if (heute2.getHours() < 3) {
+    // Setze das Datum einen Tag zurück, wenn es vor 3 Uhr morgens ist
+    heute2.setDate(heute2.getDate() - 1);
+  }
   heute2.setHours(0, 0, 0, 0);
   heute2.setDate(heute2.getDate() + 1); // Addiert selectedDay zum aktuellen Datum
   const jahr2 = heute2.getFullYear();
@@ -54,6 +62,10 @@ function dateformatter() {
   const localDateTime2 = `${jahr2}-${monat2}-${tag2}T${stunden2}:${minuten2}:${sekunden2}Z`;
 
   const heute3 = new Date();
+  if (heute3.getHours() < 3) {
+    // Setze das Datum einen Tag zurück, wenn es vor 3 Uhr morgens ist
+    heute3.setDate(heute3.getDate() - 1);
+  }
   heute3.setHours(0, 0, 0, 0);
   heute3.setDate(heute3.getDate() + 2); // Addiert selectedDay zum aktuellen Datum
   const jahr3 = heute3.getFullYear();

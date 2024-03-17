@@ -110,7 +110,7 @@ function AktuellePrios({}) {
   const getItemStyle = (isDragging, draggableStyle, isHovering) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
-    padding: 8 * 2,
+    padding: 8 * 1.5,
     margin: `0 0 ${8}px 0`,
     borderRadius: 10,
 
